@@ -14,23 +14,24 @@ jobs:
       - name: Preparation
         run: |
           # Get local uploaded manifest version of the package
-          $String = Get-Content -Path "Scripts\WinGet_Manifests\TeamSophia.SophiaScript.yaml" | Where-Object -FilterScript {$_ -match "ManifestVersion"}
-          $LocalManifest = $String -split " " | Select-Object -Last 1
+          #$String = Get-Content -Path "Scripts\WinGet_Manifests\TeamSophia.SophiaScript.yaml" | Where-Object -FilterScript {$_ -match "ManifestVersion"}
+          #$LocalManifest = $String -split " " | Select-Object -Last 1
 
           # Get latest supported manifest version provided
           # https://github.com/microsoft/winget-cli/tree/master/schemas/JSON/manifests
-          # Parse GitHub folder
+
+          # https://github.com/microsoft/winget-cli/tree/master/schemas/JSON/manifests/latest
           $Parameters = @{
-            Uri             = "https://api.github.com/repos/microsoft/winget-cli/contents/schemas/JSON/manifests"
+            Uri             = "https://raw.githubusercontent.com/microsoft/winget-cli/refs/heads/master/schemas/JSON/manifests/latest/manifest.version.latest.json"
             UseBasicParsing = $true
             Verbose         = $true
           }
-          $LatestManifest = ((Invoke-RestMethod @Parameters).name | Where-Object {$_ -ne "preview"}) -replace ("v", "") | Sort-Object -Property {[System.Version]$_} | Select-Object -Last 1
+          #$LatestManifest = ((Invoke-RestMethod @Parameters).properties | Where-Object -FilterScript {$_.ManifestVersion.description -eq "The manifest syntax version"}).ManifestVersion.default
 
           if ([System.Version]$LocalManifest -lt [System.Version]$LatestManifest)
           {
-            Write-Warning -Message "New $($LatestManifest) manifest available. Edit manifests in Scripts\WinGet_Manifests"
-            exit
+            #Write-Warning -Message "New $($LatestManifest) manifest available. Edit manifests in Scripts\WinGet_Manifests"
+            #exit
           }
 
           # Get latest version tag for Windows 11
