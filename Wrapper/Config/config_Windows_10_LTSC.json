@@ -1,6 +1,6 @@
 [
   {
-    "Region": "Protection",
+    "Region": "Initial Actions",
     "Control": "cmb",
     "Required": "true",
     "RequiredIndex": "0",
@@ -587,15 +587,15 @@
     "Arg": {
       "Zero": {
         "Tag": "Hide",
-		"Opposite": "Two"
+        "Opposite": "Two"
       },
       "One": {
         "Tag": "SearchIcon",
-		"Opposite": "Zero"
+        "Opposite": "Zero"
       },
       "Two": {
         "Tag": "SearchBox",
-		"Opposite": "Zero"
+        "Opposite": "Zero"
       }
     },
     "Preset": "Zero",
@@ -719,15 +719,15 @@
     "Arg": {
       "Zero": {
         "Tag": "Always",
-		"Opposite": "Two"
+        "Opposite": "Two"
       },
       "One": {
         "Tag": "Full",
-		"Opposite": "Two"
+        "Opposite": "Two"
       },
       "Two": {
         "Tag": "Never",
-		"Opposite": "Zero"
+        "Opposite": "Zero"
       }
     },
     "Preset": "Zero",
@@ -743,15 +743,15 @@
     "Arg": {
       "Zero": {
         "Tag": "LargeIcons",
-		"Opposite": "One"
+        "Opposite": "One"
       },
       "One": {
         "Tag": "SmallIcons",
-		"Opposite": "Zero"
+        "Opposite": "Zero"
       },
       "Two": {
         "Tag": "Category",
-		"Opposite": "Two"
+        "Opposite": "Two"
       }
     },
     "Preset": "Zero",
@@ -943,19 +943,19 @@
     "Region": "UI & Personalization",
     "Control": "cmb",
     "Required": "false",
-    "Function": "Cursors",
+    "Function": "Install-Cursors",
     "Arg": {
       "Zero": {
         "Tag": "Default",
-		"Opposite": "Zero"
+        "Opposite": "Zero"
       },
       "One": {
         "Tag": "Dark",
-		"Opposite": "Two"
+        "Opposite": "Two"
       },
       "Two": {
         "Tag": "Light",
-		"Opposite": "One"
+        "Opposite": "One"
       }
     },
     "Preset": "One",
@@ -1039,7 +1039,7 @@
     "Region": "System",
     "Control": "cmb",
     "Required": "false",
-    "Function": "Win32LongPathSupport",
+    "Function": "Win32LongPathsSupport",
     "Arg": {
       "Zero": {
         "Tag": "Enable"
@@ -1295,15 +1295,15 @@
     "Arg": {
       "Zero": {
         "Tag": "Root",
-		"Opposite": "Two"
+        "Opposite": "Two"
       },
       "One": {
         "Tag": "Custom",
-		"Opposite": "Two"
+        "Opposite": "Two"
       },
       "Two": {
         "Tag": "Default",
-		"Opposite": "One"
+        "Opposite": "One"
       }
     },
     "Preset": "Zero",
@@ -2031,24 +2031,6 @@
     "Control": "cmb",
     "Required": "false",
     "Function": "SaveZoneInformation",
-    "Arg": {
-      "Zero": {
-        "Tag": "Disable"
-      },
-      "One": {
-        "Tag": "Enable"
-      }
-    },
-    "Preset": "Zero",
-    "WindowsDefault": "One",
-    "LTSC2019": "true",
-    "LTSC2021": "true"
-  },
-  {
-    "Region": "Microsoft Defender & Security",
-    "Control": "cmb",
-    "Required": "false",
-    "Function": "WindowsScriptHost",
     "Arg": {
       "Zero": {
         "Tag": "Disable"

@@ -42,6 +42,13 @@ Mit <img src="https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows
 <br>
 <br>
 
+<kbd>
+	<a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Downloaden-green?labelColor=151B23&color=151B23&style=for-the-badge" href="#"></a>
+</kbd>
+
+<br>
+<br>
+
 This page is also available in other languages
 
 <a href="../README.md"><img src="https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/master/img/united-states.png" height="70px"/></a>
@@ -224,12 +231,6 @@ Sophia -Functions uwp<TAB>
 Sophia -Functions "DiagTrackService -Disable", "DiagnosticDataLevel -Minimal", UninstallUWPApps
 
 UninstallUWPApps, "PinToStart -UnpinAll"
-```
-
-Oder verwenden Sie ein Format im alten Stil ohne die <kbd>TAB</kbd>-Funktionen zum automatischen Ausfüllen (die Anführungszeichen sind erforderlich)
-
-```powershell
-.\Sophia.ps1 -Functions CreateRestorePoint, "ScheduledTasks -Disable", "WindowsCapabilities -Uninstall"
 ```
 
 <https://github.com/user-attachments/assets/ea90122a-bdb3-4687-bf8b-9b6e7af46826>

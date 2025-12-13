@@ -1,16 +1,16 @@
 ﻿ConvertFrom-StringData -StringData @'
 UnsupportedOSBitness                      = Das Skript unterstützt nur 64-Bit-Windows.
 UnsupportedOSBuild                        = Das Skript unterstützt nur Windows 10 Enterprise LTSC 2019. Sie verwenden Windows {0} {1}. Aktualisieren Sie Ihr Windows und versuchen Sie es erneut.
-UnsupportedWindowsTerminal                = Die Windows Terminal-Version ist niedriger als 1.20. Bitte aktualisieren Sie es im Microsoft Store und versuchen Sie es erneut.
+UnsupportedWindowsTerminal                = Die Windows Terminal-Version ist niedriger als 1.23. Bitte aktualisieren Sie es im Microsoft Store und versuchen Sie es erneut.
 UpdateWarning                             = Sie verwenden Windows 10 {0}.{1}. Unterstützt wird Windows 10 {0}.{2} und höher. Führen Sie Windows Update aus und versuchen Sie es erneut.
 UnsupportedLanguageMode                   = Die PowerShell-Sitzung wird in einem eingeschränkten Sprachmodus ausgeführt.
 LoggedInUserNotAdmin                      = Der angemeldete Benutzer hat keine Administratorrechte.
 UnsupportedPowerShell                     = Sie versuchen ein Skript über PowerShell {0}.{1} auszuführen. Bitte führen Sie das Skript in PowerShell {2} aus.
+CodeCompilationFailedWarning              = Die Code-Kompilierung ist fehlgeschlagen.
 UnsupportedHost                           = Das Skript unterstützt nicht die Ausführung über {0}.
 Win10TweakerWarning                       = Wahrscheinlich wurde Ihr Betriebssystem über die Win 10 Tweaker-Hintertür infiziert.
 TweakerWarning                            = Die Stabilität des Windows-Betriebssystems kann durch die Verwendung des {0} beeinträchtigt worden sein. Installieren Sie Windows nur mit einem Original-ISO-Abbild neu.
 HostsWarning                              = Einträge von Drittanbietern, die in der Datei {0} gefunden werden. Sie können Verbindungen zu den im Skript verwendeten Ressourcen blockieren. Möchten Sie fortfahren?
-Bin                                       = Im Ordner "{0}" befinden sich keine Dateien. Bitte laden Sie das Archiv erneut herunter.
 RebootPending                             = Der PC wartet darauf, neu gestartet zu werden.
 BitLockerWarning                          = Die BitLocker-Verschlüsselung wird gerade durchgeführt. Schließen Sie die BitLocker-Laufwerkskonfiguration ab und versuchen Sie es erneut.
 UnsupportedRelease                        = Eine neuere Version von Sophia Script gefunden: {0}. Bitte laden Sie die neueste Version herunter.
@@ -18,7 +18,6 @@ KeyboardArrows                            = Bitte verwenden Sie die Pfeiltasten 
 CustomizationWarning                      = Haben Sie alle Funktionen in der voreingestellten Datei {0} angepasst, bevor Sie Sophia Script ausführen?
 WindowsComponentBroken                    = {0} defekt oder aus dem Betriebssystem entfernt.
 ControlledFolderAccessDisabled            = Kontrollierter Ordnerzugriff deaktiviert.
-InitialActionsCheckFailed                 = Die Funktion InitialActions kann nicht aus der Voreinstellungsdatei {0} geladen werden. Bitte überprüfen Sie die Voreinstellungsdatei und versuchen Sie es erneut.
 ScheduledTasks                            = Geplante Aufgaben
 WindowsFeaturesTitle                      = Windows-Features
 OptionalFeaturesTitle                     = Optionale Features

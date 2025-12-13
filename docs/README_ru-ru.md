@@ -42,6 +42,13 @@
 <br>
 <br>
 
+<kbd>
+	<a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Скачать-green?labelColor=151B23&color=151B23&style=for-the-badge" href="#"></a>
+</kbd>
+
+<br>
+<br>
+
 This page is also available in other languages
 
 <a href="../README.md"><img src="https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/master/img/united-states.png" height="70px"/></a>
@@ -57,7 +64,7 @@ This page is also available in other languages
 `Sophia Script for Windows` — это самый мощный PowerShell-модуль на `GitHub` для тонкой настройки `Windows 10` и `Windows 11` и автоматизации рутинных задач. Он предлагает более 150 уникальных твиков и показывает, как можно настоить Windows, ничего не сломав.
 
 > [!IMPORTANT]
-> Каждый твик в пресет-файле имеет соответствующую функцию для возврата значений по умолчанию.
+> Каждый функция в пресет-файле (файл предустановок) имеет соответствующую функцию для возврата значений по умолчанию.
 
 ## Ключевые возможности
 
@@ -225,12 +232,6 @@ Sophia -Functions "DiagTrackService -Disable", "DiagnosticDataLevel -Minimal", U
 UninstallUWPApps, "PinToStart -UnpinAll"
 ```
 
-Или используйте старый формат без автопродления функций через <kbd>TAB</kbd> (необходимы кавычки)
-
-```powershell
-.\Sophia.ps1 -Functions CreateRestorePoint, "ScheduledTasks -Disable", "WindowsCapabilities -Uninstall"
-```
-
 <https://github.com/user-attachments/assets/ea90122a-bdb3-4687-bf8b-9b6e7af46826>
 
 ## Wrapper
@@ -259,7 +260,7 @@ UninstallUWPApps, "PinToStart -UnpinAll"
 . .\Import-TabCompletion.ps1
 ```
 
-* Вызовите функции из пресета `Sophia.ps1`, которые вы хотите откатить.
+* Вызовите функции из пресет-файла (файла предустановок) `Sophia.ps1`, которые вы хотите откатить.
 
 ```powershell
 Sophia -Functions "DiagTrackService -Enable", UninstallUWPApps
