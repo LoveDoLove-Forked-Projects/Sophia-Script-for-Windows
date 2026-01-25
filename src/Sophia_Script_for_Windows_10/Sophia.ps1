@@ -3,10 +3,10 @@
 	Default preset file for "Sophia Script for Windows 10"
 
 	.VERSION
-	6.0.0
+	6.0.4
 
 	.DATE
-	05.12.2025
+	05.01.2026
 
 	.COPYRIGHT
 	(c) 2014—2026 Team Sophia
@@ -63,7 +63,7 @@
 #Requires -Version 5.1
 
 #region Initial Actions
-$Global:Failed = 0
+$Global:Failed = $false
 
 # Unload and import module
 Remove-Module -Name SophiaScript -Force -ErrorAction Ignore
@@ -77,7 +77,7 @@ Get-ChildItem -Path $PSScriptRoot\Module\private | Foreach-Object -Process {. $_
 InitialActions -Warning
 
 # Global variable if checks failed
-if ($Global:Failed -eq 1)
+if ($Global:Failed)
 {
 	exit
 }
@@ -226,11 +226,11 @@ BingSearch -Disable
 #endregion Privacy & Telemetry
 
 #region UI & Personalization
-# Show the "This PC" icon on Desktop
+# Show "This PC" icon on Desktop
 # Отобразить значок "Этот компьютер" на рабочем столе
 ThisPC -Show
 
-# Hide the "This PC" icon on Desktop (default value)
+# Hide "This PC" icon on Desktop (default value)
 # Скрыть "Этот компьютер" на рабочем столе (значение по умолчанию)
 # ThisPC -Hide
 
@@ -282,7 +282,7 @@ FileExplorerRibbon -Expanded
 # Свернуть ленту проводника (значение по умолчанию)
 # FileExplorerRibbon -Minimized
 
-# Do not show sync provider notification within File Explorer
+# Hide sync provider notification within File Explorer
 # Не показывать уведомления поставщика синхронизации в проводнике
 OneDriveFileExplorerAd -Hide
 
@@ -891,13 +891,13 @@ NetworkDiscovery -Enable
 #>
 UninstallPCHealthCheck
 
-# Install the latest Microsoft Visual C++ Redistributable Packages 2015–2022 (x86/x64). Internet connection required
-# Установить последнюю версию распространяемых пакетов Microsoft Visual C++ 2015–2022 (x86/x64). Требуется соединение с интернетом
-Install-VCRedist -Redistributables 2015_2022_x86, 2015_2022_x64
+# Install the latest Microsoft Visual C++ Redistributable Packages 2015–2026 (x86/x64). Internet connection required
+# Установить последнюю версию распространяемых пакетов Microsoft Visual C++ 2015–2026 (x86/x64). Требуется соединение с интернетом
+Install-VCRedist -Redistributables 2015_2026_x86, 2015_2026_x64
 
-# Install the latest .NET Runtime 8, 9. Internet connection required
-# Установить последнюю версию .NET Runtime 8, 9. Требуется соединение с интернетом
-Install-DotNetRuntimes -Runtimes NET8, NET9
+# Install the latest .NET Desktop Runtime 8, 9, 10 x64. Internet connection required
+# Установить последнюю версию .NET Desktop Runtime 8, 9, 10 x64. Требуется соединение с интернетом
+Install-DotNetRuntimes -Runtimes NET8, NET9, NET10
 
 # Enable proxying only blocked sites from the unified registry of Roskomnadzor. The function is applicable for Russia only
 # Включить проксирование только заблокированных сайтов из единого реестра Роскомнадзора. Функция применима только для России
@@ -933,19 +933,19 @@ RegistryBackup -Enable
 #endregion WSL
 
 #region Start menu
-# Hide recently added apps in Start menu
+# Hide recently added apps on Start
 # Скрывать недавно добавленные приложения в меню "Пуск"
-RecentlyAddedApps -Hide
+RecentlyAddedStartApps -Hide
 
-# Show recently added apps in Start menu (default value)
+# Show recently added apps on Start (default value)
 # Показывать недавно добавленные приложения в меню "Пуск" (значение по умолчанию)
-# RecentlyAddedApps -Show
+# RecentlyAddedStartApps -Show
 
-# Hide app suggestions in Start menu
+# Hide app suggestions on Start
 # Скрывать рекомендации в меню "Пуск"
 AppSuggestions -Hide
 
-# Show app suggestions in Start menu (default value)
+# Show app suggestions on Start (default value)
 # Показывать рекомендации в меню "Пуск" (значение по умолчанию)
 # AppSuggestions -Show
 
@@ -965,12 +965,20 @@ PinToStart -Tiles ControlPanel, DevicesPrinters
 # Unpin all the Start tiles
 # Открепить все ярлыки от начального экрана
 # PinToStart -UnpinAll
+
+# Hide Microsoft account-related notifications in Start
+# Не отображать на начальном экране уведомления, касающиеся учетной записи Microsoft
+StartAccountNotifications -Hide
+
+# Show Microsoft account-related notifications on Start (default value)
+# Переодически показывать в меню "Пуск" уведомления, связанные с учетной записью Microsoft (значение по умолчанию)
+# StartAccountNotifications -Show
 #endregion Start menu
 
 #region UWP apps
 # Uninstall UWP apps using the pop-up dialog box
 # Удалить UWP-приложения, используя всплывающее диалоговое окно
-UninstallUWPApps
+Uninstall-UWPApps
 
 <#
 	Uninstall UWP apps for all users using the pop-up dialog box
@@ -979,7 +987,7 @@ UninstallUWPApps
 	Удалить UWP-приложения для всех пользователей, используя всплывающее диалоговое окно
 	Пакеты приложений не будут установлены для новых пользователей, если отмечена галочка "Для всех пользователей"
 #>
-# UninstallUWPApps -ForAllUsers
+# Uninstall-UWPApps -ForAllUsers
 
 # Download and install "HEVC Video Extensions from Device Manufacturer" to be able to open .heic and .heif formats
 # Скачать и установить "Расширения для видео HEVC от производителя устройства", чтобы иметь возможность открывать форматы .heic и .heif
@@ -1159,23 +1167,6 @@ SaveZoneInformation -Disable
 # Disable Windows Sandbox (default value). Applicable only to Professional, Enterprise and Education editions
 # Выключить Windows Sandbox (значение по умолчанию). Применимо только к редакциям Professional, Enterprise и Education
 # WindowsSandbox -Disable
-
-<#
-	Enable DNS-over-HTTPS for IPv4
-	The valid IPv4 addresses: 1.0.0.1, 1.1.1.1, 149.112.112.112, 8.8.4.4, 8.8.8.8, 9.9.9.9
-
-	Включить DNS-over-HTTPS для IPv4
-	Действительные IPv4-адреса: 1.0.0.1, 1.1.1.1, 149.112.112.112, 8.8.4.4, 8.8.8.8, 9.9.9.9
-#>
-DNSoverHTTPS -Enable -PrimaryDNS 1.0.0.1 -SecondaryDNS 1.1.1.1
-
-# Disable DNS-over-HTTPS for IPv4 (default value)
-# Выключить DNS-over-HTTPS для IPv4 (значение по умолчанию)
-# DNSoverHTTPS -Disable
-
-# Enable DNS-over-HTTPS via Comss.one DNS server. Applicable for Russia only
-# Включить DNS-over-HTTPS для IPv4 через DNS-сервер Comss.one. Применимо только для России
-# DNSoverHTTPS -ComssOneDNS
 #endregion Microsoft Defender & Security
 
 #region Context menu
