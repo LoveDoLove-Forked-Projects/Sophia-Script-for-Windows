@@ -50,7 +50,7 @@
 	.NOTES
 	https://forum.ru-board.com/topic.cgi?forum=62&topic=30617#15
 	https://habr.com/companies/skillfactory/articles/553800/
-	https://forums.mydigitallife.net/threads/powershell-sophia-script-for-windows-10-windows-11-5-17-8-6-5-8-x64-2023.81675/
+	https://forums.mydigitallife.net/threads/powershell-sophia-script-for-windows-6-0-4-7-0-4-2026.81675/page-21
 	https://www.reddit.com/r/PowerShell/comments/go2n5v/powershell_script_setup_windows_10/
 
 	.LINK
@@ -65,11 +65,10 @@
 #region Initial Actions
 $Global:Failed = $false
 
-# Unload and import module
+# Unload and import private functions and module
+Get-ChildItem function: | Where-Object {$_.ScriptBlock.File -match "Sophia_Script_for_Windows"} | Remove-Item -Force
 Remove-Module -Name SophiaScript -Force -ErrorAction Ignore
 Import-Module -Name $PSScriptRoot\Manifest\SophiaScript.psd1 -PassThru -Force
-
-# Load private functions
 Get-ChildItem -Path $PSScriptRoot\Module\private | Foreach-Object -Process {. $_.FullName}
 
 # "-Warning" argument enables and disables a warning message about whether the preset file was customized
@@ -431,6 +430,30 @@ NavigationPaneExpand -Disable
 # Expand to open folder on navigation pane
 # Развернуть до открытой папки область навигации
 # NavigationPaneExpand -Enable
+
+# Hide recently added apps on Start
+# Скрывать недавно добавленные приложения в меню "Пуск"
+RecentlyAddedStartApps -Hide
+
+# Show recently added apps on Start (default value)
+# Показывать недавно добавленные приложения в меню "Пуск" (значение по умолчанию)
+# RecentlyAddedStartApps -Show
+
+# Hide most used apps in Start (default value)
+# Не показывать наиболее часто используемые приложения на начальном экране (значение по умолчанию)
+MostUsedStartApps -Hide
+
+# Show most used Apps in Start
+# Показывать наиболее часто используемые приложения на начальном экране
+# MostUsedStartApps -Show
+
+# Hide app suggestions on Start
+# Скрывать рекомендации в меню "Пуск"
+AppSuggestions -Hide
+
+# Show app suggestions on Start (default value)
+# Показывать рекомендации в меню "Пуск" (значение по умолчанию)
+# AppSuggestions -Show
 #endregion UI & Personalization
 
 #region System
@@ -526,6 +549,7 @@ RestartNotification -Show
 # Do not notify me when a restart is required to finish updating (default value)
 # Не yведомлять меня о необходимости перезагрузки для завершения обновления (значение по умолчанию)
 # RestartNotification -Hide
+
 # Automatically adjust active hours for me based on daily usage
 # Автоматически изменять период активности для этого устройства на основе действий
 ActiveHours -Automatically
@@ -675,11 +699,11 @@ NetworkDiscovery -Enable
 	Register app, calculate hash, and associate with an extension with the "How do you want to open this" pop-up hidden
 	Зарегистрировать приложение, вычислить хэш и ассоциировать его с расширением без всплывающего окна "Каким образом вы хотите открыть этот файл?"
 
-	Set-Association -ProgramPath "C:\SumatraPDF.exe" -Extension .pdf -Icon "shell32.dll,100"
-	Set-Association -ProgramPath "%ProgramFiles%\Notepad++\notepad++.exe" -Extension .txt -Icon "%ProgramFiles%\Notepad++\notepad++.exe,0"
+	Set-Association -ProgramPath 'C:\SumatraPDF.exe' -Extension .pdf -Icon 'shell32.dll,100'
+	Set-Association -ProgramPath '%ProgramFiles%\Notepad++\notepad++.exe' -Extension .txt -Icon '%ProgramFiles%\Notepad++\notepad++.exe,0'
 	Set-Association -ProgramPath MSEdgeMHT -Extension .html
 #>
-# Set-Association -ProgramPath "%ProgramFiles%\Notepad++\notepad++.exe" -Extension .txt -Icon "%ProgramFiles%\Notepad++\notepad++.exe,0"
+# Set-Association -ProgramPath '%ProgramFiles%\Notepad++\notepad++.exe' -Extension .txt -Icon '%ProgramFiles%\Notepad++\notepad++.exe,0'
 
 # Экспортировать все ассоциации в Windows в корень папки в виде файла Application_Associations.json
 # Export all Windows associations into Application_Associations.json file to script root folder
@@ -702,7 +726,7 @@ Install-VCRedist -Redistributables 2015_2026_x86, 2015_2026_x64
 # Установить последнюю версию .NET Desktop Runtime 8, 9, 10 x64. Требуется соединение с интернетом
 Install-DotNetRuntimes -Runtimes NET8, NET9, NET10
 
-# Enable proxying only blocked sites from the unified registry of Roskomnadzor. The function is applicable for Russia only
+# Enable proxying only blocked sites from the unified registry of Roskomnadzor. Applicable for Russia only
 # Включить проксирование только заблокированных сайтов из единого реестра Роскомнадзора. Функция применима только для России
 # https://antizapret.prostovpn.org
 RKNBypass -Enable
@@ -728,24 +752,6 @@ RegistryBackup -Enable
 # Не создавать копии реестра при перезагрузке ПК (значение по умолчанию)
 # RegistryBackup -Disable
 #endregion System
-
-#region Start menu
-# Hide recently added apps on Start
-# Скрывать недавно добавленные приложения в меню "Пуск"
-RecentlyAddedStartApps -Hide
-
-# Show recently added apps on Start (default value)
-# Показывать недавно добавленные приложения в меню "Пуск" (значение по умолчанию)
-# RecentlyAddedStartApps -Show
-
-# Hide app suggestions on Start
-# Скрывать рекомендации в меню "Пуск"
-AppSuggestions -Hide
-
-# Show app suggestions on Start (default value)
-# Показывать рекомендации в меню "Пуск" (значение по умолчанию)
-# AppSuggestions -Show
-#endregion Start menu
 
 #region Scheduled tasks
 <#
@@ -812,14 +818,6 @@ DefenderSandbox -Enable
 # Disable sandboxing for Microsoft Defender (default value)
 # Выключить песочницу для Microsoft Defender (значение по умолчанию)
 # DefenderSandbox -Disable
-
-# Dismiss Microsoft Defender offer in the Windows Security about signing in Microsoft account
-# Отклонить предложение Microsoft Defender в "Безопасность Windows" о входе в аккаунт Microsoft
-DismissMSAccount
-
-# Dismiss Microsoft Defender offer in the Windows Security about turning on the SmartScreen filter for Microsoft Edge
-# Отклонить предложение Microsoft Defender в "Безопасность Windows" включить фильтр SmartScreen для Microsoft Edge
-DismissSmartScreenFilter
 
 # Create the "Process Creation" сustom view in the Event Viewer to log executed processes and their arguments
 # Создать настраиваемое представление "Создание процесса" в Просмотре событий для журналирования запускаемых процессов и их аргументов

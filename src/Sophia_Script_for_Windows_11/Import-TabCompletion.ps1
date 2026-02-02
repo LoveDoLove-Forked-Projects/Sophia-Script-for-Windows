@@ -30,25 +30,6 @@
 #Requires -RunAsAdministrator
 #Requires -Version 5.1
 
-function Sophia
-{
-	[CmdletBinding()]
-	param
-	(
-		[Parameter(Mandatory = $false)]
-		[string[]]
-		$Functions
-	)
-
-	foreach ($Function in $Functions)
-	{
-		Invoke-Expression -Command $Function
-	}
-
-	# The "PostActions" and "Errors" functions will be executed at the end
-	Invoke-Command -ScriptBlock {PostActions; Errors}
-}
-
 #region Initial Actions
 $Global:Failed = $false
 
@@ -69,11 +50,10 @@ if ($MyInvocation.Line -ne ". .\Import-TabCompletion.ps1")
 
 $Global:Failed = $false
 
-# Unload and import module
+# Unload and import private functions and module
+Get-ChildItem function: | Where-Object {$_.ScriptBlock.File -match "Sophia_Script_for_Windows"} | Remove-Item -Force
 Remove-Module -Name SophiaScript -Force -ErrorAction Ignore
 Import-Module -Name $PSScriptRoot\Manifest\SophiaScript.psd1 -PassThru -Force
-
-# Load private functions
 Get-ChildItem -Path $PSScriptRoot\Module\private | Foreach-Object -Process {. $_.FullName}
 
 # Dot-source script with checks
@@ -85,6 +65,25 @@ if ($Global:Failed)
 	exit
 }
 #endregion Initial Actions
+
+function Sophia
+{
+	[CmdletBinding()]
+	param
+	(
+		[Parameter(Mandatory = $false)]
+		[string[]]
+		$Functions
+	)
+
+	foreach ($Function in $Functions)
+	{
+		Invoke-Expression -Command $Function
+	}
+
+	# The "PostActions" and "Errors" functions will be executed at the end
+	Invoke-Command -ScriptBlock {PostActions}
+}
 
 $Parameters = @{
 	CommandName   = "Sophia"
@@ -265,7 +264,7 @@ Register-ArgumentCompleter @Parameters
 Write-Information -MessageData "" -InformationAction Continue
 Write-Verbose -Message "Sophia -Functions <tab>" -Verbose
 Write-Verbose -Message "Sophia -Functions temp<tab>" -Verbose
-Write-Verbose -Message "Sophia -Functions `"DiagTrackService -Disable`", `"DiagnosticDataLevel -Minimal`", Uninstall-UWPApps" -Verbose
+Write-Verbose -Message "Sophia -Functions 'DiagTrackService -Disable', 'DiagnosticDataLevel -Minimal', Uninstall-UWPApps" -Verbose
 Write-Information -MessageData "" -InformationAction Continue
-Write-Verbose -Message "Sophia -Functions `"Uninstall-UWPApps, `"PinToStart -UnpinAll`" -Verbose"
-Write-Verbose -Message "Sophia -Functions `"Set-Association -ProgramPath ```"%ProgramFiles%\Notepad++\notepad++.exe```" -Extension .txt -Icon ```"%ProgramFiles%\Notepad++\notepad++.exe,0```"`"" -Verbose
+Write-Verbose -Message "Sophia -Functions 'Uninstall-UWPApps, 'PinToStart -UnpinAll' -Verbose"
+Write-Verbose -Message "Sophia -Functions `"Set-Association -ProgramPath '%ProgramFiles%\Notepad++\notepad++.exe' -Extension .txt -Icon '%ProgramFiles%\Notepad++\notepad++.exe,0'`"" -Verbose

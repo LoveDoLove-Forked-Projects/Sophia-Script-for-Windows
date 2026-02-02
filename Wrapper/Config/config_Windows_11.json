@@ -951,7 +951,7 @@
         "WindowsDefault": "Zero"
     },
     {
-        "Region": "Start menu",
+        "Region": "UI & Personalization",
         "Control": "cmb",
         "Required": "false",
         "Function": "StartLayout",
@@ -1839,32 +1839,6 @@
         },
         "Preset": "Zero",
         "WindowsDefault": "One"
-    },
-    {
-        "Region": "Microsoft Defender & Security",
-        "Control": "chk",
-        "Required": "false",
-        "Function": "DismissMSAccount",
-        "Arg": {
-            "Zero": {
-                "Tag": ""
-            }
-        },
-        "Preset": "Zero",
-        "WindowsDefault": ""
-    },
-    {
-        "Region": "Microsoft Defender & Security",
-        "Control": "chk",
-        "Required": "false",
-        "Function": "DismissSmartScreenFilter",
-        "Arg": {
-            "Zero": {
-                "Tag": ""
-            }
-        },
-        "Preset": "Zero",
-        "WindowsDefault": ""
     },
     {
         "Region": "Microsoft Defender & Security",
