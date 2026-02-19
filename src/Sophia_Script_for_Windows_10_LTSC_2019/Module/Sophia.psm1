@@ -3,10 +3,10 @@
 	Sophia Script is a PowerShell module for fine-tuning Windows and automating routine tasks
 
 	.VERSION
-	6.0.4
+	6.1.1
 
 	.DATE
-	05.01.2026
+	13.02.2026
 
 	.COPYRIGHT
 	(c) 2014—2026 Team Sophia
@@ -210,7 +210,7 @@ function DiagnosticDataLevel
 			New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack -Name ShowedToastAtLevel -PropertyType DWord -Value 3 -Force
 			Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -Force -ErrorAction Ignore
 
-			Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -Type DELETE
+			Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -Type CLEAR
 		}
 	}
 }
@@ -255,8 +255,8 @@ function ErrorReporting
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "HKCU:\Software\Policies\Microsoft\Windows\Windows Error Reporting" -Name Disabled -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path "SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" -Name Disabled -Type DELETE
-	Set-Policy -Scope User -Path "Software\Policies\Microsoft\Windows\Windows Error Reporting" -Name Disabled -Type DELETE
+	Set-Policy -Scope Computer -Path "SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" -Name Disabled -Type CLEAR
+	Set-Policy -Scope User -Path "Software\Policies\Microsoft\Windows\Windows Error Reporting" -Name Disabled -Type CLEAR
 
 	switch ($PSCmdlet.ParameterSetName)
 	{
@@ -319,7 +319,7 @@ function FeedbackFrequency
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name DoNotShowFeedbackNotifications -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name DoNotShowFeedbackNotifications -Type DELETE
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name DoNotShowFeedbackNotifications -Type CLEAR
 	Remove-ItemProperty -Path HKCU:\Software\Microsoft\Siuf\Rules -Name PeriodInNanoSeconds -Force -ErrorAction Ignore
 
 	switch ($PSCmdlet.ParameterSetName)
@@ -382,7 +382,6 @@ function ScheduledTasks
 
 	Add-Type -AssemblyName PresentationCore, PresentationFramework
 
-	#region Variables
 	# Initialize an array list to store the selected scheduled tasks
 	$SelectedTasks = New-Object -TypeName System.Collections.ArrayList($null)
 
@@ -407,18 +406,8 @@ function ScheduledTasks
 		"MapsToastTask",
 
 		# This task checks for updates to maps which you have downloaded for offline use
-		"MapsUpdateTask",
-
-		# Initializes Family Safety monitoring and enforcement
-		"FamilySafetyMonitor",
-
-		# Synchronizes the latest settings with the Microsoft family features service
-		"FamilySafetyRefreshTask",
-
-		# XblGameSave Standby Task
-		"XblGameSaveTask"
+		"MapsUpdateTask"
 	)
-	#endregion Variables
 
 	#region XAML Markup
 	# The section defines the design of the upcoming dialog box
@@ -520,7 +509,7 @@ function ScheduledTasks
 	function DisableButton
 	{
 		Write-Information -MessageData "" -InformationAction Continue
-		# Extract the localized "Please wait..." string from shell32.dll
+		# Extract the localized "Please wait..." string from %SystemRoot%\System32\shell32.dll
 		Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
 
 		[void]$Window.Close()
@@ -532,7 +521,7 @@ function ScheduledTasks
 	function EnableButton
 	{
 		Write-Information -MessageData "" -InformationAction Continue
-		# Extract the localized "Please wait..." string from shell32.dll
+		# Extract the localized "Please wait..." string from %SystemRoot%\System32\shell32.dll
 		Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
 
 		[void]$Window.Close()
@@ -585,7 +574,7 @@ function ScheduledTasks
 		"Enable"
 		{
 			$State           = "Disabled"
-			# Extract the localized "Enable" string from shell32.dll
+			# Extract the localized "Enable" string from %SystemRoot%\System32\shell32.dll
 			$ButtonContent   = [WinAPI.GetStrings]::GetString(51472)
 			$ButtonAdd_Click = {EnableButton}
 		}
@@ -598,7 +587,7 @@ function ScheduledTasks
 	}
 
 	Write-Information -MessageData "" -InformationAction Continue
-	# Extract the localized "Please wait..." string from shell32.dll
+	# Extract the localized "Please wait..." string from %SystemRoot%\System32\shell32.dll
 	Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
 
 	# Getting list of all scheduled tasks according to the conditions
@@ -687,7 +676,7 @@ function SigninInfo
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -Name DisableAutomaticRestartSignOn -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -Name DisableAutomaticRestartSignOn -Type DELETE
+	Set-Policy -Scope Computer -Path SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -Name DisableAutomaticRestartSignOn -Type CLEAR
 
 	switch ($PSCmdlet.ParameterSetName)
 	{
@@ -799,7 +788,7 @@ function AdvertisingID
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo -Name DisabledByGroupPolicy -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo -Name DisabledByGroupPolicy -Type DELETE
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo -Name DisabledByGroupPolicy -Type CLEAR
 
 	if (-not (Test-Path -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo))
 	{
@@ -1281,8 +1270,8 @@ function FileExplorerRibbon
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer, HKCU:\Software\Policies\Microsoft\Windows\Explorer -Name ExplorerRibbonStartsMinimized -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name ExplorerRibbonStartsMinimized -Type DELETE
-	Set-Policy -Scope User -Path Software\Policies\Microsoft\Windows\Explorer -Name ExplorerRibbonStartsMinimized -Type DELETE
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name ExplorerRibbonStartsMinimized -Type CLEAR
+	Set-Policy -Scope User -Path Software\Policies\Microsoft\Windows\Explorer -Name ExplorerRibbonStartsMinimized -Type CLEAR
 
 	switch ($PSCmdlet.ParameterSetName)
 	{
@@ -1345,8 +1334,8 @@ function RecycleBinDeleteConfirmation
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer, HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name ConfirmFileDelete -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name ConfirmFileDelete -Type DELETE
-	Set-Policy -Scope User -Path Software\Policies\Microsoft\Windows\Explorer -Name ConfirmFileDelete -Type DELETE
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name ConfirmFileDelete -Type CLEAR
+	Set-Policy -Scope User -Path Software\Policies\Microsoft\Windows\Explorer -Name ConfirmFileDelete -Type CLEAR
 
 	$ShellState = Get-ItemPropertyValue -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer -Name ShellState
 
@@ -1659,8 +1648,8 @@ function QuickAccessRecentFiles
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer, HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoRecentDocsHistory -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name NoRecentDocsHistory -Type DELETE
-	Set-Policy -Scope User -Path Software\Policies\Microsoft\Windows\Explorer -Name NoRecentDocsHistory -Type DELETE
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name NoRecentDocsHistory -Type CLEAR
+	Set-Policy -Scope User -Path Software\Policies\Microsoft\Windows\Explorer -Name NoRecentDocsHistory -Type CLEAR
 
 	switch ($PSCmdlet.ParameterSetName)
 	{
@@ -1779,8 +1768,8 @@ function TaskbarSearch
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" -Name DisableSearch, SearchOnTaskbarMode -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path "SOFTWARE\Policies\Microsoft\Windows\Windows Search" -Name DisableSearch -Type DELETE
-	Set-Policy -Scope Computer -Path "SOFTWARE\Policies\Microsoft\Windows\Windows Search" -Name SearchOnTaskbarMode -Type DELETE
+	Set-Policy -Scope Computer -Path "SOFTWARE\Policies\Microsoft\Windows\Windows Search" -Name DisableSearch -Type CLEAR
+	Set-Policy -Scope Computer -Path "SOFTWARE\Policies\Microsoft\Windows\Windows Search" -Name SearchOnTaskbarMode -Type CLEAR
 
 	# Checking whether small taskbar buttons enabled
 	# We have to use GetValue() due to "Set-StrictMode -Version Latest"
@@ -1902,8 +1891,8 @@ function PeopleTaskbar
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKCU:\Software\Policies\Microsoft\Windows\Explorer, HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer -Name HidePeopleBar -Force -ErrorAction Ignore
-	Set-Policy -Scope User -Path Software\Policies\Microsoft\Windows\Explorer -Name HidePeopleBar -Type DELETE
-	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name HidePeopleBar -Type DELETE
+	Set-Policy -Scope User -Path Software\Policies\Microsoft\Windows\Explorer -Name HidePeopleBar -Type CLEAR
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name HidePeopleBar -Type CLEAR
 
 	switch ($PSCmdlet.ParameterSetName)
 	{
@@ -1966,8 +1955,8 @@ function NotificationAreaIcons
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer, HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoAutoTrayNotify -Force -ErrorAction Ignore
-	Set-Policy -Scope User -Path Software\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoAutoTrayNotify -Type DELETE
-	Set-Policy -Scope Computer -Path SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoAutoTrayNotify -Type DELETE
+	Set-Policy -Scope User -Path Software\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoAutoTrayNotify -Type CLEAR
+	Set-Policy -Scope Computer -Path SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoAutoTrayNotify -Type CLEAR
 
 	switch ($PSCmdlet.ParameterSetName)
 	{
@@ -2086,8 +2075,8 @@ function TaskbarCombine
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer, HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoTaskGrouping -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoTaskGrouping -Type DELETE
-	Set-Policy -Scope User -Path Software\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoTaskGrouping -Type DELETE
+	Set-Policy -Scope Computer -Path SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoTaskGrouping -Type CLEAR
+	Set-Policy -Scope User -Path Software\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoTaskGrouping -Type CLEAR
 
 	switch ($PSCmdlet.ParameterSetName)
 	{
@@ -2159,7 +2148,7 @@ function ControlPanelView
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name ForceClassicControlPanel -Force -ErrorAction Ignore
-	Set-Policy -Scope User -Path Software\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name ForceClassicControlPanel -Type DELETE
+	Set-Policy -Scope User -Path Software\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name ForceClassicControlPanel -Type CLEAR
 
 	if (-not (Test-Path -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\ControlPanel))
 	{
@@ -2290,7 +2279,7 @@ function NewAppInstalledNotification
 		"Show"
 		{
 			Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer -Name NoNewAppAlert -Force -ErrorAction Ignore
-			Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name NoNewAppAlert -Type DELETE
+			Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name NoNewAppAlert -Type CLEAR
 		}
 	}
 }
@@ -2335,7 +2324,7 @@ function FirstLogonAnimation
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -Name EnableFirstLogonAnimation -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -Name EnableFirstLogonAnimation -Type DELETE
+	Set-Policy -Scope Computer -Path SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -Name EnableFirstLogonAnimation -Type CLEAR
 
 	switch ($PSCmdlet.ParameterSetName)
 	{
@@ -2889,7 +2878,7 @@ public static extern bool SystemParametersInfo(uint uiAction, uint uiParam, uint
 	Do not group files and folder in the Downloads folder
 
 	.PARAMETER Default
-	Group files and folder by date modified in the Downloads folder (default value)
+	Group files and folder by date modified in the Downloads folder
 
 	.EXAMPLE
 	FolderGroupBy -None
@@ -2951,7 +2940,7 @@ function FolderGroupBy
 	Expand to current folder in navigation pane
 
 	.PARAMETER Disable
-	Do not expand to open folder on navigation pane (default value)
+	Do not expand to open folder on navigation pane
 
 	.PARAMETER Enable
 	Expand to open folder on navigation pane
@@ -3005,7 +2994,7 @@ function NavigationPaneExpand
 	Hide recently added apps on Start
 
 	.PARAMETER Show
-	Show recently added apps on Start (default value)
+	Show recently added apps on Start
 
 	.EXAMPLE
 	RecentlyAddedStartApps -Hide
@@ -3037,8 +3026,8 @@ function RecentlyAddedStartApps
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKCU:\Software\Policies\Microsoft\Windows\Explorer, HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer -Name HideRecentlyAddedApps -Force -ErrorAction Ignore
-	Set-Policy -Scope User -Path Software\Policies\Microsoft\Windows\Explorer -Name HideRecentlyAddedApps -Type DELETE
-	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name HideRecentlyAddedApps -Type DELETE
+	Set-Policy -Scope User -Path Software\Policies\Microsoft\Windows\Explorer -Name HideRecentlyAddedApps -Type CLEAR
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name HideRecentlyAddedApps -Type CLEAR
 
 	if (Get-Process -Name Start11Srv, StartAllBackCfg, StartMenu -ErrorAction Ignore)
 	{
@@ -3064,7 +3053,7 @@ function RecentlyAddedStartApps
 		"Show"
 		{
 			Remove-ItemProperty -Path HKCU:\Software\Policies\Microsoft\Windows\Explorer -Name HideRecentlyAddedApps -Force -ErrorAction Ignore
-			Set-Policy -Scope User -Path Software\Policies\Microsoft\Windows\Explorer -Name HideRecentlyAddedApps -Type DELETE
+			Set-Policy -Scope User -Path Software\Policies\Microsoft\Windows\Explorer -Name HideRecentlyAddedApps -Type CLEAR
 		}
 	}
 }
@@ -3077,7 +3066,7 @@ function RecentlyAddedStartApps
 	Hide most used Apps in Start
 
 	.PARAMETER Show
-	Show most used Apps in Start (default value)
+	Show most used Apps in Start
 
 	.EXAMPLE
 	MostUsedStartApps -Hide
@@ -3109,7 +3098,7 @@ function MostUsedStartApps
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoStartMenuMFUprogramsList -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoStartMenuMFUprogramsList -Type DELETE
+	Set-Policy -Scope Computer -Path SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoStartMenuMFUprogramsList -Type CLEAR
 
 	if (Get-Process -Name Start11Srv, StartAllBackCfg, StartMenu -ErrorAction Ignore)
 	{
@@ -3124,15 +3113,19 @@ function MostUsedStartApps
 	{
 		"Hide"
 		{
+			if (-not (Test-Path -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer))
+			{
+				New-Item -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer -ItemType Directory -Force
+			}
 			New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoStartMenuMFUprogramsList -PropertyType DWord -Value 1 -Force
 			Set-Policy -Scope User -Path Software\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoStartMenuMFUprogramsList -Type DWORD -Value 1
 		}
 		"Show"
 		{
-			Remove-ItemProperty -Path HKCU:\NoStartMenuMFUprogramsList -Name Start_TrackProgs -Force -ErrorAction Ignore
-			Set-Policy -Scope User -Path Software\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoStartMenuMFUprogramsList-Type DELETE
-			Set-Policy -Scope Computer -Path SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoStartMenuMFUprogramsList-Type DELETE
-			Set-Policy -Scope Computer -Path SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoInstrumentation-Type DELETE
+			Remove-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoStartMenuMFUprogramsList -Force -ErrorAction Ignore
+			Set-Policy -Scope User -Path Software\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoStartMenuMFUprogramsList-Type CLEAR
+			Set-Policy -Scope Computer -Path SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoStartMenuMFUprogramsList-Type CLEAR
+			Set-Policy -Scope Computer -Path SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoInstrumentation-Type CLEAR
 		}
 	}
 }
@@ -3177,7 +3170,7 @@ function AppSuggestions
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent -Name DisableWindowsConsumerFeatures -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\CloudContent -Name DisableWindowsConsumerFeatures -Type DELETE
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\CloudContent -Name DisableWindowsConsumerFeatures -Type CLEAR
 
 	switch ($PSCmdlet.ParameterSetName)
 	{
@@ -3234,7 +3227,7 @@ function StorageSense
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\StorageSense -Name AllowStorageSenseGlobal -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\StorageSense -Name AllowStorageSenseGlobal -Type DELETE
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\StorageSense -Name AllowStorageSenseGlobal -Type CLEAR
 
 	if (-not (Test-Path -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy))
 	{
@@ -3528,7 +3521,7 @@ function DeliveryOptimization
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization -Name DODownloadMode -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization -Name DODownloadMode -Type DELETE
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization -Name DODownloadMode -Type CLEAR
 
 	switch ($PSCmdlet.ParameterSetName)
 	{
@@ -3581,7 +3574,7 @@ function WindowsManageDefaultPrinter
 		$Enable
 	)
 
-	Set-Policy -Scope User -Path "Software\Microsoft\Windows NT\CurrentVersion\Windows" -Name LegacyDefaultPrinterMode -Type DELETE
+	Set-Policy -Scope User -Path "Software\Microsoft\Windows NT\CurrentVersion\Windows" -Name LegacyDefaultPrinterMode -Type CLEAR
 
 	switch ($PSCmdlet.ParameterSetName)
 	{
@@ -3639,7 +3632,6 @@ function WindowsFeatures
 
 	Add-Type -AssemblyName PresentationCore, PresentationFramework
 
-	#region Variables
 	# Initialize an array list to store the selected Windows features
 	$SelectedFeatures = New-Object -TypeName System.Collections.ArrayList($null)
 
@@ -3655,17 +3647,12 @@ function WindowsFeatures
 		# Microsoft XPS Document Writer
 		"Printing-XPSServices-Features",
 
-		# Work Folders Client
-		"WorkFolders-Client"
-	)
-
-	# The following Windows features will have their checkboxes unchecked
-	[string[]]$UncheckedFeatures = @(
 		# Media Features
 		# If you want to leave "Multimedia settings" in the advanced settings of Power Options do not disable this feature
 		"MediaPlayback"
 	)
-	#endregion Variables
+
+	$WindowsOptionalFeature = Get-WindowsOptionalFeature -Online
 
 	#region XAML Markup
 	# The section defines the design of the upcoming dialog box
@@ -3766,7 +3753,7 @@ function WindowsFeatures
 	function DisableButton
 	{
 		Write-Information -MessageData "" -InformationAction Continue
-		# Extract the localized "Please wait..." string from shell32.dll
+		# Extract the localized "Please wait..." string from %SystemRoot%\System32\shell32.dll
 		Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
 
 		[void]$Window.Close()
@@ -3778,7 +3765,7 @@ function WindowsFeatures
 	function EnableButton
 	{
 		Write-Information -MessageData "" -InformationAction Continue
-		# Extract the localized "Please wait..." string from shell32.dll
+		# Extract the localized "Please wait..." string from %SystemRoot%\System32\shell32.dll
 		Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
 
 		[void]$Window.Close()
@@ -3818,14 +3805,6 @@ function WindowsFeatures
 			$CheckBox.IsChecked = $true
 
 			# If feature checked add to the array list
-			if ($UnCheckedFeatures | Where-Object -FilterScript {$Feature.FeatureName -like $_})
-			{
-				$CheckBox.IsChecked = $false
-				# Exit function if item is not checked
-				return
-			}
-
-			# If feature checked add to the array list
 			[void]$SelectedFeatures.Add($Feature)
 		}
 	}
@@ -3848,14 +3827,14 @@ function WindowsFeatures
 	}
 
 	Write-Information -MessageData "" -InformationAction Continue
-	# Extract the localized "Please wait..." string from shell32.dll
+	# Extract the localized "Please wait..." string from %SystemRoot%\System32\shell32.dll
 	Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
 
 	# Getting list of all optional features according to the conditions
 	$OFS = "|"
-	$Features = Get-WindowsOptionalFeature -Online | Where-Object -FilterScript {
-		($_.State -in $State) -and (($_.FeatureName -match $UncheckedFeatures) -or ($_.FeatureName -match $CheckedFeatures))
-	} | ForEach-Object -Process {Get-WindowsOptionalFeature -FeatureName $_.FeatureName -Online}
+	$Features = $WindowsOptionalFeature | Where-Object -FilterScript {($_.State -in $State) -and ($_.FeatureName -match $CheckedFeatures)} | ForEach-Object -Process {
+		Get-WindowsOptionalFeature -Online -FeatureName $_.FeatureName
+	}
 	$OFS = " "
 
 	if (-not $Features)
@@ -3874,7 +3853,7 @@ function WindowsFeatures
 	Add-Type -AssemblyName System.Windows.Forms
 
 	# We cannot use Get-Process -Id $PID as script might be invoked via Terminal with different $PID
-	Get-Process -Name powershell, WindowsTerminal -ErrorAction Ignore | Where-Object -FilterScript {$_.MainWindowTitle -match "Sophia Script for Windows 10 LTSC 2019"} | ForEach-Object -Process {
+	Get-Process -Name powershell, WindowsTerminal -ErrorAction Ignore | Where-Object -FilterScript {$_.MainWindowTitle -match "Sophia Script for Windows 10"} | ForEach-Object -Process {
 		# Show window, if minimized
 		[WinAPI.ForegroundWindow]::ShowWindowAsync($_.MainWindowHandle, 10)
 
@@ -3950,13 +3929,10 @@ function WindowsCapabilities
 
 	# The following optional features will have their checkboxes checked
 	[string[]]$CheckedCapabilities = @(
-		# Microsoft Quick Assist
-		"App.Support.QuickAssist*"
-	)
+		# Steps Recorder
+		"App.StepsRecorder*",
 
-	# The following optional features will have their checkboxes unchecked
-	[string[]]$UncheckedCapabilities = @(
-		# Internet Explorer 11
+		# Internet Explorer mode
 		"Browser.InternetExplorer*",
 
 		# Windows Media Player
@@ -3964,23 +3940,7 @@ function WindowsCapabilities
 		"Media.WindowsMediaPlayer*"
 	)
 
-	# The following optional features will be excluded from the display
-	[string[]]$ExcludedCapabilities = @(
-		# The DirectX Database to configure and optimize apps when multiple Graphics Adapters are present
-		"DirectX.Configuration.Database*",
-
-		# Language components
-		"Language.*",
-
-		# Notepad
-		"Microsoft.Windows.Notepad*",
-
-		# Mail, contacts, and calendar sync component
-		"OneCoreUAP.OneSync*",
-
-		# Windows PowerShell Intergrated Scripting Enviroment
-		"Microsoft.Windows.PowerShell.ISE*"
-	)
+	$WindowsCapability = Get-WindowsCapability -Online
 	#endregion Variables
 
 	#region XAML Markup
@@ -4083,13 +4043,13 @@ function WindowsCapabilities
 	function UninstallButton
 	{
 		Write-Information -MessageData "" -InformationAction Continue
-		# Extract the localized "Please wait..." string from shell32.dll
+		# Extract the localized "Please wait..." string from %SystemRoot%\System32\shell32.dll
 		Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
 
 		[void]$Window.Close()
 
 		$SelectedCapabilities | ForEach-Object -Process {Write-Verbose -Message $_.DisplayName -Verbose}
-		$SelectedCapabilities | Where-Object -FilterScript {$_.Name -in (Get-WindowsCapability -Online).Name} | Remove-WindowsCapability -Online
+		$SelectedCapabilities | Where-Object -FilterScript {$_.Name -in $WindowsCapability.Name} | Remove-WindowsCapability -Online
 	}
 
 	function InstallButton
@@ -4097,13 +4057,13 @@ function WindowsCapabilities
 		try
 		{
 			Write-Information -MessageData "" -InformationAction Continue
-			# Extract the localized "Please wait..." string from shell32.dll
+			# Extract the localized "Please wait..." string from %SystemRoot%\System32\shell32.dll
 			Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
 
 			[void]$Window.Close()
 
 			$SelectedCapabilities | ForEach-Object -Process {Write-Verbose -Message $_.DisplayName -Verbose}
-			$SelectedCapabilities | Where-Object -FilterScript {$_.Name -in ((Get-WindowsCapability -Online).Name)} | Add-WindowsCapability -Online
+			$SelectedCapabilities | Where-Object -FilterScript {$_.Name -in $WindowsCapability.Name} | Add-WindowsCapability -Online
 		}
 		catch [System.Runtime.InteropServices.COMException]
 		{
@@ -4142,14 +4102,6 @@ function WindowsCapabilities
 			[void]$PanelContainer.Children.Add($StackPanel)
 
 			# If capability checked add to the array list
-			if ($UnCheckedCapabilities | Where-Object -FilterScript {$Capability.Name -like $_})
-			{
-				$CheckBox.IsChecked = $false
-				# Exit function if item is not checked
-				return
-			}
-
-			# If capability checked add to the array list
 			[void]$SelectedCapabilities.Add($Capability)
 		}
 	}
@@ -4183,14 +4135,14 @@ function WindowsCapabilities
 	}
 
 	Write-Information -MessageData "" -InformationAction Continue
-	# Extract the localized "Please wait..." string from shell32.dll
+	# Extract the localized "Please wait..." string from %SystemRoot%\System32\shell32.dll
 	Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
 
 	# Getting list of all capabilities according to the conditions
 	$OFS = "|"
-	$Capabilities = Get-WindowsCapability -Online | Where-Object -FilterScript {
-		($_.State -eq $State) -and (($_.Name -match $UncheckedCapabilities) -or ($_.Name -match $CheckedCapabilities) -and ($_.Name -notmatch $ExcludedCapabilities))
-	} | ForEach-Object -Process {Get-WindowsCapability -Name $_.Name -Online}
+	$Capabilities = $WindowsCapability | Where-Object -FilterScript {
+		($_.State -eq $State) -and ($_.Name -match $CheckedCapabilities)
+	} | ForEach-Object -Process {Get-WindowsCapability -Online -Name $_.Name}
 	$OFS = " "
 
 	if (-not $Capabilities)
@@ -4209,7 +4161,7 @@ function WindowsCapabilities
 	Add-Type -AssemblyName System.Windows.Forms
 
 	# We cannot use Get-Process -Id $PID as script might be invoked via Terminal with different $PID
-	Get-Process -Name powershell, WindowsTerminal -ErrorAction Ignore | Where-Object -FilterScript {$_.MainWindowTitle -match "Sophia Script for Windows 10 LTSC 2019"} | ForEach-Object -Process {
+	Get-Process -Name powershell, WindowsTerminal -ErrorAction Ignore | Where-Object -FilterScript {$_.MainWindowTitle -match "Sophia Script for Windows 10"} | ForEach-Object -Process {
 		# Show window, if minimized
 		[WinAPI.ForegroundWindow]::ShowWindowAsync($_.MainWindowHandle, 10)
 
@@ -4276,7 +4228,7 @@ function UpdateMicrosoftProducts
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU -Name AllowMUUpdateService -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU -Name AllowMUUpdateService -Type DELETE
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU -Name AllowMUUpdateService -Type CLEAR
 
 	switch ($PSCmdlet.ParameterSetName)
 	{
@@ -4334,7 +4286,7 @@ function RestartNotification
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate -Name SetAutoRestartNotificationDisable -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate -Name SetAutoRestartNotificationDisable -Type DELETE
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate -Name SetAutoRestartNotificationDisable -Type CLEAR
 
 	switch ($PSCmdlet.ParameterSetName)
 	{
@@ -4389,13 +4341,13 @@ function ActiveHours
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU -Name NoAutoRebootWithLoggedOnUsers, AlwaysAutoRebootAtScheduledTime -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU -Name NoAutoRebootWithLoggedOnUsers -Type DELETE
-	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU -Name AlwaysAutoRebootAtScheduledTime -Type DELETE
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU -Name NoAutoRebootWithLoggedOnUsers -Type CLEAR
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU -Name AlwaysAutoRebootAtScheduledTime -Type CLEAR
 
 	Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate -Name ActiveHoursEnd, ActiveHoursStart, SetActiveHours -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate -Name ActiveHoursEnd -Type DELETE
-	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate -Name ActiveHoursStart -Type DELETE
-	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate -Name SetActiveHours -Type DELETE
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate -Name ActiveHoursEnd -Type CLEAR
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate -Name ActiveHoursStart -Type CLEAR
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate -Name SetActiveHours -Type CLEAR
 
 	switch ($PSCmdlet.ParameterSetName)
 	{
@@ -4453,7 +4405,7 @@ function PowerPlan
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Power\PowerSettings -Name ActivePowerScheme -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Power\PowerSettings -Name ActivePowerScheme -Type DELETE
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Power\PowerSettings -Name ActivePowerScheme -Type CLEAR
 
 	switch ($PSCmdlet.ParameterSetName)
 	{
@@ -4509,13 +4461,21 @@ function NetworkAdaptersSavePower
 		$Enable
 	)
 
-	Write-Information -MessageData "" -InformationAction Continue
-	# Extract the localized "Please wait..." string from shell32.dll
-	Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
+	# Turn On Desktop Apps Access to Location
+	New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location -Name Value -PropertyType String -Value Allow -Force
+	New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location -Name Value -PropertyType String -Value Allow -Force
+	New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location\NonPackaged -Name Value -PropertyType String -Value Allow -Force
+
+	# Remove all policies in order to make changes visible in UI
+	Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors -Name DisableLocation -Force -ErrorAction Ignore
+	Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy -Name LetAppsAccessLocation -Force -ErrorAction Ignore
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors -Name DisableLocation -Type CLEAR
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\AppPrivacy -Name LetAppsAccessLocation -Type CLEAR
 
 	# Checking whether there's an adapter that has AllowComputerToTurnOffDevice property to manage
 	# We need also check for adapter status per some laptops have many equal adapters records in adapters list
-	$Adapters = Get-NetAdapter -Physical | Where-Object -FilterScript {$_.Status -eq "Up"} | Get-NetAdapterPowerManagement | Where-Object -FilterScript {$_.AllowComputerToTurnOffDevice -ne "Unsupported"}
+	$PhysicalAdaptersStatusUp = @(Get-NetAdapter -Physical | Where-Object -FilterScript {$_.Status -eq "Up"})
+	$Adapters = $PhysicalAdaptersStatusUp | Get-NetAdapterPowerManagement | Where-Object -FilterScript {$_.AllowComputerToTurnOffDevice -ne "Unsupported"}
 	if (-not $Adapters)
 	{
 		Write-Information -MessageData "" -InformationAction Continue
@@ -4525,8 +4485,6 @@ function NetworkAdaptersSavePower
 		return
 	}
 
-	$PhysicalAdaptersStatusUp = @(Get-NetAdapter -Physical | Where-Object -FilterScript {$_.Status -eq "Up"})
-
 	# Checking whether PC is currently connected to a Wi-Fi network
 	# NetConnectionStatus 2 is Wi-Fi
 	$InterfaceIndex = (Get-CimInstance -ClassName Win32_NetworkAdapter -Namespace root/CIMV2 | Where-Object -FilterScript {$_.NetConnectionStatus -eq 2}).InterfaceIndex
@@ -4534,6 +4492,47 @@ function NetworkAdaptersSavePower
 	{
 		# Get currently connected Wi-Fi network SSID
 		$SSID = (Get-NetConnectionProfile).Name
+	}
+
+	if ($PhysicalAdaptersStatusUp)
+	{
+		# If Wi-Fi network was used
+		if ($SSID)
+		{
+			Write-Verbose -Message $SSID -Verbose
+
+			# Check whether network shell commands were granted location permission to access WLAN information
+			# https://learn.microsoft.com/en-us/windows/win32/nativewifi/wi-fi-access-location-changes
+			try
+			{
+				# Connect to it
+				Start-Process -FilePath "$env:SystemRoot\System32\netsh.exe" -ArgumentList "wlan connect name=$SSID" -Wait -ErrorAction Stop
+			}
+			catch
+			{
+				Write-Information -MessageData "" -InformationAction Continue
+				Write-Verbose -Message ($Localization.LocationServicesDisabled, ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -Verbose
+				Write-Error -Message ($Localization.LocationServicesDisabled, ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
+
+				Start-Process -FilePath ms-settings:privacy-location
+
+				return
+			}
+		}
+
+		# All network adapters are turned into "Disconnected" for few seconds, so we need to wait a bit to let them up
+		# Otherwise functions below will indicate that there is no the Internet connection
+		while
+		(
+			Get-NetAdapter -Physical -Name $PhysicalAdaptersStatusUp.Name | Where-Object -FilterScript {($_.Status -eq "Disconnected") -and $_.MacAddress}
+		)
+		{
+			Write-Information -MessageData "" -InformationAction Continue
+			# Extract the localized "Please wait..." string from %SystemRoot%\System32\shell32.dll
+			Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
+
+			Start-Sleep -Seconds 2
+		}
 	}
 
 	switch ($PSCmdlet.ParameterSetName)
@@ -4556,25 +4555,26 @@ function NetworkAdaptersSavePower
 		}
 	}
 
-	# All network adapters are turned into "Disconnected" for few seconds, so we need to wait a bit to let them up
-	# Otherwise functions below will indicate that there is no the Internet connection
 	if ($PhysicalAdaptersStatusUp)
 	{
 		# If Wi-Fi network was used
 		if ($SSID)
 		{
 			Write-Verbose -Message $SSID -Verbose
+
 			# Connect to it
-			netsh wlan connect name=$SSID
+			Start-Process -FilePath "$env:SystemRoot\System32\netsh.exe" -ArgumentList "wlan connect name=$SSID" -Wait
 		}
 
+		# All network adapters are turned into "Disconnected" for few seconds, so we need to wait a bit to let them up
+		# Otherwise functions below will indicate that there is no the Internet connection
 		while
 		(
 			Get-NetAdapter -Physical -Name $PhysicalAdaptersStatusUp.Name | Where-Object -FilterScript {($_.Status -eq "Disconnected") -and $_.MacAddress}
 		)
 		{
 			Write-Information -MessageData "" -InformationAction Continue
-			# Extract the localized "Please wait..." string from shell32.dll
+			# Extract the localized "Please wait..." string from %SystemRoot%\System32\shell32.dll
 			Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
 
 			Start-Sleep -Seconds 2
@@ -4699,7 +4699,7 @@ function Set-UserShellFolderLocation
 	}
 
 	# Registry user folder names
-	$UserFolderRegistry = @{
+	$Global:UserFolderRegistry = @{
 		"Desktop"   = "Desktop"
 		"Documents" = "Personal"
 		"Downloads" = "{374DE290-123F-4565-9164-39C4925E467B}"
@@ -4708,7 +4708,7 @@ function Set-UserShellFolderLocation
 		"Videos"    = "My Video"
 	}
 
-	$UserFolderGUIDs = @{
+	$Global:UserFolderGUIDs = @{
 		"Desktop"   = "{754AC886-DF64-4CBA-86B5-F7FBF4FBCEF5}"
 		"Documents" = "{F42EE2D3-909F-4907-8871-4C22FC0BF756}"
 		"Downloads" = "{7D83EE9B-2244-4E70-B1F5-5404642AF1E4}"
@@ -4721,14 +4721,14 @@ function Set-UserShellFolderLocation
 	$Desktop = @"
 "",
 "[.ShellClassInfo]",
-"LocalizedResourceName=@%SystemRoot%\System32\shell32.dll,-21769",
+"LocalizedResourceName=@shell32.dll,-21769",
 "IconResource=%SystemRoot%\System32\imageres.dll,-183"
 "@
 
 	$Documents = @"
 "",
 "[.ShellClassInfo]",
-"LocalizedResourceName=@%SystemRoot%\System32\shell32.dll,-21770",
+"LocalizedResourceName=@shell32.dll,-21770",
  "IconResource=%SystemRoot%\System32\imageres.dll,-112",
 "IconFile=%SystemRoot%\System32\shell32.dll",
 "IconIndex=-235"
@@ -4737,15 +4737,15 @@ function Set-UserShellFolderLocation
 	$Downloads = @"
 "",
 "[.ShellClassInfo]",
-"LocalizedResourceName=@%SystemRoot%\System32\shell32.dll,-21798",
+"LocalizedResourceName=@shell32.dll,-21798",
 "IconResource=%SystemRoot%\System32\imageres.dll,-184"
 "@
 
 	$Music = @"
 "",
 "[.ShellClassInfo]",
-"LocalizedResourceName=@%SystemRoot%\System32\shell32.dll,-21790",
-"InfoTip=@%SystemRoot%\System32\shell32.dll,-12689",
+"LocalizedResourceName=@shell32.dll,-21790",
+"InfoTip=@shell32.dll,-12689",
 "IconResource=%SystemRoot%\System32\imageres.dll,-108",
 "IconFile=%SystemRoot%\System32\shell32.dll","IconIndex=-237"
 "@
@@ -4753,8 +4753,8 @@ function Set-UserShellFolderLocation
 	$Pictures = @"
 "",
 "[.ShellClassInfo]",
-"LocalizedResourceName=@%SystemRoot%\System32\shell32.dll,-21779",
-"InfoTip=@%SystemRoot%\System32\shell32.dll,-12688",
+"LocalizedResourceName=@shell32.dll,-21779",
+"InfoTip=@shell32.dll,-12688",
 "IconResource=%SystemRoot%\System32\imageres.dll,-113",
 "IconFile=%SystemRoot%\System32\shell32.dll",
 "IconIndex=-236"
@@ -4763,14 +4763,14 @@ function Set-UserShellFolderLocation
 	$Videos = @"
 "",
 "[.ShellClassInfo]",
-"LocalizedResourceName=@%SystemRoot%\System32\shell32.dll,-21791",
-"InfoTip=@%SystemRoot%\System32\shell32.dll,-12690",
+"LocalizedResourceName=@shell32.dll,-21791",
+"InfoTip=@shell32.dll,-12690",
 "IconResource=%SystemRoot%\System32\imageres.dll,-189",
 "IconFile=%SystemRoot%\System32\shell32.dll",
 "IconIndex=-238"
 "@
 
-	$DesktopINI = @{
+	$Global:DesktopINI = @{
 		"Desktop"   = $Desktop
 		"Documents" = $Documents
 		"Downloads" = $Downloads
@@ -4797,7 +4797,7 @@ function Set-UserShellFolderLocation
 
 			foreach ($UserFolder in @("Desktop", "Documents", "Downloads", "Music", "Pictures", "Videos"))
 			{
-				# Extract the localized user folders strings from shell32.dll
+				# Extract the localized user folders strings from %SystemRoot%\System32\shell32.dll
 				Write-Information -MessageData "" -InformationAction Continue
 				Write-Verbose -Message ($Localization.DriveSelect -f [WinAPI.GetStrings]::GetString($LocalizedUserFolderNameIDs[$UserFolder])) -Verbose
 
@@ -4818,8 +4818,8 @@ function Set-UserShellFolderLocation
 						$Skip
 						{
 							Write-Information -MessageData "" -InformationAction Continue
-							Write-Verbose -Message ($Localization.Skipped -f $MyInvocation.Line.Trim()) -Verbose
-							Write-Error -Message ($Localization.Skipped -f $MyInvocation.Line.Trim()) -ErrorAction SilentlyContinue
+							Write-Verbose -Message (($Localization.UserFolderMoveSkipped -f [WinAPI.GetStrings]::GetString($LocalizedUserFolderNameIDs[$UserFolder])), ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -Verbose
+							Write-Error -Message (($Localization.UserFolderMoveSkipped -f [WinAPI.GetStrings]::GetString($LocalizedUserFolderNameIDs[$UserFolder])), ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
 						}
 						$KeyboardArrows {}
 					}
@@ -4831,7 +4831,7 @@ function Set-UserShellFolderLocation
 		{
 			foreach ($UserFolder in @("Desktop", "Documents", "Downloads", "Music", "Pictures", "Videos"))
 			{
-				# Extract the localized user folders strings from shell32.dll
+				# Extract the localized user folders strings from %SystemRoot%\System32\shell32.dll
 				Write-Information -MessageData "" -InformationAction Continue
 				Write-Verbose -Message ($Localization.UserFolderRequest -f [WinAPI.GetStrings]::GetString($LocalizedUserFolderNameIDs[$UserFolder])) -Verbose
 
@@ -4874,8 +4874,8 @@ function Set-UserShellFolderLocation
 						$Skip
 						{
 							Write-Information -MessageData "" -InformationAction Continue
-							Write-Verbose -Message ($Localization.Skipped -f $MyInvocation.Line.Trim()) -Verbose
-							Write-Error -Message ($Localization.Skipped -f $MyInvocation.Line.Trim()) -ErrorAction SilentlyContinue
+							Write-Verbose -Message (($Localization.UserFolderMoveSkipped -f [WinAPI.GetStrings]::GetString($LocalizedUserFolderNameIDs[$UserFolder])), ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -Verbose
+							Write-Error -Message (($Localization.UserFolderMoveSkipped -f [WinAPI.GetStrings]::GetString($LocalizedUserFolderNameIDs[$UserFolder])), ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
 						}
 						$KeyboardArrows {}
 					}
@@ -4887,7 +4887,7 @@ function Set-UserShellFolderLocation
 		{
 			foreach ($UserFolder in @("Desktop", "Documents", "Downloads", "Music", "Pictures", "Videos"))
 			{
-				# Extract the localized user folders strings from shell32.dll
+				# Extract the localized user folders strings from %SystemRoot%\System32\shell32.dll
 				Write-Information -MessageData "" -InformationAction Continue
 				Write-Verbose -Message ($Localization.UserDefaultFolder -f [WinAPI.GetStrings]::GetString($LocalizedUserFolderNameIDs[$UserFolder])) -Verbose
 
@@ -4908,66 +4908,14 @@ function Set-UserShellFolderLocation
 						$Skip
 						{
 							Write-Information -MessageData "" -InformationAction Continue
-							Write-Verbose -Message ($Localization.Skipped -f $MyInvocation.Line.Trim()) -Verbose
-							Write-Error -Message ($Localization.Skipped -f $MyInvocation.Line.Trim()) -ErrorAction SilentlyContinue
+							Write-Verbose -Message (($Localization.UserFolderMoveSkipped -f [WinAPI.GetStrings]::GetString($LocalizedUserFolderNameIDs[$UserFolder])), ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -Verbose
+							Write-Error -Message (($Localization.UserFolderMoveSkipped -f [WinAPI.GetStrings]::GetString($LocalizedUserFolderNameIDs[$UserFolder])), ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
 						}
 						$KeyboardArrows {}
 					}
 				}
 				until ($Choice -ne $KeyboardArrows)
 			}
-		}
-	}
-}
-
-<#
-	.SYNOPSIS
-	The the latest installed .NET Desktop Runtime for all apps usage
-
-	.PARAMETER Enable
-	Use .NET Framework 4.8.1 for old apps
-
-	.PARAMETER Disable
-	Do not use .NET Framework 4.8.1 for old apps
-
-	.EXAMPLE
-	LatestInstalled.NET -Enable
-
-	.EXAMPLE
-	LatestInstalled.NET -Disable
-
-	.NOTES
-	Machine-wide
-#>
-function LatestInstalled.NET
-{
-	param
-	(
-		[Parameter(
-			Mandatory = $true,
-			ParameterSetName = "Enable"
-		)]
-		[switch]
-		$Enable,
-
-		[Parameter(
-			Mandatory = $true,
-			ParameterSetName = "Disable"
-		)]
-		[switch]
-		$Disable
-	)
-
-	switch ($PSCmdlet.ParameterSetName)
-	{
-		"Enable"
-		{
-			New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\.NETFramework -Name OnlyUseLatestCLR -PropertyType DWord -Value 1 -Force
-			New-ItemProperty -Path HKLM:\SOFTWARE\Wow6432Node\Microsoft\.NETFramework -Name OnlyUseLatestCLR -PropertyType DWord -Value 1 -Force
-		}
-		"Disable"
-		{
-			Remove-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\.NETFramework, HKLM:\SOFTWARE\Wow6432Node\Microsoft\.NETFramework -Name OnlyUseLatestCLR -Force -ErrorAction Ignore
 		}
 	}
 }
@@ -5325,8 +5273,8 @@ function Autoplay
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer, HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoDriveTypeAutoRun -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoDriveTypeAutoRun -Type DELETE
-	Set-Policy -Scope User -Path Software\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoDriveTypeAutoRun -Type DELETE
+	Set-Policy -Scope Computer -Path SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoDriveTypeAutoRun -Type CLEAR
+	Set-Policy -Scope User -Path Software\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoDriveTypeAutoRun -Type CLEAR
 
 	switch ($PSCmdlet.ParameterSetName)
 	{
@@ -5473,7 +5421,7 @@ function NetworkDiscovery
 	Path to an icon
 
 	.EXAMPLE
-	Set-Association -ProgramPath 'C:\SumatraPDF.exe' -Extension .pdf -Icon 'shell32.dll,100'
+	Set-Association -ProgramPath 'C:\SumatraPDF.exe' -Extension .pdf -Icon '%SystemRoot%\System32\shell32.dll,100'
 
 	.EXAMPLE
 	Set-Association -ProgramPath '%ProgramFiles%\Notepad++\notepad++.exe' -Extension .txt -Icon '%ProgramFiles%\Notepad++\notepad++.exe,0'
@@ -5754,7 +5702,7 @@ public static int UnloadHive(RegistryHives hive, string subKey)
 	[array]$Global:RegisteredProgIDs = @()
 
 	Write-Information -MessageData "" -InformationAction Continue
-	# Extract the localized "Please wait..." string from shell32.dll
+	# Extract the localized "Please wait..." string from %SystemRoot%\System32\shell32.dll
 	Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
 
 	# Register %1 argument if ProgId exists as an executable file
@@ -6089,10 +6037,10 @@ function Import-Associations
 
 <#
 	.SYNOPSIS
-	Install the latest Microsoft Visual C++ Redistributable Packages 2015–2026 (x86/x64)
+	Install the latest Microsoft Visual C++ Redistributable Packages 2017—2026 (x86/x64)
 
 	.EXAMPLE
-	Install-VCRedist -Redistributables 2015_2026_x86, 2015_2026_x64
+	Install-VCRedist
 
 	.LINK
 	https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist
@@ -6102,19 +6050,7 @@ function Import-Associations
 #>
 function Install-VCRedist
 {
-	[CmdletBinding()]
-	param
-	(
-		[Parameter(
-			Mandatory = $true,
-			ParameterSetName = "Redistributables"
-		)]
-		[ValidateSet("2015_2026_x86", "2015_2026_x64")]
-		[string[]]
-		$Redistributables
-	)
-
-	# Get latest build version
+	# Get latest Visual C++ Redistributable Packages build version
 	# https://github.com/ScoopInstaller/Extras/blob/master/bucket/vcredist2022.json
 	try
 	{
@@ -6134,117 +6070,64 @@ function Install-VCRedist
 		return
 	}
 
-	# Checking whether vc_redist builds installed
-	if (Test-Path -Path "$env:ProgramData\Package Cache\*\vc_redist.x86.exe")
-	{
-		# Choose the first item if user has more than one package installed
-		$CurrentVCredistx86Version = (Get-Item -Path "$env:ProgramData\Package Cache\*\vc_redist.x86.exe" | Select-Object -First 1).VersionInfo.FileVersion
-	}
-	else
-	{
-		$CurrentVCredistx86Version = "0.0"
-	}
-	if (Test-Path -Path "$env:ProgramData\Package Cache\*\vc_redist.x64.exe")
-	{
-		# Choose the first item if user has more than one package installed
-		$CurrentVCredistx64Version = (Get-Item -Path "$env:ProgramData\Package Cache\*\vc_redist.x64.exe" | Select-Object -First 1).VersionInfo.FileVersion
-	}
-	else
-	{
-		$CurrentVCredistx64Version = "0.0"
-	}
-
 	$DownloadsFolder = Get-ItemPropertyValue -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "{374DE290-123F-4565-9164-39C4925E467B}"
 
-	foreach ($Redistributable in $Redistributables)
+	foreach ($Item in @("x64", "x86"))
 	{
-		switch ($Redistributable)
+		# Checking whether vc_redist builds installed
+		if (Test-Path -Path "$env:ProgramData\Package Cache\*\vc_redist.$($Item).exe")
 		{
-			2015_2026_x86
+			# Choose the first item if user has more than one package installed
+			$CurrentVCredistVersion = (Get-Item -Path "$env:ProgramData\Package Cache\*\vc_redist.$($Item).exe" | Select-Object -First 1).VersionInfo.FileVersion
+		}
+		else
+		{
+			$CurrentVCredistVersion = "0.0"
+		}
+
+		# Proceed if currently installed build is lower than available from Microsoft or json file is unreachable, or redistributable is not installed
+		if (([System.Version]$LatestVCRedistVersion -gt [System.Version]$CurrentVCredistVersion) -or ($CurrentVCredistVersion -eq "0.0"))
+		{
+			try
 			{
-				# Proceed if currently installed build is lower than available from Microsoft or json file is unreachable, or redistributable is not installed
-				if (([System.Version]$LatestVCRedistVersion -gt [System.Version]$CurrentVCredistx86Version) -or ($CurrentVCredistx86Version -eq "0.0"))
-				{
-					try
-					{
-						$Parameters = @{
-							Uri             = "https://aka.ms/vc14/vc_redist.x86.exe"
-							OutFile         = "$DownloadsFolder\vc_redist.x86.exe"
-							UseBasicParsing = $true
-							Verbose         = $true
-						}
-						Invoke-WebRequest @Parameters
-
-						Write-Information -MessageData "" -InformationAction Continue
-						Write-Verbose -Message ($Localization.InstallNotification -f "Visual C++ Redistributable x86 $LatestVCRedistVersion") -Verbose
-
-						Start-Process -FilePath "$DownloadsFolder\vc_redist.x86.exe" -ArgumentList "/install /passive /norestart" -Wait
-					}
-					catch [System.Net.WebException]
-					{
-						Write-Information -MessageData "" -InformationAction Continue
-						Write-Verbose -Message (($Localization.NoResponse -f "https://download.visualstudio.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -Verbose
-						Write-Error -Message (($Localization.NoResponse -f "https://download.visualstudio.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
-
-						return
-					}
+				$Parameters = @{
+					Uri             = "https://aka.ms/vc14/vc_redist.$($Item).exe"
+					OutFile         = "$DownloadsFolder\vc_redist.$($Item).exe"
+					UseBasicParsing = $true
+					Verbose         = $true
 				}
-				else
-				{
-					Write-Information -MessageData "" -InformationAction Continue
-					Write-Verbose -Message (($Localization.PackageIsInstalled -f "Microsoft Visual C++ Redistributable Packages 2015–2026 x86"), ($Localization.Skipped -f ("{0} -{1} {2}" -f $MyInvocation.MyCommand.Name, $MyInvocation.BoundParameters.Keys.Trim(), $_)) -join " ") -Verbose
-					Write-Error -Message (($Localization.PackageIsInstalled -f "Microsoft Visual C++ Redistributable Packages 2015–2026 x86"), ($Localization.Skipped -f ("{0} -{1} {2}" -f $MyInvocation.MyCommand.Name, $MyInvocation.BoundParameters.Keys.Trim(), $_)) -join " ") -ErrorAction SilentlyContinue
+				Invoke-WebRequest @Parameters
 
-				}
+				Write-Information -MessageData "" -InformationAction Continue
+				Write-Verbose -Message ($Localization.InstallNotification -f "Visual C++ Redistributable $($Item) $LatestVCRedistVersion") -Verbose
+				Write-Information -MessageData "" -InformationAction Continue
+
+				Start-Process -FilePath "$DownloadsFolder\vc_redist.$($Item).exe" -ArgumentList "/install /passive /norestart" -Wait
+
+				# PowerShell 5.1 (7.5 too) interprets 8.3 file name literally, if an environment variable contains a non-Latin word
+				# https://github.com/PowerShell/PowerShell/issues/21070
+				$Paths = @(
+					"$DownloadsFolder\vc_redist.$($Item).exe",
+					"$env:TEMP\dd_vcredist_$($Item)_*.log"
+				)
+				Get-ChildItem -Path $Paths -Force -ErrorAction Ignore | Remove-Item -Force -ErrorAction Ignore
 			}
-			2015_2026_x64
+			catch [System.Net.WebException]
 			{
-				# Proceed if currently installed build is lower than available from Microsoft or json file is unreachable, or redistributable is not installed
-				if (([System.Version]$LatestVCRedistVersion -gt [System.Version]$CurrentVCredistx64Version) -or ($CurrentVCredistx64Version -eq "0.0"))
-				{
-					try
-					{
-						$Parameters = @{
-							Uri             = "https://aka.ms/vc14/vc_redist.x64.exe"
-							OutFile         = "$DownloadsFolder\vc_redist.x64.exe"
-							UseBasicParsing = $true
-							Verbose         = $true
-						}
-						Invoke-WebRequest @Parameters
-					}
-					catch [System.Net.WebException]
-					{
-						Write-Information -MessageData "" -InformationAction Continue
-						Write-Verbose -Message (($Localization.NoResponse -f "https://download.visualstudio.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -Verbose
-						Write-Error -Message (($Localization.NoResponse -f "https://download.visualstudio.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
+				Write-Information -MessageData "" -InformationAction Continue
+				Write-Verbose -Message (($Localization.NoResponse -f "https://download.visualstudio.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -Verbose
+				Write-Error -Message (($Localization.NoResponse -f "https://download.visualstudio.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
 
-						return
-					}
-
-					Write-Information -MessageData "" -InformationAction Continue
-					Write-Verbose -Message ($Localization.InstallNotification -f "Visual C++ Redistributable x64 $LatestVCRedistVersion") -Verbose
-
-					Start-Process -FilePath "$DownloadsFolder\vc_redist.x64.exe" -ArgumentList "/install /passive /norestart" -Wait
-				}
-				else
-				{
-					Write-Information -MessageData "" -InformationAction Continue
-					Write-Verbose -Message (($Localization.PackageIsInstalled -f "Microsoft Visual C++ Redistributable Packages 2015–2026 x64"), ($Localization.Skipped -f ("{0} -{1} {2}" -f $MyInvocation.MyCommand.Name, $MyInvocation.BoundParameters.Keys.Trim(), $_)) -join " ") -Verbose
-					Write-Error -Message (($Localization.PackageIsInstalled -f "Microsoft Visual C++ Redistributable Packages 2015–2026 x64"), ($Localization.Skipped -f ("{0} -{1} {2}" -f $MyInvocation.MyCommand.Name, $MyInvocation.BoundParameters.Keys.Trim(), $_)) -join " ") -ErrorAction SilentlyContinue
-				}
+				return
 			}
 		}
+		else
+		{
+			Write-Information -MessageData "" -InformationAction Continue
+			Write-Verbose -Message (($Localization.PackageIsInstalled -f "Microsoft Visual C++ Redistributable Packages 2017-2026 $LatestVCRedistVersion"), ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -Verbose
+			Write-Error -Message (($Localization.PackageIsInstalled -f "Microsoft Visual C++ Redistributable Packages 2017-2026 $LatestVCRedistVersion"), ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
+		}
 	}
-
-	# PowerShell 5.1 (7.5 too) interprets 8.3 file name literally, if an environment variable contains a non-Latin word
-	# https://github.com/PowerShell/PowerShell/issues/21070
-	$Paths = @(
-		"$DownloadsFolder\vc_redist.x64.exe",
-		"$env:TEMP\dd_vcredist_amd64_*.log",
-		"$DownloadsFolder\vc_redist.x86.exe",
-		"$env:TEMP\dd_vcredist_x86_*.log"
-	)
-	Get-ChildItem -Path $Paths -Force -ErrorAction Ignore | Remove-Item -Force -ErrorAction Ignore
 }
 
 <#
@@ -6289,245 +6172,114 @@ function Install-DotNetRuntimes
 	{
 		switch ($Runtime)
 		{
-			NET8
+			"NET8"
 			{
-				try
-				{
-					# Get latest build version
-					# https://github.com/dotnet/core/blob/main/release-notes/releases-index.json
-					$Parameters = @{
-						Uri             = "https://builds.dotnet.microsoft.com/dotnet/release-metadata/8.0/releases.json"
-						Verbose         = $true
-						UseBasicParsing = $true
-					}
-					$LatestNET8Version = (Invoke-RestMethod @Parameters)."latest-release"
-				}
-				catch [System.Net.WebException]
-				{
-					Write-Information -MessageData "" -InformationAction Continue
-					Write-Verbose -Message (($Localization.NoResponse -f "https://builds.dotnet.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -Verbose
-					Write-Error -Message (($Localization.NoResponse -f "https://builds.dotnet.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
-
-					return
-				}
-
-				# Checking whether .NET 8 installed
-				if (Test-Path -Path "$env:ProgramData\Package Cache\*\windowsdesktop-runtime-$LatestNET8Version-win-x64.exe")
-				{
-					# Choose the first item if user has more than one package installed
-					# FileVersion has four properties while $LatestNET8Version has only three, unless the [System.Version] accelerator fails
-					$CurrentNET8Version = (Get-Item -Path "$env:ProgramData\Package Cache\*\windowsdesktop-runtime-$LatestNET8Version-win-x64.exe" | Select-Object -First 1).VersionInfo.FileVersion
-					$CurrentNET8Version = "{0}.{1}.{2}" -f $CurrentNET8Version.Split(".")
-				}
-				else
-				{
-					$CurrentNET8Version = "0.0"
-				}
-
-				# Proceed if currently installed build is lower than available from Microsoft or json file is unreachable, or .NET 8 is not installed at all
-				if (([System.Version]$LatestNET8Version -gt [System.Version]$CurrentNET8Version) -or ($CurrentNET8Version -eq "0.0"))
-				{
-					try
-					{
-						# .NET Desktop Runtime 8
-						$Parameters = @{
-							Uri             = "https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/$LatestNET8Version/windowsdesktop-runtime-$LatestNET8Version-win-x64.exe"
-							OutFile         = "$DownloadsFolder\windowsdesktop-runtime-$LatestNET8Version-win-x64.exe"
-							UseBasicParsing = $true
-							Verbose         = $true
-						}
-						Invoke-WebRequest @Parameters
-					}
-					catch [System.Net.WebException]
-					{
-						Write-Information -MessageData "" -InformationAction Continue
-						Write-Verbose -Message (($Localization.NoResponse -f "https://builds.dotnet.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -Verbose
-						Write-Error -Message (($Localization.NoResponse -f "https://builds.dotnet.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
-
-						return
-					}
-
-					Write-Information -MessageData "" -InformationAction Continue
-					Write-Verbose -Message ($Localization.InstallNotification -f ".NET 8 $LatestNET8Version") -Verbose
-
-					Start-Process -FilePath "$DownloadsFolder\windowsdesktop-runtime-$LatestNET8Version-win-x64.exe" -ArgumentList "/install /passive /norestart" -Wait
-				}
-				else
-				{
-					Write-Information -MessageData "" -InformationAction Continue
-					Write-Verbose -Message (($Localization.PackageIsInstalled -f ".NET 8"), ($Localization.Skipped -f ("{0} -{1} {2}" -f $MyInvocation.MyCommand.Name, $MyInvocation.BoundParameters.Keys.Trim(), $_)) -join " ") -Verbose
-					Write-Error -Message (($Localization.PackageIsInstalled -f ".NET 8"), ($Localization.Skipped -f ("{0} -{1} {2}" -f $MyInvocation.MyCommand.Name, $MyInvocation.BoundParameters.Keys.Trim(), $_)) -join " ") -ErrorAction SilentlyContinue
-				}
+				$NET = "8.0"
 			}
-			NET9
+			"NET9"
 			{
-				try
-				{
-					# Get latest build version
-					# https://github.com/dotnet/core/blob/main/release-notes/releases-index.json
-					$Parameters = @{
-						Uri             = "https://builds.dotnet.microsoft.com/dotnet/release-metadata/9.0/releases.json"
-						Verbose         = $true
-						UseBasicParsing = $true
-					}
-					$LatestNET9Version = (Invoke-RestMethod @Parameters)."latest-release"
-				}
-				catch [System.Net.WebException]
-				{
-					Write-Information -MessageData "" -InformationAction Continue
-					Write-Verbose -Message (($Localization.NoResponse -f "https://builds.dotnet.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -Verbose
-					Write-Error -Message (($Localization.NoResponse -f "https://builds.dotnet.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
-
-					return
-				}
-
-				# Checking whether .NET 9 installed
-				if (Test-Path -Path "$env:ProgramData\Package Cache\*\windowsdesktop-runtime-$LatestNET9Version-win-x64.exe")
-				{
-					# Choose the first item if user has more than one package installed
-					# FileVersion has four properties while $LatestNET9Version has only three, unless the [System.Version] accelerator fails
-					$CurrentNET9Version = (Get-Item -Path "$env:ProgramData\Package Cache\*\windowsdesktop-runtime-$LatestNET9Version-win-x64.exe" | Select-Object -First 1).VersionInfo.FileVersion
-					$CurrentNET9Version = "{0}.{1}.{2}" -f $CurrentNET9Version.Split(".")
-				}
-				else
-				{
-					$CurrentNET9Version = "0.0"
-				}
-
-				# Proceed if currently installed build is lower than available from Microsoft or json file is unreachable, or .NET 9 is not installed at all
-				if (([System.Version]$LatestNET9Version -gt [System.Version]$CurrentNET9Version) -or ($CurrentNET9Version -eq "0.0"))
-				{
-					try
-					{
-						# .NET Desktop Runtime 9
-						$Parameters = @{
-							Uri             = "https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/$LatestNET9Version/windowsdesktop-runtime-$LatestNET9Version-win-x64.exe"
-							OutFile         = "$DownloadsFolder\windowsdesktop-runtime-$LatestNET9Version-win-x64.exe"
-							UseBasicParsing = $true
-							Verbose         = $true
-						}
-						Invoke-WebRequest @Parameters
-					}
-					catch [System.Net.WebException]
-					{
-						Write-Information -MessageData "" -InformationAction Continue
-						Write-Verbose -Message (($Localization.NoResponse -f "https://builds.dotnet.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -Verbose
-						Write-Error -Message (($Localization.NoResponse -f "https://builds.dotnet.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
-
-						return
-					}
-
-					Write-Information -MessageData "" -InformationAction Continue
-					Write-Verbose -Message ($Localization.InstallNotification -f ".NET 9 $LatestNET9Version") -Verbose
-
-					Start-Process -FilePath "$DownloadsFolder\windowsdesktop-runtime-$LatestNET9Version-win-x64.exe" -ArgumentList "/install /passive /norestart" -Wait
-				}
-				else
-				{
-					Write-Information -MessageData "" -InformationAction Continue
-					Write-Verbose -Message (($Localization.PackageIsInstalled -f ".NET 9"), ($Localization.Skipped -f ("{0} -{1} {2}" -f $MyInvocation.MyCommand.Name, $MyInvocation.BoundParameters.Keys.Trim(), $_)) -join " ") -Verbose
-					Write-Error -Message (($Localization.PackageIsInstalled -f ".NET 9"), ($Localization.Skipped -f ("{0} -{1} {2}" -f $MyInvocation.MyCommand.Name, $MyInvocation.BoundParameters.Keys.Trim(), $_)) -join " ") -ErrorAction SilentlyContinue
-				}
+				$NET = "9.0"
 			}
-			NET10
+			"NET10"
 			{
-				try
-				{
-					# Get latest build version
-					# https://github.com/dotnet/core/blob/main/release-notes/releases-index.json
-					$Parameters = @{
-						Uri             = "https://builds.dotnet.microsoft.com/dotnet/release-metadata/10.0/releases.json"
-						Verbose         = $true
-						UseBasicParsing = $true
-					}
-					$LatestNET10Version = (Invoke-RestMethod @Parameters)."latest-release"
-				}
-				catch [System.Net.WebException]
-				{
-					Write-Information -MessageData "" -InformationAction Continue
-					Write-Verbose -Message (($Localization.NoResponse -f "https://builds.dotnet.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -Verbose
-					Write-Error -Message (($Localization.NoResponse -f "https://builds.dotnet.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
-
-					return
-				}
-
-				# Checking whether .NET 10 installed
-				if (Test-Path -Path "$env:ProgramData\Package Cache\*\windowsdesktop-runtime-$LatestNET10Version-win-x64.exe")
-				{
-					# Choose the first item if user has more than one package installed
-					# FileVersion has four properties while $LatestNET10Version has only three, unless the [System.Version] accelerator fails
-					$CurrentNET10Version = (Get-Item -Path "$env:ProgramData\Package Cache\*\windowsdesktop-runtime-$LatestNET10Version-win-x64.exe" | Select-Object -First 1).VersionInfo.FileVersion
-					$CurrentNET10Version = "{0}.{1}.{2}" -f $CurrentNET10Version.Split(".")
-				}
-				else
-				{
-					$CurrentNET10Version = "0.0"
-				}
-
-				# Proceed if currently installed build is lower than available from Microsoft or json file is unreachable, or .NET 10 is not installed at all
-				if (([System.Version]$LatestNET10Version -gt [System.Version]$CurrentNET10Version) -or ($CurrentNET10Version -eq "0.0"))
-				{
-					try
-					{
-						# .NET Desktop Runtime 10
-						$Parameters = @{
-							Uri             = "https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/$LatestNET10Version/windowsdesktop-runtime-$LatestNET10Version-win-x64.exe"
-							OutFile         = "$DownloadsFolder\windowsdesktop-runtime-$LatestNET10Version-win-x64.exe"
-							UseBasicParsing = $true
-							Verbose         = $true
-						}
-						Invoke-WebRequest @Parameters
-					}
-					catch [System.Net.WebException]
-					{
-						Write-Information -MessageData "" -InformationAction Continue
-						Write-Verbose -Message (($Localization.NoResponse -f "https://builds.dotnet.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -Verbose
-						Write-Error -Message (($Localization.NoResponse -f "https://builds.dotnet.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
-
-						return
-					}
-
-					Write-Information -MessageData "" -InformationAction Continue
-					Write-Verbose -Message ($Localization.InstallNotification -f ".NET 10 $LatestNET10Version") -Verbose
-
-					Start-Process -FilePath "$DownloadsFolder\windowsdesktop-runtime-$LatestNET10Version-win-x64.exe" -ArgumentList "/install /passive /norestart" -Wait
-				}
-				else
-				{
-					Write-Information -MessageData "" -InformationAction Continue
-					Write-Verbose -Message (($Localization.PackageIsInstalled -f ".NET 10"), ($Localization.Skipped -f ("{0} -{1} {2}" -f $MyInvocation.MyCommand.Name, $MyInvocation.BoundParameters.Keys.Trim(), $_)) -join " ") -Verbose
-					Write-Error -Message (($Localization.PackageIsInstalled -f ".NET 10"), ($Localization.Skipped -f ("{0} -{1} {2}" -f $MyInvocation.MyCommand.Name, $MyInvocation.BoundParameters.Keys.Trim(), $_)) -join " ") -ErrorAction SilentlyContinue
-				}
+				$NET = "10.0"
 			}
 		}
-	}
 
-	# PowerShell 5.1 (7.5 too) interprets 8.3 file name literally, if an environment variable contains a non-Latin word
-	# https://github.com/PowerShell/PowerShell/issues/21070
-	$Paths = @(
-		"$env:TEMP\Microsoft_Windows_Desktop_Runtime*.log",
-		"$DownloadsFolder\windowsdesktop-runtime-$LatestNET8Version-win-x64.exe",
-		"$DownloadsFolder\windowsdesktop-runtime-$LatestNET9Version-win-x64.exe",
-		"$DownloadsFolder\windowsdesktop-runtime-$LatestNET10Version-win-x64.exe"
-	)
-	Get-ChildItem -Path $Paths -Force -ErrorAction Ignore | Remove-Item -Force -ErrorAction Ignore
+		try
+		{
+			# Get latest build version
+			# https://github.com/dotnet/core/blob/main/release-notes/releases-index.json
+			$Parameters = @{
+				Uri             = "https://builds.dotnet.microsoft.com/dotnet/release-metadata/$NET/releases.json"
+				Verbose         = $true
+				UseBasicParsing = $true
+			}
+			$LatestNETVersion = (Invoke-RestMethod @Parameters)."latest-release"
+		}
+		catch [System.Net.WebException]
+		{
+			Write-Information -MessageData "" -InformationAction Continue
+			Write-Verbose -Message (($Localization.NoResponse -f "https://builds.dotnet.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -Verbose
+			Write-Error -Message (($Localization.NoResponse -f "https://builds.dotnet.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
+
+			return
+		}
+
+		# Checking whether .NET installed
+		if (Test-Path -Path "$env:ProgramData\Package Cache\*\windowsdesktop-runtime-$LatestNETVersion-win-x64.exe")
+		{
+			# Choose the first item if user has more than one package installed
+			# FileVersion has four properties while $LatestNETVersion has only three, unless the [System.Version] accelerator fails
+			$CurrentNETVersion = (Get-Item -Path "$env:ProgramData\Package Cache\*\windowsdesktop-runtime-$LatestNETVersion-win-x64.exe" | Select-Object -First 1).VersionInfo.FileVersion
+			$CurrentNETVersion = "{0}.{1}.{2}" -f $CurrentNETVersion.Split(".")
+		}
+		else
+		{
+			$CurrentNETVersion = "0.0"
+		}
+
+		# Proceed if currently installed build is lower than available from Microsoft or json file is unreachable, or .NET is not installed at all
+		if (([System.Version]$LatestNETVersion -gt [System.Version]$CurrentNETVersion) -or ($CurrentNETVersion -eq "0.0"))
+		{
+			try
+			{
+				# Downloading .NET Desktop Runtime
+				$Parameters = @{
+					Uri             = "https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/$LatestNETVersion/windowsdesktop-runtime-$LatestNETVersion-win-x64.exe"
+					OutFile         = "$DownloadsFolder\windowsdesktop-runtime-$LatestNETVersion-win-x64.exe"
+					UseBasicParsing = $true
+					Verbose         = $true
+				}
+				Invoke-WebRequest @Parameters
+			}
+			catch [System.Net.WebException]
+			{
+				Write-Information -MessageData "" -InformationAction Continue
+				Write-Verbose -Message (($Localization.NoResponse -f "https://builds.dotnet.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -Verbose
+				Write-Error -Message (($Localization.NoResponse -f "https://builds.dotnet.microsoft.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
+
+				return
+			}
+
+			Write-Information -MessageData "" -InformationAction Continue
+			Write-Verbose -Message ($Localization.InstallNotification -f ".NET $LatestNETVersion") -Verbose
+			Write-Information -MessageData "" -InformationAction Continue
+
+			Start-Process -FilePath "$DownloadsFolder\windowsdesktop-runtime-$LatestNETVersion-win-x64.exe" -ArgumentList "/install /passive /norestart" -Wait
+		}
+		else
+		{
+			Write-Information -MessageData "" -InformationAction Continue
+			Write-Verbose -Message (($Localization.PackageIsInstalled -f ".NET $LatestNETVersion"), ($Localization.Skipped -f ("{0} -{1} {2}" -f $MyInvocation.MyCommand.Name, $MyInvocation.BoundParameters.Keys.Trim(), $Runtime)) -join " ") -Verbose
+			Write-Error -Message (($Localization.PackageIsInstalled -f ".NET $LatestNETVersion"), ($Localization.Skipped -f ("{0} -{1} {2}" -f $MyInvocation.MyCommand.Name, $MyInvocation.BoundParameters.Keys.Trim(), $Runtime)) -join " ") -ErrorAction SilentlyContinue
+		}
+
+		# PowerShell 5.1 (7.5 too) interprets 8.3 file name literally, if an environment variable contains a non-Latin word
+		# https://github.com/PowerShell/PowerShell/issues/21070
+		$Paths = @(
+			"$env:TEMP\Microsoft_Windows_Desktop_Runtime*.log",
+			"$DownloadsFolder\windowsdesktop-runtime-$LatestNETVersion-win-x64.exe"
+		)
+		Get-ChildItem -Path $Paths -Force -ErrorAction Ignore | Remove-Item -Force -ErrorAction Ignore
+	}
 }
 
 <#
 	.SYNOPSIS
-	Bypass RKN restrictins using antizapret.prostovpn.org proxies
+	Bypass RKN restrictins using antizapret.prostovpn.org proxy
 
 	.PARAMETER Enable
-	Enable proxying only blocked sites from the unified registry of Roskomnadzor using antizapret.prostovpn.org servers
+	Enable proxying only blocked sites from the unified registry of Roskomnadzor using antizapret.prostovpn.org proxy
 
 	.PARAMETER Disable
-	Disable proxying only blocked sites from the unified registry of Roskomnadzor using antizapret.prostovpn.org servers
+	Disable proxying only blocked sites from the unified registry of Roskomnadzor using antizapret.prostovpn.org proxy
 
 	.EXAMPLE
-	RKNBypass -Enable
+	AntizapretProxy -Enable
 
 	.EXAMPLE
-	RKNBypass -Disable
+	AntizapretProxy -Disable
 
 	.LINK
 	https://antizapret.prostovpn.org
@@ -6535,7 +6287,7 @@ function Install-DotNetRuntimes
 	.NOTES
 	Current user
 #>
-function RKNBypass
+function AntizapretProxy
 {
 	param
 	(
@@ -6566,8 +6318,8 @@ function RKNBypass
 			else
 			{
 				Write-Information -MessageData "" -InformationAction Continue
-				Write-Verbose -Message ($Localization.GeoIdNotSupported, ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -Verbose
-				Write-Error -Message ($Localization.GeoIdNotSupported, ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
+				Write-Verbose -Message (($Localization.GeoIdNotSupported -f $MyInvocation.Line.Trim()), ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -Verbose
+				Write-Error -Message (($Localization.GeoIdNotSupported -f $MyInvocation.Line.Trim()), ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
 			}
 		}
 		"Disable"
@@ -6597,135 +6349,6 @@ public static extern bool InternetSetOption(IntPtr hInternet, int dwOption, IntP
 	$INTERNET_OPTION_REFRESH          = 37
 	[WinAPI.wininet]::InternetSetOption(0, $INTERNET_OPTION_SETTINGS_CHANGED, 0, 0)
 	[WinAPI.wininet]::InternetSetOption(0, $INTERNET_OPTION_REFRESH, 0, 0)
-}
-
-<#
-	.SYNOPSIS
-	Desktop shortcut creation upon Microsoft Edge update
-
-	.PARAMETER Channels
-	List Microsoft Edge channels to prevent desktop shortcut creation upon its update
-
-	.PARAMETER Disable
-	Do not prevent desktop shortcut creation upon Microsoft Edge update
-
-	.EXAMPLE
-	PreventEdgeShortcutCreation -Channels Stable, Beta, Dev, Canary
-
-	.EXAMPLE
-	PreventEdgeShortcutCreation -Disable
-
-	.NOTES
-	Machine-wide
-#>
-function PreventEdgeShortcutCreation
-{
-	[CmdletBinding()]
-	param
-	(
-		[Parameter(
-			Mandatory = $false,
-			ParameterSetName = "Channels"
-		)]
-		[ValidateSet("Stable", "Beta", "Dev", "Canary")]
-		[string[]]
-		$Channels,
-
-		[Parameter(
-			Mandatory = $false,
-			ParameterSetName = "Disable"
-		)]
-		[switch]
-		$Disable
-	)
-
-	if (-not (Get-Package -Name "Microsoft Edge" -ErrorAction Ignore))
-	{
-		Write-Information -MessageData "" -InformationAction Continue
-		Write-Verbose -Message (($Localization.PackageNotInstalled -f "Microsoft Edge"), ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -Verbose
-		Write-Error -Message (($Localization.PackageNotInstalled -f "Microsoft Edge"), ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
-
-		return
-	}
-
-	if (-not (Test-Path -Path HKLM:\SOFTWARE\Policies\Microsoft\EdgeUpdate))
-	{
-		New-Item -Path HKLM:\SOFTWARE\Policies\Microsoft\EdgeUpdate -Force
-	}
-
-	foreach ($Channel in $Channels)
-	{
-		switch ($Channel)
-		{
-			Stable
-			{
-				if (Get-Package -Name "Microsoft Edge" -ErrorAction Ignore)
-				{
-					New-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\EdgeUpdate -Name "CreateDesktopShortcut{56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}" -PropertyType DWord -Value 0 -Force
-					# msedgeupdate.admx is not a default ADMX template
-					if (Test-Path -Path "$env:SystemRoot\PolicyDefinitions\msedgeupdate.admx")
-					{
-						Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\EdgeUpdate -Name "CreateDesktopShortcut{56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}" -Type DWORD -Value 3
-					}
-				}
-			}
-			Beta
-			{
-				if (Get-Package -Name "Microsoft Edge Beta" -ErrorAction Ignore)
-				{
-					New-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\EdgeUpdate -Name "CreateDesktopShortcut{2CD8A007-E189-409D-A2C8-9AF4EF3C72AA}" -PropertyType DWord -Value 0 -Force
-					# msedgeupdate.admx is not a default ADMX template
-					if (Test-Path -Path "$env:SystemRoot\PolicyDefinitions\msedgeupdate.admx")
-					{
-						Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\EdgeUpdate -Name "CreateDesktopShortcut{2CD8A007-E189-409D-A2C8-9AF4EF3C72AA}" -Type DWORD -Value 3
-					}
-				}
-			}
-			Dev
-			{
-				if (Get-Package -Name "Microsoft Edge Dev" -ErrorAction Ignore)
-				{
-					New-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\EdgeUpdate -Name "CreateDesktopShortcut{0D50BFEC-CD6A-4F9A-964C-C7416E3ACB10}" -PropertyType DWord -Value 0 -Force
-					# msedgeupdate.admx is not a default ADMX template
-					if (Test-Path -Path "$env:SystemRoot\PolicyDefinitions\msedgeupdate.admx")
-					{
-						Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\EdgeUpdate -Name "CreateDesktopShortcut{0D50BFEC-CD6A-4F9A-964C-C7416E3ACB10}" -Type DWORD -Value 3
-					}
-				}
-			}
-			Canary
-			{
-				if (Get-Package -Name "Microsoft Edge Canary" -ErrorAction Ignore)
-				{
-					New-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\EdgeUpdate -Name "CreateDesktopShortcut{65C35B14-6C1D-4122-AC46-7148CC9D6497}" -PropertyType DWord -Value 0 -Force
-					# msedgeupdate.admx is not a default ADMX template
-					if (Test-Path -Path "$env:SystemRoot\PolicyDefinitions\msedgeupdate.admx")
-					{
-						Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\EdgeUpdate -Name "CreateDesktopShortcut{65C35B14-6C1D-4122-AC46-7148CC9D6497}" -Type DWORD -Value 3
-					}
-				}
-			}
-		}
-	}
-
-	if ($Disable)
-	{
-		$Names = @(
-			"CreateDesktopShortcut{56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}",
-			"CreateDesktopShortcut{2CD8A007-E189-409D-A2C8-9AF4EF3C72AA}",
-			"CreateDesktopShortcut{0D50BFEC-CD6A-4F9A-964C-C7416E3ACB10}",
-			"CreateDesktopShortcut{65C35B14-6C1D-4122-AC46-7148CC9D6497}"
-		)
-		Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\EdgeUpdate -Name $Names -Force -ErrorAction Ignore
-
-		if (Test-Path -Path "$env:SystemRoot\PolicyDefinitions\msedgeupdate.admx")
-		{
-			Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\EdgeUpdate -Name "CreateDesktopShortcut{56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}" -Type DELETE
-			Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\EdgeUpdate -Name "CreateDesktopShortcut{2CD8A007-E189-409D-A2C8-9AF4EF3C72AA}" -Type DELETE
-			Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\EdgeUpdate -Name "CreateDesktopShortcut{0D50BFEC-CD6A-4F9A-964C-C7416E3ACB10}" -Type DELETE
-			Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\EdgeUpdate -Name "CreateDesktopShortcut{65C35B14-6C1D-4122-AC46-7148CC9D6497}" -Type DELETE
-		}
-	}
 }
 
 <#
@@ -6765,6 +6388,9 @@ function RegistryBackup
 		[switch]
 		$Disable
 	)
+
+	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance" -Name MaintenanceDisabled -Force -ErrorAction Ignore
+	Get-ScheduledTask -TaskName RegIdleBackup -ErrorAction Ignore | Enable-ScheduledTask -ErrorAction Ignore
 
 	switch ($PSCmdlet.ParameterSetName)
 	{
@@ -6836,8 +6462,8 @@ function CleanupTask
 			Remove-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\SystemSettings\AccountNotifications -Name EnableAccountNotifications -Force -ErrorAction Ignore
 			Remove-ItemProperty -Path HKCU:\Software\Policies\Microsoft\Windows\Explorer, HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Force -ErrorAction Ignore
 			Remove-ItemProperty -Path HKCU:\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications -Name NoToastApplicationNotification -Force -ErrorAction Ignore
-			Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Type DELETE
-			Set-Policy -Scope User -Path Software\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Type DELETE
+			Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Type CLEAR
+			Set-Policy -Scope User -Path Software\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Type CLEAR
 
 			# Remove registry keys if Windows Script Host is disabled
 			Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows Script Host\Settings", "HKLM:\SOFTWARE\Microsoft\Windows Script Host\Settings" -Name Enabled -Force -ErrorAction Ignore
@@ -7285,8 +6911,8 @@ function SoftwareDistributionTask
 			Remove-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\SystemSettings\AccountNotifications -Name EnableAccountNotifications -Force -ErrorAction Ignore
 			Remove-ItemProperty -Path HKCU:\Software\Policies\Microsoft\Windows\Explorer, HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Force -ErrorAction Ignore
 			Remove-ItemProperty -Path HKCU:\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications -Name NoToastApplicationNotification -Force -ErrorAction Ignore
-			Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Type DELETE
-			Set-Policy -Scope User -Path Software\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Type DELETE
+			Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Type CLEAR
+			Set-Policy -Scope User -Path Software\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Type CLEAR
 
 			# Remove registry keys if Windows Script Host is disabled
 			Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows Script Host\Settings", "HKLM:\SOFTWARE\Microsoft\Windows Script Host\Settings" -Name Enabled -Force -ErrorAction Ignore
@@ -7606,8 +7232,8 @@ function TempTask
 			Remove-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\SystemSettings\AccountNotifications -Name EnableAccountNotifications -Force -ErrorAction Ignore
 			Remove-ItemProperty -Path HKCU:\Software\Policies\Microsoft\Windows\Explorer, HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Force -ErrorAction Ignore
 			Remove-ItemProperty -Path HKCU:\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications -Name NoToastApplicationNotification -Force -ErrorAction Ignore
-			Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Type DELETE
-			Set-Policy -Scope User -Path Software\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Type DELETE
+			Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Type CLEAR
+			Set-Policy -Scope User -Path Software\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Type CLEAR
 
 			# Remove registry keys if Windows Script Host is disabled
 			Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows Script Host\Settings", "HKLM:\SOFTWARE\Microsoft\Windows Script Host\Settings" -Name Enabled -Force -ErrorAction Ignore
@@ -8152,7 +7778,7 @@ function EventViewerCustomView
 			# Unlike in Windows 11 default value for Windows 10 is "disable" by default
 			auditpol /set /subcategory:"{0CCE922B-69AE-11D9-BED3-505054503030}" /success:disable /failure:disable
 			Remove-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit -Name ProcessCreationIncludeCmdLine_Enabled -Force -ErrorAction Ignore
-			Set-Policy -Scope Computer -Path SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit -Name ProcessCreationIncludeCmdLine_Enabled -Type DELETE
+			Set-Policy -Scope Computer -Path SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit -Name ProcessCreationIncludeCmdLine_Enabled -Type CLEAR
 			Remove-Item -Path "$env:ProgramData\Microsoft\Event Viewer\Views\ProcessCreation.xml" -Force -ErrorAction Ignore
 		}
 	}
@@ -8215,7 +7841,7 @@ function PowerShellModulesLogging
 			Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging -Name EnableModuleLogging -Force -ErrorAction Ignore
 			Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging\ModuleNames -Name * -Force -ErrorAction Ignore
 
-			Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging -Name EnableModuleLogging -Type DELETE
+			Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging -Name EnableModuleLogging -Type CLEAR
 		}
 	}
 }
@@ -8273,7 +7899,7 @@ function PowerShellScriptsLogging
 		"Disable"
 		{
 			Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging -Name EnableScriptBlockLogging -Force -ErrorAction Ignore
-			Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging -Name EnableScriptBlockLogging -Type DELETE
+			Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging -Name EnableScriptBlockLogging -Type CLEAR
 		}
 	}
 }
@@ -8378,7 +8004,7 @@ function SaveZoneInformation
 
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments -Name SaveZoneInformation -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments -Name SaveZoneInformation -Type DELETE
+	Set-Policy -Scope Computer -Path SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments -Name SaveZoneInformation -Type CLEAR
 
 	switch ($PSCmdlet.ParameterSetName)
 	{
@@ -8395,7 +8021,7 @@ function SaveZoneInformation
 		"Enable"
 		{
 			Remove-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Attachments -Name SaveZoneInformation -Force -ErrorAction Ignore
-			Set-Policy -Scope User -Path Software\Microsoft\Windows\CurrentVersion\Policies\Attachments -Name SaveZoneInformation -Type DELETE
+			Set-Policy -Scope User -Path Software\Microsoft\Windows\CurrentVersion\Policies\Attachments -Name SaveZoneInformation -Type CLEAR
 		}
 	}
 }
@@ -8544,7 +8170,7 @@ function MSIExtractContext
 			$Value = "msiexec.exe /a `"%1`" /qb TARGETDIR=`"%1 extracted`""
 			New-ItemProperty -Path Registry::HKEY_CLASSES_ROOT\Msi.Package\shell\Extract\Command -Name "(default)" -PropertyType String -Value $Value -Force
 			New-ItemProperty -Path Registry::HKEY_CLASSES_ROOT\Msi.Package\shell\Extract -Name MUIVerb -PropertyType String -Value "@shell32.dll,-37514" -Force
-			New-ItemProperty -Path Registry::HKEY_CLASSES_ROOT\Msi.Package\shell\Extract -Name Icon -PropertyType String -Value "shell32.dll,-16817" -Force
+			New-ItemProperty -Path Registry::HKEY_CLASSES_ROOT\Msi.Package\shell\Extract -Name Icon -PropertyType String -Value "%SystemRoot%\System32\shell32.dll,-16817" -Force
 		}
 		"Hide"
 		{
@@ -8595,7 +8221,11 @@ function CABInstallContext
 	{
 		"Show"
 		{
-			if ([Microsoft.Win32.Registry]::GetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.cab\UserChoice", "ProgId", $null) -eq "CABFolder")
+			if
+			(
+				([Microsoft.Win32.Registry]::GetValue("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.cab\UserChoice", "ProgId", $null) -eq "CABFolder") -or
+				(-not (Get-ChildItem -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.cab\UserChoice -ErrorAction Ignore))
+			)
 			{
 				if (-not (Test-Path -Path Registry::HKEY_CLASSES_ROOT\CABFolder\Shell\runas\Command))
 				{
@@ -9013,7 +8643,7 @@ function BitmapImageNewContext
 				try
 				{
 					Write-Information -MessageData "" -InformationAction Continue
-					# Extract the localized "Please wait..." string from shell32.dll
+					# Extract the localized "Please wait..." string from %SystemRoot%\System32\shell32.dll
 					Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
 					Write-Information -MessageData "" -InformationAction Continue
 
@@ -9093,7 +8723,7 @@ function RichTextDocumentNewContext
 				try
 				{
 					Write-Information -MessageData "" -InformationAction Continue
-					# Extract the localized "Please wait..." string from shell32.dll
+					# Extract the localized "Please wait..." string from %SystemRoot%\System32\shell32.dll
 					Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
 					Write-Information -MessageData "" -InformationAction Continue
 
@@ -9235,7 +8865,7 @@ function MultipleInvokeContext
 function ScanRegistryPolicies
 {
 	Write-Information -MessageData "" -InformationAction Continue
-	# Extract the localized "Please wait..." string from shell32.dll
+	# Extract the localized "Please wait..." string from %SystemRoot%\System32\shell32.dll
 	Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
 	Write-Information -MessageData "" -InformationAction Continue
 
@@ -9308,6 +8938,4 @@ function ScanRegistryPolicies
 			}
 		}
 	}
-
-	& "$env:SystemRoot\System32\gpupdate.exe" /force
 }

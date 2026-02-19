@@ -369,7 +369,7 @@
         },
         "Preset": "Zero",
         "WindowsDefault": "One",
-        "LTSC2019": "false",
+        "LTSC2019": "true",
         "LTSC2021": "true"
     },
     {
@@ -541,7 +541,7 @@
         "Preset": "Zero",
         "WindowsDefault": "One",
         "LTSC2019": "true",
-        "LTSC2021": "false"
+        "LTSC2021": "true"
     },
     {
         "Region": "UI & Personalization",
@@ -960,7 +960,7 @@
         },
         "Preset": "One",
         "WindowsDefault": "Zero",
-        "LTSC2019": "false",
+        "LTSC2019": "true",
         "LTSC2021": "true"
     },
     {
@@ -1031,7 +1031,9 @@
             }
         },
         "Preset": "Zero",
-        "WindowsDefault": "Zero"
+        "WindowsDefault": "Zero",
+        "LTSC2019": "false",
+        "LTSC2021": "true"
     },
     {
         "Region": "UI & Personalization",
@@ -1315,7 +1317,7 @@
         },
         "Preset": "Zero",
         "WindowsDefault": "One",
-        "LTSC2019": "false",
+        "LTSC2019": "true",
         "LTSC2021": "true"
     },
     {
@@ -1333,7 +1335,7 @@
         },
         "Preset": "Zero",
         "WindowsDefault": "One",
-        "LTSC2019": "false",
+        "LTSC2019": "true",
         "LTSC2021": "true"
     },
     {
@@ -1350,7 +1352,10 @@
             }
         },
         "Preset": "Zero",
-        "WindowsDefault": "Zero"
+        "WindowsDefault": "Zero",
+        "WindowsDefault": "One",
+        "LTSC2019": "false",
+        "LTSC2021": "true"
     },
     {
         "Region": "System",
@@ -1427,24 +1432,6 @@
         },
         "Preset": "Zero",
         "WindowsDefault": "Two",
-        "LTSC2019": "true",
-        "LTSC2021": "true"
-    },
-    {
-        "Region": "System",
-        "Control": "cmb",
-        "Required": "false",
-        "Function": "LatestInstalled.NET",
-        "Arg": {
-            "Zero": {
-                "Tag": "Enable"
-            },
-            "One": {
-                "Tag": "Disable"
-            }
-        },
-        "Preset": "Zero",
-        "WindowsDefault": "One",
         "LTSC2019": "true",
         "LTSC2021": "true"
     },
@@ -1693,7 +1680,10 @@
             }
         },
         "Preset": "",
-        "WindowsDefault": ""
+        "WindowsDefault": "",
+        "WindowsDefault": "One",
+        "LTSC2019": "true",
+        "LTSC2021": "true"
     },
     {
         "Region": "System",
@@ -1729,13 +1719,10 @@
         "Region": "System",
         "Control": "chk",
         "Required": "false",
-        "Function": "Install-VCRedist -Redistributables",
+        "Function": "Install-VCRedist",
         "Arg": {
             "Zero": {
-                "Tag": "2015_2026_x86"
-            },
-            "One": {
-                "Tag": "2015_2026_x64"
+                "Tag": ""
             }
         },
         "Preset": "",
@@ -1768,7 +1755,7 @@
         "Region": "System",
         "Control": "cmb",
         "Required": "false",
-        "Function": "RKNBypass",
+        "Function": "AntizapretProxy",
         "Arg": {
             "Zero": {
                 "Tag": "Enable"
@@ -1816,7 +1803,9 @@
         "Preset": "Zero",
         "WindowsDefault": "One",
         "Preset2": "0123",
-        "WindowsDefault2": ""
+        "WindowsDefault2": "",
+        "LTSC2019": "false",
+        "LTSC2021": "true"
     },
     {
         "Region": "System",
@@ -2084,70 +2073,6 @@
         "WindowsDefault": "One",
         "LTSC2019": "true",
         "LTSC2021": "true"
-    },
-    {
-        "Region": "Microsoft Defender & Security",
-        "Control": "cmbcmbcmb",
-        "Required": "false",
-        "Function": "DNSoverHTTPS",
-        "Key": "SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters\\DohWellKnownServers",
-        "PrefixArg2": "PrimaryDNS",
-        "PrefixArg3": "SecondaryDNS",
-        "Arg2_3_Width": "145",
-        "Arg": {
-            "Zero": {
-                "Tag": "Enable"
-            },
-            "One": {
-                "Tag": "Disable"
-            }
-        },
-        "Arg2": {
-            "Zero": {
-                "Tag": "1.0.0.1"
-            },
-            "One": {
-                "Tag": "1.1.1.1"
-            },
-            "Two": {
-                "Tag": "149.112.112.112"
-            },
-            "Three": {
-                "Tag": "8.8.4.4"
-            },
-            "Four": {
-                "Tag": "8.8.8.8"
-            },
-            "Five": {
-                "Tag": "9.9.9.9"
-            }
-        },
-        "Arg3": {
-            "Zero": {
-                "Tag": "1.0.0.1"
-            },
-            "One": {
-                "Tag": "1.1.1.1"
-            },
-            "Two": {
-                "Tag": "149.112.112.112"
-            },
-            "Three": {
-                "Tag": "8.8.4.4"
-            },
-            "Four": {
-                "Tag": "8.8.8.8"
-            },
-            "Five": {
-                "Tag": "9.9.9.9"
-            }
-        },
-        "Preset": "Zero",
-        "WindowsDefault": "One",
-        "Preset2": "Zero",
-        "WindowsDefault2": "",
-        "Preset3": "One",
-        "WindowsDefault3": ""
     },
     {
         "Region": "Context menu",

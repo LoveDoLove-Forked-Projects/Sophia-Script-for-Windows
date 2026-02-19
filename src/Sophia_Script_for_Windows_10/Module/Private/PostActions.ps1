@@ -3,10 +3,10 @@
 	Post actions
 
 	.VERSION
-	7.0.4
+	7.1.1
 
 	.DATE
-	05.01.2026
+	13.02.2026
 
 	.COPYRIGHT
 	(c) 2014—2026 Team Sophia
@@ -105,9 +105,6 @@ public static void PostMessage()
 		}
 	}
 
-	# Open Startup page
-	Start-Process -FilePath "ms-settings:startupapps"
-
 	# Checking whether any of scheduled tasks were created. Unless open Task Scheduler
 	if ($Global:ScheduledTasks)
 	{
@@ -126,6 +123,17 @@ public static void PostMessage()
 
 		$Global:ScheduledTasks = $false
 	}
+
+	# Apply policies found in registry to re-build database database because gpedit.msc relies in its own database
+	if (Test-Path -Path "$env:TEMP\LGPO.txt")
+	{
+		& "$PSScriptRoot\..\..\Binaries\LGPO.exe" /t "$env:TEMP\LGPO.txt"
+		& "$env:SystemRoot\System32\gpupdate.exe" /force
+	}
+
+	# PowerShell 5.1 (7.5 too) interprets 8.3 file name literally, if an environment variable contains a non-Latin word
+	# https://github.com/PowerShell/PowerShell/issues/21070
+	Get-ChildItem -Path "$env:TEMP\LGPO.txt" -Force -ErrorAction Ignore | Remove-Item -Force -ErrorAction Ignore
 	#endregion Other actions
 
 	#region Toast notifications
@@ -136,8 +144,8 @@ public static void PostMessage()
 	Remove-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\SystemSettings\AccountNotifications -Name EnableAccountNotifications -Force -ErrorAction Ignore
 	Remove-ItemProperty -Path HKCU:\Software\Policies\Microsoft\Windows\Explorer, HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Force -ErrorAction Ignore
 	Remove-ItemProperty -Path HKCU:\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications -Name NoToastApplicationNotification -Force -ErrorAction Ignore
-	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Type DELETE
-	Set-Policy -Scope User -Path Software\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Type DELETE
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Type CLEAR
+	Set-Policy -Scope User -Path Software\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Type CLEAR
 
 	if (-not (Test-Path -Path Registry::HKEY_CLASSES_ROOT\AppUserModelId\Sophia))
 	{
@@ -175,18 +183,6 @@ public static void PostMessage()
 	[Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier("Sophia").Show($ToastMessage)
 	#endregion Toast notifications
 
-	# Apply policies found in registry to re-build database database because gpedit.msc relies in its own database
-	if (Test-Path -Path "$env:TEMP\LGPO.txt")
-	{
-		& "$PSScriptRoot\..\..\Binaries\LGPO.exe" /t "$env:TEMP\LGPO.txt"
-
-		& "$env:SystemRoot\System32\gpupdate.exe" /force
-	}
-
-	# PowerShell 5.1 (7.5 too) interprets 8.3 file name literally, if an environment variable contains a non-Latin word
-	# https://github.com/PowerShell/PowerShell/issues/21070
-	Get-ChildItem -Path "$env:TEMP\LGPO.txt" -Force -ErrorAction Ignore | Remove-Item -Force -ErrorAction Ignore
-
 	Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
 	Write-Verbose -Message "https://t.me/sophianews" -Verbose
 	Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
@@ -206,7 +202,7 @@ public static void PostMessage()
 
 			[PSCustomObject]@{
 				$Localization.ErrorsLine                  = $_.InvocationInfo.ScriptLineNumber
-				# Extract the localized "File" string from shell32.dll
+				# Extract the localized "File" string from %SystemRoot%\System32\shell32.dll
 				"$([WinAPI.GetStrings]::GetString(4130))" = $ErrorInFile
 				$Localization.ErrorsMessage               = $_.Exception.Message
 			}

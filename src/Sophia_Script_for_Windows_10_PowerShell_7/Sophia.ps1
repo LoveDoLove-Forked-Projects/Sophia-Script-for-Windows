@@ -3,10 +3,10 @@
 	Default preset file for "Sophia Script for Windows 10 (PowerShell 7)"
 
 	.VERSION
-	6.0.4
+	6.1.1
 
 	.DATE
-	05.01.2026
+	13.02.2026
 
 	.COPYRIGHT
 	(c) 2014—2026 Team Sophia
@@ -758,46 +758,17 @@ InputMethod -English
 # Переопределить метод ввода по умолчанию: использовать список языков (значение по умолчанию)
 # InputMethod -Default
 
-<#
-	Change user folders location to the root of any drive using an interactive menu
-	User files or folders won't be moved to a new location. Move them manually
-	They're located in the %USERPROFILE% folder by default
-
-	Переместить пользовательские папки в корень любого диска на выбор с помощью интерактивного меню
-	Пользовательские файлы и папки не будут перемещены в новое расположение. Переместите их вручную
-	По умолчанию они располагаются в папке %USERPROFILE%
-#>
+# Change location of user folders to the root of any drive using the interactive menu. User files or folders won't be moved to a new location
+# Изменить расположение пользовательских папки в корень любого диска на выбор с помощью интерактивного меню. Пользовательские файлы и папки не будут перемещены в новое расположение
 Set-UserShellFolderLocation -Root
 
-<#
-	Select folders for user folders location manually using a folder browser dialog
-	User files or folders won't be moved to a new location. Move them manually
-	They're located in the %USERPROFILE% folder by default
-
-	Выбрать папки для расположения пользовательских папок вручную, используя диалог "Обзор папок"
-	Пользовательские файлы и папки не будут перемещены в новое расположение. Переместите их вручную
-	По умолчанию они располагаются в папке %USERPROFILE%
-#>
+# Select location of user folders manually using a folder browser dialog. User files or folders won't be moved to a new location
+# Выбрать папки для расположения пользовательских папок вручную, используя диалог "Обзор папок". Пользовательские файлы и папки не будут перемещены в новое расположение
 # Set-UserShellFolderLocation -Custom
 
-<#
-	Change user folders location to the default values
-	User files or folders won't be moved to the new location. Move them manually
-	They're located in the %USERPROFILE% folder by default
-
-	Изменить расположение пользовательских папок на значения по умолчанию
-	Пользовательские файлы и папки не будут перемещены в новое расположение. Переместите их вручную
-	По умолчанию они располагаются в папке %USERPROFILE%
-#>
+# Change user folders location to default values. User files or folders won't be moved to the new location
+# Изменить расположение пользовательских папок на значения по умолчанию. Пользовательские файлы и папки не будут перемещены в новое расположение
 # Set-UserShellFolderLocation -Default
-
-# Use .NET Framework 4.8.1 for old apps
-# Использовать .NET Framework 4.8.1 для устаревших программ
-# LatestInstalled.NET -Enable
-
-# Do not use .NET Framework 4.8.1 for old apps (default value)
-# Не использовать .NET Framework 4.8.1 для устаревших программ (значение по умолчанию)
-# LatestInstalled.NET -Disable
 
 # Save screenshots on the Desktop when pressing Windows+PrtScr or using Windows+Shift+S
 # Сохранять скриншоты по нажатию Windows+PrtScr или Windows+Shift+S на рабочий стол
@@ -909,7 +880,7 @@ NetworkDiscovery -Enable
 	Register app, calculate hash, and associate with an extension with the "How do you want to open this" pop-up hidden
 	Зарегистрировать приложение, вычислить хэш и ассоциировать его с расширением без всплывающего окна "Каким образом вы хотите открыть этот файл?"
 
-	Set-Association -ProgramPath 'C:\SumatraPDF.exe' -Extension .pdf -Icon 'shell32.dll,100'
+	Set-Association -ProgramPath 'C:\SumatraPDF.exe' -Extension .pdf -Icon '%SystemRoot%\System32\shell32.dll,100'
 	Set-Association -ProgramPath '%ProgramFiles%\Notepad++\notepad++.exe' -Extension .txt -Icon '%ProgramFiles%\Notepad++\notepad++.exe,0'
 	Set-Association -ProgramPath MSEdgeMHT -Extension .html
 #>
@@ -937,11 +908,11 @@ NetworkDiscovery -Enable
 
 	https://support.microsoft.com/en-us/topic/kb5005463-pc-health-check-application-e33cf4e2-49e2-4727-b913-f3c5b1ee0e56
 #>
-UninstallPCHealthCheck
+Uninstall-PCHealthCheck
 
-# Install the latest Microsoft Visual C++ Redistributable Packages 2015–2026 (x86/x64). Internet connection required
-# Установить последнюю версию распространяемых пакетов Microsoft Visual C++ 2015–2026 (x86/x64). Требуется соединение с интернетом
-Install-VCRedist -Redistributables 2015_2026_x86, 2015_2026_x64
+# Install the latest Microsoft Visual C++ Redistributable Packages 2017–2026 (x86/x64). Internet connection required
+# Установить последнюю версию распространяемых пакетов Microsoft Visual C++ 2017–2026 (x86/x64). Требуется соединение с интернетом
+Install-VCRedist
 
 # Install the latest .NET Desktop Runtime 8, 9, 10 x64. Internet connection required
 # Установить последнюю версию .NET Desktop Runtime 8, 9, 10 x64. Требуется соединение с интернетом
@@ -950,12 +921,12 @@ Install-DotNetRuntimes -Runtimes NET8, NET9, NET10
 # Enable proxying only blocked sites from the unified registry of Roskomnadzor. Applicable for Russia only
 # Включить проксирование только заблокированных сайтов из единого реестра Роскомнадзора. Функция применима только для России
 # https://antizapret.prostovpn.org
-RKNBypass -Enable
+AntizapretProxy -Enable
 
 # Disable proxying only blocked sites from the unified registry of Roskomnadzor (default value)
 # Выключить проксирование только заблокированных сайтов из единого реестра Роскомнадзора (значение по умолчанию)
 # https://antizapret.prostovpn.org
-# RKNBypass -Disable
+# AntizapretProxy -Disable
 
 # List Microsoft Edge channels to prevent desktop shortcut creation upon its update
 # Перечислите каналы Microsoft Edge для предотвращения создания ярлыков на рабочем столе после его обновления
@@ -1281,15 +1252,11 @@ UseStoreOpenWith -Hide
 #endregion Context menu
 
 #region Update Policies
-# Scan the Windows registry and display all policies (even created manually) in the Local Group Policy Editor snap-in (gpedit.msc)
-# Просканировать реестр и отобразить все политики (даже созданные вручную) в оснастке Редактора локальной групповой политики (gpedit.msc)
+# Scan the Windows registry and display applied registry policies in the Local Group Policy Editor snap-in (gpedit.msc)
+# Просканировать реестр и отобразить примененные политики реестра в оснастке редактирования групповых политик (gpedit.msc)
 # ScanRegistryPolicies
 #endregion Update Policies
 
-# Environment refresh and other neccessary post actions
-# Обновление окружения и прочие необходимые действия после выполнения основных функций
+# Post actions
+# Завершающие действия
 PostActions
-
-# Errors output
-# Вывод ошибок
-Errors

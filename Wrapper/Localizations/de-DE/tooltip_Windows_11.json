@@ -1128,20 +1128,6 @@
   },
   {
     "Region": "System",
-    "Function": "LatestInstalled.NET",
-    "Arg": {
-      "Zero": {
-        "Tag": "Enable",
-        "ToolTip": "Verwenden Sie die neueste installierte .NET-Laufzeitumgebung für alle Anwendungen."
-      },
-      "One": {
-        "Tag": "Disable",
-        "ToolTip": "Die zuletzt installierte .NET-Laufzeitumgebung nicht für alle Anwendungen verwenden (Standardwert)."
-      }
-    }
-  },
-  {
-    "Region": "System",
     "Function": "WinPrtScrFolder",
     "Arg": {
       "Zero": {
@@ -1363,16 +1349,12 @@
   },
   {
     "Region": "System",
-    "Function": "Install-VCRedist -Redistributables",
-    "ToolTip": "Installieren Sie die neueste Microsoft Visual C++ Redistributable Packages x86, x64",
+    "Function": "Install-VCRedist",
+    "ToolTip": "Installieren Sie die neueste Microsoft Visual C++ Redistributable Packages 2017–2026 (x86/x64)",
     "Arg": {
       "Zero": {
-        "Tag": "2015_2026_x86",
-        "ToolTip": "Installieren Sie die neueste unterstützte Microsoft Visual C++ Redistributable 2015–2026 x86. Internetverbindung erforderlich."
-      },
-      "One": {
-        "Tag": "2015_2026_x64",
-        "ToolTip": "Installieren Sie die neueste unterstützte Microsoft Visual C++ Redistributable 2015–2026 x64. Internetverbindung erforderlich."
+        "Tag": "",
+        "ToolTip": "Internetverbindung erforderlich."
       }
     }
   },
@@ -1397,7 +1379,7 @@
   },
   {
     "Region": "System",
-    "Function": "RKNBypass",
+    "Function": "AntizapretProxy",
     "Arg": {
       "Zero": {
         "Tag": "Enable",
@@ -1434,6 +1416,20 @@
       "One": {
         "Tag": "Disable",
         "ToolTip": "Sichern Sie die Systemregistrierung nicht im Ordner %SystemRoot%\\System32\\config\\RegBack (Standardwert)."
+      }
+    }
+  },
+  {
+    "Region": "System",
+    "Function": "WindowsAI",
+    "Arg": {
+      "Zero": {
+        "Tag": "Disable",
+        "ToolTip": "Windows-KI-Funktionen deaktivieren."
+      },
+      "One": {
+        "Tag": "Enable",
+        "ToolTip": "Windows-KI-Funktionen aktivieren (Standardwert)."
       }
     }
   },
@@ -1682,16 +1678,28 @@
     "Function": "DNSoverHTTPS",
     "Arg": {
       "Zero": {
-        "Tag": "Enable",
-        "ToolTip": "Aktiviert DNS-over-HTTPS für IPv4. Gültige IPv4-Adressen: 1.0.0.1, 1.1.1.1, 149.112.112.112, 8.8.4.4, 8.8.8.8, 9.9.9.91."
+        "Tag": "Cloudflare",
+        "ToolTip": "Aktivieren Sie DNS-over-HTTPS mit Cloudflare DNS."
       },
       "One": {
-        "Tag": "Disable",
-        "ToolTip": "Deaktiviert DNS-over-HTTPS für IPv4 (Standardwert)."
+        "Tag": "Google",
+        "ToolTip": "Aktivieren Sie DNS-over-HTTPS mit Google DNS."
       },
       "Two": {
-        "Tag": "ComssOneDNS",
-        "ToolTip": "DNS-over-HTTPS über den Comss.one-DNS-Server aktivieren."
+        "Tag": "Quad9",
+        "ToolTip": "Aktivieren Sie DNS-over-HTTPS mit Quad9 DNS."
+      },
+      "Three": {
+        "Tag": "ComssOne",
+        "ToolTip": "Aktivieren Sie DNS-over-HTTPS mit ComssOne DNS."
+      },
+      "Four": {
+        "Tag": "AdGuard",
+        "ToolTip": "Aktivieren Sie DNS-over-HTTPS mit AdGuard DNS."
+      },
+      "Five": {
+        "Tag": "Disable",
+        "ToolTip": "Standard-DNS-Einträge des Internetdienstanbieters festlegen (Standardwert)."
       }
     }
   },

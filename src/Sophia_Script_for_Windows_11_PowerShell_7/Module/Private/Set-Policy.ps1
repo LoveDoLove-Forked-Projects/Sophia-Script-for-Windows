@@ -9,16 +9,16 @@
 	Set-Policy -Scope User -Path Software\Policies\Microsoft\Windows\Explorer -Name DisableSearchBoxSuggestions -Type DWORD -Value 1
 
 	.EXAMPLE Set DisableNotificationCenter value to "Not configured" in gpedit.msc snap-in
-	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Type DELETE
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\Explorer -Name DisableNotificationCenter -Type CLEAR
 
 	.NOTES
 	https://techcommunity.microsoft.com/t5/microsoft-security-baselines/lgpo-exe-local-group-policy-object-utility-v1-0/ba-p/701045
 
 	.VERSION
-	7.0.4
+	7.1.1
 
 	.DATE
-	05.01.2026
+	13.02.2026
 
 	.COPYRIGHT
 	(c) 2014—2026 Team Sophia
@@ -57,7 +57,7 @@ function Global:Set-Policy
 			Mandatory = $true,
 			Position = 4
 		)]
-		[ValidateSet("DWORD", "SZ", "EXSZ", "DELETE")]
+		[ValidateSet("DWORD", "SZ", "EXSZ", "CLEAR")]
 		[string]
 		$Type,
 
@@ -75,7 +75,7 @@ function Global:Set-Policy
 
 	switch ($Type)
 	{
-		"DELETE"
+		"CLEAR"
 		{
 			$Policy = @"
 $Scope

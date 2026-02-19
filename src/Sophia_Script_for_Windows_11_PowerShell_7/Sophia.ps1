@@ -3,10 +3,10 @@
 	Default preset file for "Sophia Script for Windows 11 (PowerShell 7)"
 
 	.VERSION
-	7.0.4
+	7.1.1
 
 	.DATE
-	05.01.2026
+	13.02.2026
 
 	.COPYRIGHT
 	(c) 2014—2026 Team Sophia
@@ -732,46 +732,17 @@ InputMethod -English
 # Переопределить метод ввода по умолчанию: использовать список языков (значение по умолчанию)
 # InputMethod -Default
 
-<#
-	Change user folders location to the root of any drive using an interactive menu
-	User files or folders won't be moved to a new location. Move them manually
-	They're located in the %USERPROFILE% folder by default
-
-	Переместить пользовательские папки в корень любого диска на выбор с помощью интерактивного меню
-	Пользовательские файлы и папки не будут перемещены в новое расположение. Переместите их вручную
-	По умолчанию они располагаются в папке %USERPROFILE%
-#>
+# Change location of user folders to the root of any drive using the interactive menu. User files or folders won't be moved to a new location
+# Изменить расположение пользовательских папки в корень любого диска на выбор с помощью интерактивного меню. Пользовательские файлы и папки не будут перемещены в новое расположение
 Set-UserShellFolderLocation -Root
 
-<#
-	Select folders for user folders location manually using a folder browser dialog
-	User files or folders won't be moved to a new location. Move them manually
-	They're located in the %USERPROFILE% folder by default
-
-	Выбрать папки для расположения пользовательских папок вручную, используя диалог "Обзор папок"
-	Пользовательские файлы и папки не будут перемещены в новое расположение. Переместите их вручную
-	По умолчанию они располагаются в папке %USERPROFILE%
-#>
+# Select location of user folders manually using a folder browser dialog. User files or folders won't be moved to a new location
+# Выбрать папки для расположения пользовательских папок вручную, используя диалог "Обзор папок". Пользовательские файлы и папки не будут перемещены в новое расположение
 # Set-UserShellFolderLocation -Custom
 
-<#
-	Change user folders location to the default values
-	User files or folders won't be moved to the new location. Move them manually
-	They're located in the %USERPROFILE% folder by default
-
-	Изменить расположение пользовательских папок на значения по умолчанию
-	Пользовательские файлы и папки не будут перемещены в новое расположение. Переместите их вручную
-	По умолчанию они располагаются в папке %USERPROFILE%
-#>
+# Change user folders location to default values. User files or folders won't be moved to the new location
+# Изменить расположение пользовательских папок на значения по умолчанию. Пользовательские файлы и папки не будут перемещены в новое расположение
 # Set-UserShellFolderLocation -Default
-
-# Use .NET Framework 4.8.1 for old apps
-# Использовать .NET Framework 4.8.1 для устаревших программ
-# LatestInstalled.NET -Enable
-
-# Do not use .NET Framework 4.8.1 for old apps (default value)
-# Не использовать .NET Framework 4.8.1 для устаревших программ (значение по умолчанию)
-# LatestInstalled.NET -Disable
 
 # Save screenshots on the Desktop when pressing Windows+PrtScr or using Windows+Shift+S
 # Сохранять скриншоты по нажатию Windows+PrtScr или Windows+Shift+S на рабочий стол
@@ -883,7 +854,7 @@ NetworkDiscovery -Enable
 	Register app, calculate hash, and associate with an extension with the "How do you want to open this" pop-up hidden
 	Зарегистрировать приложение, вычислить хэш и ассоциировать его с расширением без всплывающего окна "Каким образом вы хотите открыть этот файл?"
 
-	Set-Association -ProgramPath 'C:\SumatraPDF.exe' -Extension .pdf -Icon 'shell32.dll,100'
+	Set-Association -ProgramPath 'C:\SumatraPDF.exe' -Extension .pdf -Icon '%SystemRoot%\System32\shell32.dll,100'
 	Set-Association -ProgramPath '%ProgramFiles%\Notepad++\notepad++.exe' -Extension .txt -Icon '%ProgramFiles%\Notepad++\notepad++.exe,0'
 	Set-Association -ProgramPath MSEdgeMHT -Extension .html
 #>
@@ -910,9 +881,9 @@ DefaultTerminalApp -WindowsTerminal
 # Установить Windows Console Host как приложение терминала по умолчанию для размещения пользовательского интерфейса для приложений командной строки (значение по умолчанию)
 # DefaultTerminalApp -ConsoleHost
 
-# Install the latest Microsoft Visual C++ Redistributable Packages 2015–2026 (x86/x64). Internet connection required
-# Установить последнюю версию распространяемых пакетов Microsoft Visual C++ 2015–2026 (x86/x64). Требуется соединение с интернетом
-Install-VCRedist -Redistributables 2015_2026_x86, 2015_2026_x64
+# Install the latest Microsoft Visual C++ Redistributable Packages 2017–2026 (x86/x64). Internet connection required
+# Установить последнюю версию распространяемых пакетов Microsoft Visual C++ 2017–2026 (x86/x64). Требуется соединение с интернетом
+Install-VCRedist
 
 # Install the latest .NET Desktop Runtime 8, 9, 10 x64. Internet connection required
 # Установить последнюю версию .NET Desktop Runtime 8, 9, 10 x64. Требуется соединение с интернетом
@@ -921,12 +892,12 @@ Install-DotNetRuntimes -Runtimes NET8, NET9, NET10
 # Enable proxying only blocked sites from the unified registry of Roskomnadzor. Applicable for Russia only
 # Включить проксирование только заблокированных сайтов из единого реестра Роскомнадзора. Функция применима только для России
 # https://antizapret.prostovpn.org
-RKNBypass -Enable
+AntizapretProxy -Enable
 
 # Disable proxying only blocked sites from the unified registry of Roskomnadzor (default value)
 # Выключить проксирование только заблокированных сайтов из единого реестра Роскомнадзора (значение по умолчанию)
 # https://antizapret.prostovpn.org
-# RKNBypass -Disable
+# AntizapretProxy -Disable
 
 # List Microsoft Edge channels to prevent desktop shortcut creation upon its update
 # Перечислите каналы Microsoft Edge для предотвращения создания ярлыков на рабочем столе после его обновления
@@ -943,6 +914,14 @@ RegistryBackup -Enable
 # Do not back up the system registry to %SystemRoot%\System32\config\RegBack folder (default value)
 # Не создавать копии реестра при перезагрузке ПК (значение по умолчанию)
 # RegistryBackup -Disable
+
+# Disable Windows AI functions
+# Выключить функции, связанные с ИИ Windows
+WindowsAI -Disable
+
+# Enable Windows AI functions (default value)
+# Включить функции, связанные с ИИ Windows (значение по умолчанию)
+# WindowsAI -Enable
 #endregion System
 
 #region WSL
@@ -1116,23 +1095,29 @@ SaveZoneInformation -Disable
 # Выключить Windows Sandbox (значение по умолчанию). Применимо только к редакциям Professional, Enterprise и Education
 # WindowsSandbox -Disable
 
-<#
-	Enable DNS-over-HTTPS for IPv4
-	The valid IPv4 addresses: 1.0.0.1, 1.1.1.1, 149.112.112.112, 8.8.4.4, 8.8.8.8, 9.9.9.9
+# Enable DNS-over-HTTPS using Cloudflare DNS
+# Установить Cloudflare DNS, используя DNS-over-HTTPS
+DNSoverHTTPS -Cloudflare
 
-	Включить DNS-over-HTTPS для IPv4
-	Действительные IPv4-адреса: 1.0.0.1, 1.1.1.1, 149.112.112.112, 8.8.4.4, 8.8.8.8, 9.9.9.9
-#>
-DNSoverHTTPS -Enable -PrimaryDNS 1.0.0.1 -SecondaryDNS 1.1.1.1
+# Enable DNS-over-HTTPS using Google Public DNS
+# Установить Google Public DNS, используя DNS-over-HTTPS
+# DNSoverHTTPS -Google
 
-# Disable DNS-over-HTTPS for IPv4 (default value)
-# Выключить DNS-over-HTTPS для IPv4 (значение по умолчанию)
+# Enable DNS-over-HTTPS using Quad9 DNS
+# Установить Google DNS, используя DNS-over-HTTPS
+# DNSoverHTTPS -Quad9
+
+# Enable DNS-over-HTTPS using Comss.one DNS
+# Установить Google DNS, используя DNS-over-HTTPS
+# DNSoverHTTPS -ComssOne
+
+# Enable DNS-over-HTTPS using AdGuard DNS
+# Установить AdGuard DNS, используя DNS-over-HTTPS
+# DNSoverHTTPS -AdGuard
+
+# Set default ISP's DNS records (default value)
+# Установить DNS-записи вашего провайдера (значение по умолчанию)
 # DNSoverHTTPS -Disable
-
-# Enable DNS-over-HTTPS via Comss.one DNS server
-# Включить DNS-over-HTTPS через DNS-сервер Comss.one
-# https://www.comss.ru/page.php?id=7315
-# DNSoverHTTPS -ComssOneDNS
 
 # Enable Local Security Authority protection to prevent code injection
 # Включить защиту локальной системы безопасности, чтобы предотвратить внедрение кода
@@ -1161,11 +1146,11 @@ CABInstallContext -Show
 # CABInstallContext -Hide
 
 # Hide the "Edit with Clipchamp" item from the media files context menu
-# Скрыть пункт "Редактировать в Climpchamp" из контекстного меню
+# Скрыть пункт "Редактировать в Clipchamp" из контекстного меню
 EditWithClipchampContext -Hide
 
 # Show the "Edit with Clipchamp" item in the media files context menu (default value)
-# Отобразить пункт "Редактировать в Climpchamp" в контекстном меню (значение по умолчанию)
+# Отобразить пункт "Редактировать в Clipchamp" в контекстном меню (значение по умолчанию)
 # EditWithClipchampContext -Show
 
 # Hide the "Edit with Photos" item from the media files context menu

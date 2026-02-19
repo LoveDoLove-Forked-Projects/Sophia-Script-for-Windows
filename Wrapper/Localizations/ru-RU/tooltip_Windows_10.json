@@ -812,6 +812,34 @@
   },
   {
     "Region": "UI & Personalization",
+    "Function": "MostUsedStartApps",
+    "Arg": {
+      "Zero": {
+        "Tag": "Hide",
+        "ToolTip": "Не показывать наиболее часто используемые приложения на начальном экране (значение по умолчанию)."
+      },
+      "One": {
+        "Tag": "Show",
+        "ToolTip": "Показывать наиболее часто используемые приложения на начальном экране."
+      }
+    }
+  },
+  {
+    "Region": "UI & Personalization",
+    "Function": "StartAccountNotifications",
+    "Arg": {
+      "Zero": {
+        "Tag": "Hide",
+        "ToolTip": "Не отображать на начальном экране уведомления, касающиеся учетной записи Microsoft."
+      },
+      "One": {
+        "Tag": "Show",
+        "ToolTip": "Отображать на начальном экране уведомления, касающиеся учетной записи Microsoft (значение по умолчанию)."
+      }
+    }
+  },
+  {
+    "Region": "UI & Personalization",
     "Function": "AppSuggestions",
     "Arg": {
       "Zero": {
@@ -846,20 +874,6 @@
       "Zero": {
         "Tag": "",
         "ToolTip": "Открепить все ярлыки от начального экрана."
-      }
-    }
-  },
-  {
-    "Region": "UI & Personalization",
-    "Function": "StartAccountNotifications",
-    "Arg": {
-      "Zero": {
-        "Tag": "Hide",
-        "ToolTip": "Hide Microsoft account-related notifications in Start."
-      },
-      "One": {
-        "Tag": "Show",
-        "ToolTip": "Show Microsoft account-related notifications on Start (default value)."
       }
     }
   },
@@ -1145,29 +1159,15 @@
     "Arg": {
       "Zero": {
         "Tag": "Root",
-        "ToolTip": "Переместить пользовательские папки в корень любого диска на выбор с помощью интерактивного меню. Пользовательские файлы и папки не будут перемещены в новое расположение. Переместите их вручную. По умолчанию они располагаются в папке %USERPROFILE%."
+        "ToolTip": "Изменить расположение пользовательских папки в корень любого диска на выбор с помощью интерактивного меню. Пользовательские файлы и папки не будут перемещены в новое расположение."
       },
       "One": {
         "Tag": "Custom",
-        "ToolTip": "Выбрать папки для расположения пользовательских папок вручную, используя диалог \"Обзор папок\". Пользовательские файлы и папки не будут перемещены в новое расположение. Переместите их вручную. По умолчанию они располагаются в папке %USERPROFILE%."
+        "ToolTip": "Выбрать папки для расположения пользовательских папок вручную, используя диалог \"Обзор папок\". Пользовательские файлы и папки не будут перемещены в новое расположение."
       },
       "Two": {
         "Tag": "Default",
-        "ToolTip": "Изменить расположение пользовательских папок на значения по умолчанию. Пользовательские файлы и папки не будут перемещены в новое расположение. Переместите их вручную. По умолчанию они располагаются в папке %USERPROFILE% (значение по умолчанию)."
-      }
-    }
-  },
-  {
-    "Region": "System",
-    "Function": "LatestInstalled.NET",
-    "Arg": {
-      "Zero": {
-        "Tag": "Enable",
-        "ToolTip": "Использовать .NET Framework 4.8.1 для устаревших программ."
-      },
-      "One": {
-        "Tag": "Disable",
-        "ToolTip": "Не использовать .NET Framework 4.8.1 для устаревших программ (значение по умолчанию)."
+        "ToolTip": "Изменить расположение пользовательских папок на значения по умолчанию. Пользовательские файлы и папки не будут перемещены в новое расположение (значение по умолчанию)."
       }
     }
   },
@@ -1380,7 +1380,7 @@
   },
   {
     "Region": "System",
-    "Function": "UninstallPCHealthCheck",
+    "Function": "Uninstall-PCHealthCheck",
     "Arg": {
       "Zero": {
         "Tag": "",
@@ -1390,16 +1390,12 @@
   },
   {
     "Region": "System",
-    "Function": "Install-VCRedist -Redistributables",
-    "ToolTip": "Установить последнюю версию распространяемых пакетов Microsoft Visual C++ 2015–2026. Требуется соединение с интернетом.",
+    "Function": "Install-VCRedist",
+    "ToolTip": "Установить последнюю версию Microsoft Visual C++ Redistributable Packages 2017–2026 (x86/x64)",
     "Arg": {
       "Zero": {
-        "Tag": "2015_2026_x86",
-        "ToolTip": "Установить последнюю версию распространяемых пакетов Microsoft Visual C++ 2015–2026 x86. Требуется соединение с интернетом."
-      },
-      "One": {
-        "Tag": "2015_2026_x64",
-        "ToolTip": "Установить последнюю версию распространяемых пакетов Microsoft Visual C++ 2015–2026 x64. Требуется соединение с интернетом."
+        "Tag": "",
+        "ToolTip": "Требуется соединение с интернетом."
       }
     }
   },
@@ -1424,7 +1420,7 @@
   },
   {
     "Region": "System",
-    "Function": "RKNBypass",
+    "Function": "AntizapretProxy",
     "Arg": {
       "Zero": {
         "Tag": "Enable",
@@ -1739,20 +1735,6 @@
       "One": {
         "Tag": "Disable",
         "ToolTip": "Выключить Windows Sandbox (значение по умолчанию). Применимо только к редакциям Professional, Enterprise и Education."
-      }
-    }
-  },
-  {
-    "Region": "Microsoft Defender & Security",
-    "Function": "DNSoverHTTPS",
-    "Arg": {
-      "Zero": {
-        "Tag": "Enable",
-        "ToolTip": "Включить DNS-over-HTTPS для IPv4. Действительные IPv4-адреса: 1.0.0.1, 1.1.1.1, 149.112.112.112, 8.8.4.4, 8.8.8.8, 9.9.9.9."
-      },
-      "One": {
-        "Tag": "Disable",
-        "ToolTip": "Выключить DNS-over-HTTPS для IPv4 (значение по умолчанию)."
       }
     }
   },

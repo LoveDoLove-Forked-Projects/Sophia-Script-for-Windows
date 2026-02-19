@@ -788,11 +788,11 @@
     "Arg": {
       "Zero": {
         "Tag": "Disable",
-        "ToolTip": "Den Navigatiosbereich des Explorers (Linker Abschnitt) nicht auf den aktuellen Ordner erweitern (Standardwert)."
+        "ToolTip": "Nicht erweitern, um Ordner im Navigationsbereich zu öffnen (Standardwert)."
       },
       "One": {
         "Tag": "Enable",
-        "ToolTip": "Der Navigationsbereich des Explorers (Linker Abschnitt) wird auf den aktuellen Ordner erweitert."
+        "ToolTip": "Erweitern, um Ordner im Navigationsbereich zu öffnen."
       }
     }
   },
@@ -816,11 +816,11 @@
     "Arg": {
       "Zero": {
         "Tag": "Hide",
-        "ToolTip": "Hide most used apps in Start (default value)."
+        "ToolTip": "Die am häufigsten verwendeten Apps im Startmenü ausblenden (Standardwert)."
       },
       "One": {
         "Tag": "Show",
-        "ToolTip": "Show most used Apps in Start."
+        "ToolTip": "Die am häufigsten verwendeten Apps in Start anzeigen."
       }
     }
   },
@@ -1159,29 +1159,15 @@
     "Arg": {
       "Zero": {
         "Tag": "Root",
-        "ToolTip": "Verschieben Sie Benutzerordner über das interaktive Menü in das Stammverzeichnis eines beliebigen Laufwerks. Benutzerdateien oder -ordner können nicht an einen neuen Speicherort verschoben werden. Verschieben Sie sie manuell. Sie befinden sich standardmäßig in dem Ordner %USERPROFILE%."
+        "ToolTip": "Ändern Sie den Speicherort von Benutzerordnern über das interaktive Menü in das Stammverzeichnis eines beliebigen Laufwerks. Benutzerdateien oder -ordner werden nicht an einen neuen Speicherort verschoben."
       },
       "One": {
         "Tag": "Custom",
-        "ToolTip": "Wählen Sie  den Ordner für Benutzerordner manuell über einen Ordner-Browser-Dialog aus. Benutzerdateien oder -ordner werden nicht an einen neuen Speicherort verschoben. Verschieben Sie sie manuell. Sie befinden sich standardmäßig in dem Ordner %USERPROFILE%."
+        "ToolTip": "Wählen Sie den Speicherort der Benutzerordner manuell über einen Ordner-Browser-Dialog aus. Benutzerdateien oder -ordner werden nicht an einen neuen Speicherort verschoben."
       },
       "Two": {
         "Tag": "Default",
-        "ToolTip": "Ändern Sie den Speicherort von Benutzerordnern auf die Standardwerten. Benutzerdateien oder -ordner lassen sich nicht an einen neuen Speicherort verschieben. Verschieben Sie sie manuell. Sie befinden sich standardmäßig im Ordner %USERPROFILE% (Standardwert)."
-      }
-    }
-  },
-  {
-    "Region": "System",
-    "Function": "LatestInstalled.NET",
-    "Arg": {
-      "Zero": {
-        "Tag": "Enable",
-        "ToolTip": "Verwenden Sie die neueste installierte .NET-Laufzeitumgebung für alle Anwendungen."
-      },
-      "One": {
-        "Tag": "Disable",
-        "ToolTip": "Die zuletzt installierte .NET-Laufzeitumgebung nicht für alle Anwendungen verwenden (Standardwert)."
+        "ToolTip": "Ändern Sie den Speicherort der Benutzerordner auf die Standardwerte. Benutzerdateien oder -ordner werden nicht an den neuen Speicherort verschoben (Standardwert)."
       }
     }
   },
@@ -1394,7 +1380,7 @@
   },
   {
     "Region": "System",
-    "Function": "UninstallPCHealthCheck",
+    "Function": "Uninstall-PCHealthCheck",
     "Arg": {
       "Zero": {
         "Tag": "Block",
@@ -1404,16 +1390,12 @@
   },
   {
     "Region": "System",
-    "Function": "Install-VCRedist -Redistributables",
-    "ToolTip": "Installieren Sie die neueste Microsoft Visual C++ Redistributable Packages x86, x64",
+    "Function": "Install-VCRedist",
+    "ToolTip": "Installieren Sie die neueste Microsoft Visual C++ Redistributable Packages 2017–2026 (x86/x64)",
     "Arg": {
       "Zero": {
-        "Tag": "2015_2026_x86",
-        "ToolTip": "Installieren Sie die neueste unterstützte Microsoft Visual C++ Redistributable 2015–2026 x86. Internetverbindung erforderlich."
-      },
-      "One": {
-        "Tag": "2015_2026_x64",
-        "ToolTip": "Installieren Sie die neueste unterstützte Microsoft Visual C++ Redistributable 2015–2026 x64. Internetverbindung erforderlich."
+        "Tag": "",
+        "ToolTip": "Internetverbindung erforderlich."
       }
     }
   },
@@ -1438,7 +1420,7 @@
   },
   {
     "Region": "System",
-    "Function": "RKNBypass",
+    "Function": "AntizapretProxy",
     "Arg": {
       "Zero": {
         "Tag": "Enable",
@@ -1753,20 +1735,6 @@
       "One": {
         "Tag": "Disable",
         "ToolTip": "Windows-Sandbox deaktivieren (Standardwert). Gilt nur für die Editionen Professional, Enterprise und Education."
-      }
-    }
-  },
-  {
-    "Region": "Microsoft Defender & Security",
-    "Function": "DNSoverHTTPS",
-    "Arg": {
-      "Zero": {
-        "Tag": "Enable",
-        "ToolTip": "Aktiviert DNS-over-HTTPS für IPv4. Gültige IPv4-Adressen: 1.0.0.1, 1.1.1.1, 149.112.112.112, 8.8.4.4, 8.8.8.8, 9.9.9.91."
-      },
-      "One": {
-        "Tag": "Disable",
-        "ToolTip": "Deaktiviert DNS-over-HTTPS für IPv4 (Standardwert)."
       }
     }
   },

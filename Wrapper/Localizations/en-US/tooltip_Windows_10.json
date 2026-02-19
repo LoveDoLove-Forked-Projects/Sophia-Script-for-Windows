@@ -812,6 +812,34 @@
   },
   {
     "Region": "UI & Personalization",
+    "Function": "MostUsedStartApps",
+    "Arg": {
+      "Zero": {
+        "Tag": "Hide",
+        "ToolTip": "Hide most used apps in Start (default value)."
+      },
+      "One": {
+        "Tag": "Show",
+        "ToolTip": "Show most used Apps in Start."
+      }
+    }
+  },
+  {
+    "Region": "UI & Personalization",
+    "Function": "StartAccountNotifications",
+    "Arg": {
+      "Zero": {
+        "Tag": "Hide",
+        "ToolTip": "Hide Microsoft account-related notifications in Start."
+      },
+      "One": {
+        "Tag": "Show",
+        "ToolTip": "Show Microsoft account-related notifications on Start (default value)."
+      }
+    }
+  },
+  {
+    "Region": "UI & Personalization",
     "Function": "AppSuggestions",
     "Arg": {
       "Zero": {
@@ -846,20 +874,6 @@
       "Zero": {
         "Tag": "",
         "ToolTip": "Unpin all the Start tiles."
-      }
-    }
-  },
-  {
-    "Region": "UI & Personalization",
-    "Function": "StartAccountNotifications",
-    "Arg": {
-      "Zero": {
-        "Tag": "Hide",
-        "ToolTip": "Hide Microsoft account-related notifications on Start."
-      },
-      "One": {
-        "Tag": "Show",
-        "ToolTip": "Show Microsoft account-related notifications on Start (default value)."
       }
     }
   },
@@ -1145,29 +1159,15 @@
     "Arg": {
       "Zero": {
         "Tag": "Root",
-        "ToolTip": "Change user folders location to the root of any drive using the interactive menu. User files or folders won't be moved to a new location. Move them manually. They're located in the %USERPROFILE% folder by default."
+        "ToolTip": "Change location of user folders to the root of any drive using the interactive menu. User files or folders won't be moved to a new location."
       },
       "One": {
         "Tag": "Custom",
-        "ToolTip": "Select folders for user folders location manually using a folder browser dialog. User files or folders won't be moved to a new location. Move them manually. They're located in the %USERPROFILE% folder by default."
+        "ToolTip": "Select location of user folders manually using a folder browser dialog. User files or folders won't be moved to a new location."
       },
       "Two": {
         "Tag": "Default",
-        "ToolTip": "Change user folders location to the default values. User files or folders won't be moved to a new location. Move them manually. They're located in the %USERPROFILE% folder by default (default value)."
-      }
-    }
-  },
-  {
-    "Region": "System",
-    "Function": "LatestInstalled.NET",
-    "Arg": {
-      "Zero": {
-        "Tag": "Enable",
-        "ToolTip": "Use .NET Framework 4.8.1 for old apps."
-      },
-      "One": {
-        "Tag": "Disable",
-        "ToolTip": "Do not use .NET Framework 4.8.1 for old apps (default value)."
+        "ToolTip": "Change user folders location to default values. User files or folders won't be moved to the new location (default value)."
       }
     }
   },
@@ -1380,7 +1380,7 @@
   },
   {
     "Region": "System",
-    "Function": "UninstallPCHealthCheck",
+    "Function": "Uninstall-PCHealthCheck",
     "Arg": {
       "Zero": {
         "Tag": "Block",
@@ -1390,16 +1390,12 @@
   },
   {
     "Region": "System",
-    "Function": "Install-VCRedist -Redistributables",
-    "ToolTip": "Install the latest Microsoft Visual C++ Redistributable Packages x86, x64",
+    "Function": "Install-VCRedist",
+    "ToolTip": "Install the latest Microsoft Visual C++ Redistributable Packages 2017–2026 (x86/x64)",
     "Arg": {
       "Zero": {
-        "Tag": "2015_2026_x86",
-        "ToolTip": "Install the latest Microsoft Visual C++ Redistributable Packages 2015–2026 x86. Internet connection required."
-      },
-      "One": {
-        "Tag": "2015_2026_x64",
-        "ToolTip": "Install the latest Microsoft Visual C++ Redistributable Packages 2015–2026 x64. Internet connection required."
+        "Tag": "",
+        "ToolTip": "Internet connection required."
       }
     }
   },
@@ -1424,7 +1420,7 @@
   },
   {
     "Region": "System",
-    "Function": "RKNBypass",
+    "Function": "AntizapretProxy",
     "Arg": {
       "Zero": {
         "Tag": "Enable",
@@ -1740,20 +1736,6 @@
       "One": {
         "Tag": "Disable",
         "ToolTip": "Disable Windows Sandbox (default value). Applicable only to Professional, Enterprise and Education editions."
-      }
-    }
-  },
-  {
-    "Region": "Microsoft Defender & Security",
-    "Function": "DNSoverHTTPS",
-    "Arg": {
-      "Zero": {
-        "Tag": "Enable",
-        "ToolTip": "Enable DNS-over-HTTPS for IPv4. The valid IPv4 addresses: 1.0.0.1, 1.1.1.1, 149.112.112.112, 8.8.4.4, 8.8.8.8, 9.9.9.9."
-      },
-      "One": {
-        "Tag": "Disable",
-        "ToolTip": "Disable DNS-over-HTTPS for IPv4 (default value)."
       }
     }
   },

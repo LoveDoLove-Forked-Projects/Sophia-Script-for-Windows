@@ -3,10 +3,10 @@
 	Initial checks before proceeding to module execution
 
 	.VERSION
-	7.0.4
+	7.1.1
 
 	.DATE
-	05.01.2026
+	13.02.2026
 
 	.COPYRIGHT
 	(c) 2014—2026 Team Sophia
@@ -28,7 +28,7 @@ function InitialActions
 
 	Set-StrictMode -Version Latest
 
-	$Host.UI.RawUI.WindowTitle = "Sophia Script for Windows 11 v7.0.4 (PowerShell 7) | Made with $([System.Char]::ConvertFromUtf32(0x1F497)) of Windows | $([System.Char]0x00A9) Team Sophia, 2014$([System.Char]0x2013)2026"
+	$Host.UI.RawUI.WindowTitle = "Sophia Script for Windows 11 v7.1.1 (PowerShell 7) | Made with $([System.Char]::ConvertFromUtf32(0x1F497)) of Windows | $([System.Char]0x00A9) Team Sophia, 2014$([System.Char]0x2013)2026"
 
 	# Unblock all files in the script folder by removing the Zone.Identifier alternate data stream with a value of "3"
 	Get-ChildItem -Path $PSScriptRoot\..\..\ -File -Recurse -Force | Unblock-File
@@ -318,14 +318,14 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 		}
 	}
 
-	# Extract the localized "Browse" string from shell32.dll
+	# Extract the localized "Browse" string from %SystemRoot%\System32\shell32.dll
 	$Global:Browse = [WinAPI.GetStrings]::GetString(9015)
-	# Extract the localized "&No" string from shell32.dll
+	# Extract the localized "&No" string from %SystemRoot%\System32\shell32.dll
 	$Global:No = [WinAPI.GetStrings]::GetString(33232).Replace("&", "")
-	# Extract the localized "&Yes" string from shell32.dll
+	# Extract the localized "&Yes" string from %SystemRoot%\System32\shell32.dll
 	$Global:Yes = [WinAPI.GetStrings]::GetString(33224).Replace("&", "")
 	$Global:KeyboardArrows = $Localization.KeyboardArrows -f [System.Char]::ConvertFromUtf32(0x2191), [System.Char]::ConvertFromUtf32(0x2193)
-	# Extract the localized "Skip" string from shell32.dll
+	# Extract the localized "Skip" string from %SystemRoot%\System32\shell32.dll
 	$Global:Skip = [WinAPI.GetStrings]::GetString(16956)
 
 	# Check the language mode
@@ -398,6 +398,8 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 		CrystalCry           = "HKLM:\SOFTWARE\CrystalCry"
 		# https://github.com/es3n1n/defendnot
 		defendnot            = "$env:SystemRoot\System32\Tasks\defendnot"
+		# https://github.com/zoicware/RemoveWindowsAI
+		RemoveWindowsAI      = "$env:SystemRoot\System32\CatRoot\*\ZoicwareRemoveWindowsAI*"
 	}
 	foreach ($Tweaker in $Tweakers.Keys)
 	{
@@ -411,7 +413,7 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 
 				Write-Verbose -Message "https://youtu.be/na93MS-1EkM" -Verbose
 				Write-Verbose -Message "https://pikabu.ru/story/byekdor_v_win_10_tweaker_ili_sovremennyie_metodyi_borbyi_s_piratstvom_8227558" -Verbose
-				Write-Verbose -Message "https://www.microsoft.com/software-download/windows11" -Verbose
+				Write-Verbose -Message "https://massgrave.dev/genuine-installation-media" -Verbose
 				Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
 				Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
 
@@ -424,7 +426,7 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 			Write-Warning -Message ($Localization.TweakerWarning -f $Tweaker)
 			Write-Information -MessageData "" -InformationAction Continue
 
-			Write-Verbose -Message "https://www.microsoft.com/software-download/windows11" -Verbose
+			Write-Verbose -Message "https://massgrave.dev/genuine-installation-media" -Verbose
 			Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
 			Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
 
@@ -449,7 +451,7 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 			Write-Warning -Message ($Localization.TweakerWarning -f $Tweaker)
 			Write-Information -MessageData "" -InformationAction Continue
 
-			Write-Verbose -Message "https://www.microsoft.com/software-download/windows11" -Verbose
+			Write-Verbose -Message "https://massgrave.dev/genuine-installation-media" -Verbose
 			Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
 			Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
 
@@ -460,7 +462,7 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 	}
 
 	Write-Information -MessageData "" -InformationAction Continue
-	# Extract the localized "Please wait..." string from shell32.dll
+	# Extract the localized "Please wait..." string from %SystemRoot%\System32\shell32.dll
 	Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
 	Write-Information -MessageData "" -InformationAction Continue
 
@@ -507,11 +509,11 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 	if ((Get-Service -Name EventLog).Status -eq "Stopped")
 	{
 		Write-Information -MessageData "" -InformationAction Continue
-		# Extract the localized "Event Viewer" string from shell32.dll
+		# Extract the localized "Event Viewer" string from %SystemRoot%\System32\shell32.dll
 		Write-Warning -Message ($Localization.WindowsComponentBroken -f $([WinAPI.GetStrings]::GetString(22029)))
 		Write-Information -MessageData "" -InformationAction Continue
 
-		Write-Verbose -Message "https://www.microsoft.com/software-download/windows11" -Verbose
+		Write-Verbose -Message "https://massgrave.dev/genuine-installation-media" -Verbose
 		Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
 		Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
 
@@ -536,7 +538,7 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 		Write-Warning -Message ($Localization.WindowsComponentBroken -f "UWP")
 		Write-Information -MessageData "" -InformationAction Continue
 
-		Write-Verbose -Message "https://www.microsoft.com/software-download/windows11" -Verbose
+		Write-Verbose -Message "https://massgrave.dev/genuine-installation-media" -Verbose
 		Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
 		Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
 
@@ -563,7 +565,7 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 		Write-Warning -Message ($Localization.WindowsComponentBroken -f "Microsoft Defender")
 		Write-Information -MessageData "" -InformationAction Continue
 
-		Write-Verbose -Message "https://www.microsoft.com/software-download/windows11" -Verbose
+		Write-Verbose -Message "https://massgrave.dev/genuine-installation-media" -Verbose
 		Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
 		Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
 
@@ -579,7 +581,7 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 		Write-Warning -Message ($Localization.WindowsComponentBroken -f "Microsoft Defender")
 		Write-Information -MessageData "" -InformationAction Continue
 
-		Write-Verbose -Message "https://www.microsoft.com/software-download/windows11" -Verbose
+		Write-Verbose -Message "https://massgrave.dev/genuine-installation-media" -Verbose
 		Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
 		Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
 
@@ -604,7 +606,7 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 		Write-Warning -Message ($Localization.WindowsComponentBroken -f "Microsoft Defender")
 		Write-Information -MessageData "" -InformationAction Continue
 
-		Write-Verbose -Message "https://www.microsoft.com/software-download/windows11" -Verbose
+		Write-Verbose -Message "https://massgrave.dev/genuine-installation-media" -Verbose
 		Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
 		Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
 
@@ -613,13 +615,18 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 		exit
 	}
 
-	if ((Get-Service -Name SecurityHealthService).Status -ne "running")
+	# Check SecurityHealthService service
+	try
+	{
+		Get-Service -Name SecurityHealthService -ErrorAction Stop | Start-Service -ErrorAction Stop
+	}
+	catch
 	{
 		Write-Information -MessageData "" -InformationAction Continue
 		Write-Warning -Message ($Localization.WindowsComponentBroken -f "Microsoft Defender")
 		Write-Information -MessageData "" -InformationAction Continue
 
-		Write-Verbose -Message "https://www.microsoft.com/software-download/windows11" -Verbose
+		Write-Verbose -Message "https://massgrave.dev/genuine-installation-media" -Verbose
 		Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
 		Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
 
@@ -629,32 +636,13 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 	}
 
 	# Check whether Microsoft Defender is a default AV
-	try
+	$Global:DefenderDefaultAV = $false
+	$productState = (Get-CimInstance -ClassName AntiVirusProduct -Namespace root/SecurityCenter2 -ErrorAction Stop | Where-Object -FilterScript {$_.instanceGuid -eq "{D68DDC3A-831F-4fae-9E44-DA132C1ACF46}"}).productState
+	$DefenderState = ('0x{0:x}' -f $productState).Substring(3, 2)
+	if ($DefenderState -notmatch "00|01")
 	{
-		$Global:DefenderDefaultAV = $false
-
-		$productState = (Get-CimInstance -ClassName AntiVirusProduct -Namespace root/SecurityCenter2 -ErrorAction Stop | Where-Object -FilterScript {$_.instanceGuid -eq "{D68DDC3A-831F-4fae-9E44-DA132C1ACF46}"}).productState
-		$DefenderState = ('0x{0:x}' -f $productState).Substring(3, 2)
-
-		if ($DefenderState -notmatch "00|01")
-		{
-			# Defender is a default AV
-			$Global:DefenderDefaultAV = $true
-		}
-	}
-	catch
-	{
-		Write-Information -MessageData "" -InformationAction Continue
-		Write-Warning -Message ($Localization.WindowsComponentBroken -f "Microsoft Defender")
-		Write-Information -MessageData "" -InformationAction Continue
-
-		Write-Verbose -Message "https://www.microsoft.com/software-download/windows11" -Verbose
-		Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
-		Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
-
-		$Global:Failed = $true
-
-		exit
+		# Defender is a default AV
+		$Global:DefenderDefaultAV = $true
 	}
 
 	# Check whether Controlled Folder Access is enabled
@@ -666,7 +654,6 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 
 		Start-Process -FilePath "windowsdefender://RansomwareProtection"
 
-		Write-Verbose -Message "https://www.microsoft.com/software-download/windows11" -Verbose
 		Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
 		Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
 
@@ -706,13 +693,14 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 	}
 
 	# Checking whether BitLocker encryption or decryption in process
-	if (Get-BitLockerVolume -MountPoint $env:SystemDrive | Where-Object -FilterScript {$_.VolumeStatus -notin @("FullyEncrypted", "FullyDecrypted")})
+	$BitLocker = Get-BitLockerVolume -MountPoint $env:SystemDrive | Where-Object -FilterScript {$_.VolumeStatus -notin @("FullyEncrypted", "FullyDecrypted")}
+	if ($BitLocker)
 	{
 		Write-Information -MessageData "" -InformationAction Continue
-		Write-Warning -Message $Localization.BitLockerInOperation
+		Write-Warning -Message ($Localization.BitLockerInOperation -f $BitLocker.EncryptionPercentage)
 		Write-Verbose -Message "https://www.neowin.net/guides/how-to-remove-bitlocker-drive-encryption-in-windows-11/" -Verbose
 
-		Get-BitLockerVolume -MountPoint $env:SystemDrive | Where-Object -FilterScript {$_.VolumeStatus -notin @("FullyEncrypted", "FullyDecrypted")}
+		$BitLocker
 
 		# Open if Windows edition is not Home
 		if ((Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion").EditionID -ne "Core")
@@ -733,9 +721,7 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 	if (Get-BitLockerVolume -MountPoint $env:SystemDrive | Where-Object -FilterScript {($_.ProtectionStatus -eq "Off") -and ($_.VolumeStatus -eq "FullyEncrypted")})
 	{
 		Write-Warning -Message $Localization.BitLockerAutomaticEncryption
-		Write-Error -Message $Localization.BitLockerAutomaticEncryption -ErrorAction SilentlyContinue
 		Write-Verbose -Message "https://www.neowin.net/guides/how-to-remove-bitlocker-drive-encryption-in-windows-11/" -Verbose
-		Write-Error -Message "https://www.neowin.net/guides/how-to-remove-bitlocker-drive-encryption-in-windows-11/" -ErrorAction SilentlyContinue
 
 		do
 		{
@@ -745,7 +731,21 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 			{
 				$Yes
 				{
-					Disable-BitLocker -MountPoint $env:SystemDrive
+					try
+					{
+						Disable-BitLocker -MountPoint $env:SystemDrive -ErrorAction Stop
+					}
+					catch
+					{
+						Write-Warning -Message $Localization.RebootPending
+
+						Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
+						Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
+
+						$Global:Failed = $true
+
+						exit
+					}
 				}
 				$No
 				{
@@ -811,6 +811,9 @@ public extern static string BrandingFormatString(string sFormat);
 		# Check for updates
 		& "$env:SystemRoot\System32\UsoClient.exe" StartInteractiveScan
 
+		Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
+		Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
+
 		$Global:Failed = $true
 
 		exit
@@ -840,6 +843,9 @@ public extern static string BrandingFormatString(string sFormat);
 
 			# Check for UWP apps updates
 			Get-CimInstance -ClassName MDM_EnterpriseModernAppManagement_AppManagement01 -Namespace root/CIMV2/mdm/dmmap | Invoke-CimMethod -MethodName UpdateScanMethod
+
+			Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
+			Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
 
 			$Global:Failed = $true
 
@@ -877,6 +883,9 @@ public extern static string BrandingFormatString(string sFormat);
 
 			# Open the "Windows Update" page
 			Start-Process -FilePath "ms-settings:windowsupdate"
+
+			Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
+			Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
 
 			$Global:Failed = $true
 
@@ -931,6 +940,9 @@ public extern static string BrandingFormatString(string sFormat);
 				# Open the "Windows Update" page
 				Start-Process -FilePath "ms-settings:windowsupdate"
 
+				Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
+				Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
+
 				$Global:Failed = $true
 
 				exit
@@ -952,6 +964,9 @@ public extern static string BrandingFormatString(string sFormat);
 	{
 		Get-CimInstance -ClassName CIM_ComputerSystem | Set-CimInstance -Property @{AutomaticManagedPageFile = $true}
 	}
+
+	# If you do not use old applications, there's no need to force old applications based on legacy .NET Framework 2.0, 3.0, or 3.5 to use .NET Framework 4.8.1
+	Remove-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\.NETFramework, HKLM:\SOFTWARE\Wow6432Node\Microsoft\.NETFramework -Name OnlyUseLatestCLR -Force -ErrorAction Ignore
 
 	# PowerShell 5.1 (7.5 too) interprets 8.3 file name literally, if an environment variable contains a non-Latin word
 	# https://github.com/PowerShell/PowerShell/issues/21070

@@ -3,10 +3,10 @@
 	Enable tab completion to invoke for functions if you do not know function name
 
 	.VERSION
-	7.0.4
+	7.1.1
 
 	.DATE
-	05.01.2026
+	13.02.2026
 
 	.COPYRIGHT
 	(c) 2014—2026 Team Sophia
@@ -166,30 +166,6 @@ $Parameters = @{
 				}
 			}
 
-			# If a module command is Install-VCRedist
-			if ($Command -eq "Install-VCRedist")
-			{
-				# Get all command arguments, excluding defaults
-				foreach ($ParameterSet in $ParameterSets.Name)
-				{
-					# If an argument is Redistributables
-					if ($ParameterSet -eq "Redistributables")
-					{
-						$ValidValues = ((Get-Command -Name Install-VCRedist).Parametersets.Parameters | Where-Object -FilterScript {$null -eq $_.Attributes.AliasNames}).Attributes.ValidValues
-						foreach ($ValidValue in $ValidValues)
-						{
-							# The "Install-VCRedist -Redistributables <function>" construction
-							"Install-VCRedist" + " " + "-" + $ParameterSet + " " + $ValidValue | Where-Object -FilterScript {$_ -like "*$wordToComplete*"} | ForEach-Object -Process {"`"$_`""}
-						}
-
-						# The "Install-VCRedist -Redistributables <functions>" construction
-						"Install-VCRedist" + " " + "-" + $ParameterSet + " " + ($ValidValues -join ", ") | Where-Object -FilterScript {$_ -like "*$wordToComplete*"} | ForEach-Object -Process {"`"$_`""}
-					}
-
-					continue
-				}
-			}
-
 			# If a module command is Install-DotNetRuntimes
 			if ($Command -eq "Install-DotNetRuntimes")
 			{
@@ -212,30 +188,6 @@ $Parameters = @{
 
 					continue
 				}
-			}
-
-			# If a module command is DNSoverHTTPS
-			if ($Command -eq "DNSoverHTTPS")
-			{
-				(Get-Command -Name $Command).Name | Where-Object -FilterScript {$_ -like "*$wordToComplete*"}
-
-				# Get the valid IPv4 addresses array
-				# ((Get-Command -Name DNSoverHTTPS).Parametersets.Parameters | Where-Object -FilterScript {$null -eq $_.Attributes.AliasNames}).Attributes.ValidValues | Select-Object -Unique
-				$ValidValues = @((Get-ChildItem -Path HKLM:\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters\DohWellKnownServers).PSChildName) | Where-Object {$_ -notmatch ":"}
-				foreach ($ValidValue in $ValidValues)
-				{
-					$ValidValuesDescending = @((Get-ChildItem -Path HKLM:\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters\DohWellKnownServers).PSChildName) | Where-Object {$_ -notmatch ":"}
-					foreach ($ValidValueDescending in $ValidValuesDescending)
-					{
-						# The "DNSoverHTTPS -Enable -PrimaryDNS x.x.x.x -SecondaryDNS x.x.x.x" construction
-						"DNSoverHTTPS -Enable -PrimaryDNS $ValidValue -SecondaryDNS $ValidValueDescending" | Where-Object -FilterScript {$_ -like "*$wordToComplete*"} | ForEach-Object -Process {"`"$_`""}
-					}
-				}
-
-				"DNSoverHTTPS -Disable" | Where-Object -FilterScript {$_ -like "*$wordToComplete*"} | ForEach-Object -Process {"`"$_`""}
-				"DNSoverHTTPS -ComssOneDNS" | Where-Object -FilterScript {$_ -like "*$wordToComplete*"} | ForEach-Object -Process {"`"$_`""}
-
-				continue
 			}
 
 			# If a module command is Set-Policy
@@ -266,5 +218,5 @@ Write-Verbose -Message "Sophia -Functions <tab>" -Verbose
 Write-Verbose -Message "Sophia -Functions temp<tab>" -Verbose
 Write-Verbose -Message "Sophia -Functions 'DiagTrackService -Disable', 'DiagnosticDataLevel -Minimal', Uninstall-UWPApps" -Verbose
 Write-Information -MessageData "" -InformationAction Continue
-Write-Verbose -Message "Sophia -Functions 'Uninstall-UWPApps, 'PinToStart -UnpinAll' -Verbose"
+Write-Verbose -Message "Sophia -Functions 'Uninstall-UWPApps, 'PinToStart -UnpinAll'" -Verbose
 Write-Verbose -Message "Sophia -Functions `"Set-Association -ProgramPath '%ProgramFiles%\Notepad++\notepad++.exe' -Extension .txt -Icon '%ProgramFiles%\Notepad++\notepad++.exe,0'`"" -Verbose

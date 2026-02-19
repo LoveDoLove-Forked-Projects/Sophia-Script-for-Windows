@@ -14,7 +14,7 @@
 	<a href="https://github.com/farag2/Sophia-Script-for-Windows/actions"><img src="https://img.shields.io/github/actions/workflow/status/farag2/Sophia-Script-for-Windows/Sophia.yml?labelColor=151B23&color=151B23&style=for-the-badge&label=build&logo=GitHub"></a>
 </kbd>
 <kbd>
-  <a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Arm-support-green?labelColor=151B23&color=151B23&style=for-the-badge&logo=Arm&logoColor=white" href="#"></a>
+	<a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Arm-support-green?labelColor=151B23&color=151B23&style=for-the-badge&logo=Arm&logoColor=white" href="#"></a>
 </kbd>
 <kbd>
 	<a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Human%20Coded%20100%25-green?labelColor=151B23&color=151B23&style=for-the-badge" href="#"></a>
@@ -57,23 +57,30 @@
 
 ## Ключові особливості
 
+* `Sophia Script for Windows` дбає про стабільність вашої Windows і повідомить вас у разі виявлення проблеми
 * Понад 150 унікальних функцій для налаштування Windows з використанням офіційно задокументованих методів Microsoft без шкоди для системи
   * Кожне налаштування має відповідну функцію для відновлення значень за замовчуванням
+* Проект с полностью открытым исходным кодом
+  * Всі архіви збираються і завантажуються на сторінку релізів, [використовуючи GitHub Actions](https://github.com/farag2/Sophia-Script-for-Windows/actions)
 * Налаштування Windows AI
 * Налаштування приватності, безпеки та персоналізації Windows
-* Проект с полностью открытым исходным кодом
-  * Всі архіви збираються і завантажуються на сторінку релізів, використовуючи GitHub Actions, в [автоматичному режимі](https://github.com/farag2/Sophia-Script-for-Windows/actions).
 * Доступний через Scoop, Chocolatey та WinGet
-* Підтримка ARM64 і PowerShell 7
+* Підтримка ARM64
+* Підтримка PowerShell 7
 * Не конфліктує з [VAC](https://help.steampowered.com/faqs/view/571A-97DA-70E9-FF74#whatisvac)
 * Видалення UWP-додатків, що відображають назви пакетів
-  * Скрипт генерує список встановлених UWP-додатків [динамічно](#локалізовані-назви-uwp-пакетів)
-* Відобразити застосовані політики реєстру в оснащенні редагування групових політик (gpedit.msc)
-* Активація DNS-over-HTTPS
+  * Скрипт генерує список встановлених UWP-додатків [динамічно](#скріншоти)
+* Застосовані політики реєстру будуть відображатися в оснащенні редагування групових політик (gpedit.msc)
+* Встановити на вибір наступні DNS-провайдери, використовуючи DNS-over-HTTPS
+  * [Cloudflare DNS](https://developers.cloudflare.com/1.1.1.1/setup/windows/)
+  * [Google Public DNS](https://developers.google.com/speed/public-dns/docs/using)
+  * [Quad9 DNS](https://quad9.net/service/service-addresses-and-features/)
+  * [Comss.one DNS](https://www.comss.ru/page.php?id=7315)
+  * [AdGuard DNS](https://adguard-dns.io/public-dns.html)
 * Видалення OneDrive
 * Інтерактивні [підказки та спливаючі вікна](#скріншоти)
-* <kbd>TAB</kbd> [доповнення](#як-виконати-конкретну-функцію(ї)) для функцій та їх аргументів (Використовуючи Import-TabCompletion.ps1)
-* Змінити розташування папок користувача (без переміщення файлів користувача) за допомогою інтерактивного меню зі стрілками
+* <kbd>TAB</kbd> [доповнення](#як-запустити-певну-функціюї) для функцій та їх аргументів (Використовуючи Import-TabCompletion.ps1)
+* Змінити розташування папок користувача (без переміщення файлів користувача) за допомогою інтерактивного меню
   * Робочий стіл
   * Документи
   * Завантаження
@@ -82,10 +89,10 @@
   * Відео
 * Встановлення безкоштовних (світлий та темний) курсорів "Windows 11 Cursors Concept v2" від [Jepri Creations](https://www.deviantart.com/jepricreations/art/Windows-11-Cursors-Concept-v2-886489356) на льоту
   * Архів був завантажений у папку [Cursors](https://github.com/farag2/Sophia-Script-for-Windows/tree/master/Cursors), за допомогою [DeviantArt API](https://github.com/farag2/Sophia-Script-for-Windows/blob/master/.github/workflows/Cursors.yml)
-* Реєстрація програми, розрахунок хешу та встановлення за замовчуванням для певного розширення без спливаючого вікна "Як ви хочете відкрити це"
+* Реєстрація програми, розрахунок хешу та встановлення за замовчуванням для певного розширення без спливаючого вікна `Як ви хочете відкрити це`
 * Експортувати та імпортувати всі асоціації в Windows. Необхідно встановити всі програми відповідно до експортованого файлу JSON, щоб відновити асоціації.
-* Встановити дистрибутив Linux через WSL, використовуючи локалізовані імена дистрибутивів за допомогою спливаючого [вікна](#скріншоти)
-  * Створити завдання з нативним тостовим повідомленням, де ви зможете запустити або скасувати [виконання](#інтерактивні-тости-для-запланованих-завдань) завдання
+* Створити завдання в Планувальнику завдань з [нативним тостовим повідомленням](#скріншоти)
+  * Створити завдання з нативним тостовим повідомленням, де ви зможете запустити або скасувати [виконання](#скріншоти) завдання
   * Створити завдання `Windows Cleanup` и `Windows Cleanup Notification` для очищення Windows від невикористовуваних файлів та оновлень
   * Створити завдання `SoftwareDistribution` для очищення `%SystemRoot%\SoftwareDistribution\Download`
   * Створити завдання `Temp` для очищення `%TEMP%`
@@ -97,22 +104,14 @@
 
 * [Ключові особливості](#ключові-особливості)
 * [Як завантажити](#як-завантажити)
-  * [Зі сторінки релізу](#зі-сторінки-релізу)
-  * [Завантажити через PowerShell](#завантажити-через-powershell)
-  * [Завантажити через Chocolatey](#завантажити-через-chocolatey)
-  * [Завантажити через WinGet](#завантажити-через-winget)
-  * [Завантажити через Scoop](#завантажити-через-Scoop)
 * [Як використовувати](#як-використовувати)
   * [Як запустити певну функцію(ї)](#як-запустити-певну-функціюї)
   * [Wrapper](#wrapper)
-  * [Як відкотити зміни](#як-відкотити-зміни)
-* [Пожертвування](#пожертвування)
 * [Системні вимоги](#системні-вимоги)
 * [Скріншоти](#скріншоти)
-* [Відео](#відео)
 * [Як перекласти](#як-перекласти)
 * [Медіа](#медіа)
-* [SophiApp 2](#sophiapp-20-c--winui-3)
+* [SophiApp 2.0](#sophiapp-20-c--winui-3)
 
 ## Як завантажити
 
@@ -164,9 +163,7 @@ iwr script.sophia.team -useb | iex
 iwr sl.sophia.team -useb | iex
 ```
 
-### Завантажити через Chocolatey
-
-<https://chocolatey.org>
+### Chocolatey
 
 Завантажте та розпакуйте в папку Завантаження останню версію `Sophia Script for Windows` залежно від вашої версії Windows.
 
@@ -185,9 +182,7 @@ choco install sophia --params "/PS7" --force -y
 choco uninstall sophia --force -y
 ```
 
-### Завантажити через WinGet
-
-<https://github.com/microsoft/winget-cli>
+### WinGet
 
 Завантажте та розпакуйте в папку Завантаження останню версію `Sophia Script for Windows` для Windows 11 і PowerShell 5.1 (SFX-архів `sophiascript.exe`).
 
@@ -203,9 +198,7 @@ winget install --id TeamSophia.SophiaScript --location $DownloadsFolder --accept
 winget uninstall --id TeamSophia.SophiaScript --force
 ```
 
-### Завантажити через Scoop
-
-<https://scoop.sh>
+### Scoop
 
 Завантажте та розпакуйте в папку Завантаження останню версію `Sophia Script for Windows` для Windows 11 та PowerShell 5.1.
 
@@ -222,17 +215,20 @@ scoop uninstall sophia-script --purge
 
 ## Як використовувати
 
-* Завантажте та розпакуйте архів
+<https://github.com/user-attachments/assets/5af5c234-5fb5-4e7e-a3d0-ae496a89e6ba>
+
+* Завантажте та розпакуйте архів для вашої системи
 * Перегляньте файл `Sophia.ps1` для налаштування функцій, які потрібно запустити
-  * Помістіть символ `#` перед функцією, якщо ви не бажаєте, щоб вона виконувалась.
-  * Приберіть символ `#` перед функцією, якщо ви бажаєте, щоб вона виконувалась.
-* Скопіюйте весь шлях до `Sophia.ps1`
-  * У `Windows 10` натисніть і утримуйте клавішу <kbd>Shift</kbd>, клацніть правою кнопкою миші на `Sophia.ps1` і виберіть Копіювати як шлях
-  * У `Windows 11` клацніть правою кнопкою миші на `Sophia.ps1` і виберіть `Копіювати як шлях`.
-* Відкрийте `Windows PowerShell`
-  * У `Windows 10` натисніть `Файл` у Провіднику файлів, наведіть курсор на `Відкрити Windows PowerShell` і виберіть `Відкрити Windows PowerShell від імені адміністратора` [(покрокова інструкція зі скріншотами)](https://www.howtogeek.com/662611/9-ways-to-open-powershell-in-windows-10/)
-  * У `Windows 11` натисніть правою кнопкою миші на іконку <kbd>Windows</kbd> і відкрийте `Термінал Windows (Адміністратор)`.
-* Встановіть політику виконання, щоб мати змогу запускати сценарії лише у поточному сеансі PowerShell
+  * Помістіть символ `#` перед функцією, якщо ви не бажаєте, щоб вона виконувалась
+  * Приберіть символ `#` перед функцією, якщо ви бажаєте, щоб вона виконувалась
+* Скопіюйте шлях до папки `Sophia Script for Windows`
+* Клацніть правою кнопкою миші на кнопці `Windows` і відкрийте Термінал (PowerShell) від імені адміністратора та вставте скопійований шлях
+
+```batch
+  cd путь\до\папки
+```
+
+* Встановіть політику виконання, щоб можна було виконувати скрипти в поточній сесії PowerShell
 
 ```powershell
   Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
@@ -240,19 +236,9 @@ scoop uninstall sophia-script --purge
 
 * Введіть `.\Sophia.ps1` і натисніть <kbd>Enter</kbd>
 
-```powershell
-  .\Sophia.ps1
-```
-
-### Windows 11
-
-<https://github.com/user-attachments/assets/2654b005-9577-4e56-ac9e-501d3e8a18bd>
-
-### Windows 10
-
-<https://github.com/user-attachments/assets/f5bda68f-9509-41dc-b3b1-1518aeaee36f>
-
 ### Як запустити певну функцію(ї)
+
+<https://github.com/user-attachments/assets/d70150d6-af8c-4933-9ec5-b2cf3bb1dd34>
 
 * Повторіть усі кроки з розділу [Як використовувати](#як-використовувати) і зупиніться на кроці встановлення політики виконання скриптів у `PowerShell`
 * Для запуску певної функції(й) [запустити](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_operators#dot-sourcing-operator-) необхідно запустити файл `Import-TabCompletion.ps1`:
@@ -274,43 +260,13 @@ Sophia -Functions "DiagTrackService -Disable", "DiagnosticDataLevel -Minimal", U
 Uninstall-UWPApps, "PinToStart -UnpinAll"
 ```
 
-<https://github.com/user-attachments/assets/b7ba9ff5-fa3f-481c-a91f-d8bac5631a56>
-
 ## Wrapper
 
-![Image](https://github.com/farag2/Sophia-Script-for-Windows/raw/master/img/Wrapper.png)
+<img src="./img/Wrapper.png" width='600'>
+
+Wrapper — це сторонній лончер із закритим вихідним кодом для `Sophia Script for Windows`. Проект повністю підтримується [@BenchTweakGaming](https://github.com/BenchTweakGaming).
 
 Детальніше [тут](./Wrapper/README.md)
-
-[@BenchTweakGaming](https://github.com/BenchTweakGaming)
-
-* Завантажте [останню](https://github.com/farag2/Sophia-Script-for-Windows/releases/latest) версію Wrapper
-* Завантажте та розпакуйте архів
-* Запустіть `SophiaScriptWrapper.exe` та імпортуйте `Sophia.ps1`
-  * `Sophia.ps1` повинен знаходитись у тій папці `Sophia Script`
-  * Wrapper має рендеринг інтерфейсу в реальному часі
-* Налаштуйте кожну функцію
-* Відкрийте вкладку `Console Output` і натисніть `Run PowerShell`.
-
-## Як відкотити зміни
-
-* Повторіть усі кроки з розділу [Як використовувати](#як-використовувати) і зупиніться на кроці встановлення політики виконання скриптів у `PowerShell`
-* Для запуску певної функції(й) [запустити](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_operators#dot-sourcing-operator-) необхідно запустити файл `Import-TabCompletion.ps1`:
-
-```powershell
-# З крапкою на початку
-. .\Import-TabCompletion.ps1
-```
-
-* Викличте функції з пресета `Sophia.ps1`, які ви хочете відкотити.
-
-```powershell
-Sophia -Functions "DiagTrackService -Enable", Uninstall-UWPApps
-```
-
-## Пожертвування
-
-[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/farag)
 
 ## Системні вимоги
 
@@ -330,25 +286,12 @@ Sophia -Functions "DiagTrackService -Enable", Uninstall-UWPApps
 
 ## Скріншоти
 
-### Локалізовані назви UWP-пакетів
+<div class="row">
+  <img src="./img/uwpapps.png" width='314'>
+  <img src="./img/WSL.png" width='350'>
+</div>
 
-![Image](./img/uwpapps.png)
-
-### Завантажте та встановіть будь-який підтримуваний дистрибутив Linux в автоматичному режимі
-
-![Image](./img/WSL.png)
-
-### Інтерактивні тости для запланованих завдань
-
-![Image](https://github.com/farag2/Sophia-Script-for-Windows/raw/master/img/Toasts.png)
-
-## Відео
-
-[Video Tutorial](https://www.youtube.com/watch?v=q_weQifFM58)
-
-[Chris Titus Tech' Review](https://youtu.be/8E6OT_QcHaU?t=370)
-
-[Znorux' Review](https://youtu.be/091SOihvx0k?t=490)
+<img src="./img/Toasts.png" width='400'>
 
 ## Як перекласти
 
@@ -358,19 +301,27 @@ Sophia -Functions "DiagTrackService -Enable", Uninstall-UWPApps
 
 ## Медіа
 
-* [XDA](https://www.xda-developers.com/sophia-script-returns-control-windows-11)
-* [4sysops](https://4sysops.com/archives/windows-10-sophia-script-powershell-functions-for-windows-10-fine-tuning-and-automating-routine-configuration-tasks/)
-* [gHacks](https://www.ghacks.net/2020/09/27/windows-10-setup-script-has-a-new-name-and-is-now-easier-to-use/)
-* [Neowin](https://www.neowin.net/news/this-windows-10-setup-script-lets-you-fine-tune-around-150-functions-for-new-installs)
-* [Comss.ru](https://www.comss.ru/page.php?id=8019)
-* [Habr](https://habr.com/company/skillfactory/blog/553800)
-* [Deskmodder.de](https://www.deskmodder.de/blog/2021/08/07/sophia-script-for-windows-jetzt-fuer-windows-11-und-10/)
-* [PCsoleil Informatique](https://www.pcsoleil.fr/successeur-de-win10-initial-setup-script-sophia-script-comment-lutiliser/)
-* [Reddit (архівовано)](https://www.reddit.com/r/PowerShell/comments/go2n5v/powershell_script_setup_windows_10/)
-  * Написати в [особисті](https://www.reddit.com/user/farag2/)
-* [Ru-Board](https://forum.ru-board.com/topic.cgi?forum=62&topic=30617#15)
-* [rutracker](https://rutracker.org/forum/viewtopic.php?t=5996011)
-* [My Digital Life](https://forums.mydigitallife.net/threads/powershell-windows-10-sophia-script.81675/)
+<details>
+<a href="https://www.xda-developers.com/sophia-script-returns-control-windows-11">XDA</a>
+
+<a href="https://4sysops.com/archives/windows-10-sophia-script-powershell-functions-for-windows-10-fine-tuning-and-automating-routine-configuration-tasks/">4sysops</a>
+
+<a href="https://www.ghacks.net/2020/09/27/windows-10-setup-script-has-a-new-name-and-is-now-easier-to-use/">gHacks</a>
+
+<a href="https://www.neowin.net/news/this-windows-10-setup-script-lets-you-fine-tune-around-150-functions-for-new-installs">Neowin</a>
+
+<a href="https://www.comss.ru/page.php?id=8019">Comss.ru</a>
+
+<a href="https://habr.com/company/skillfactory/blog/553800">Habr</a>
+
+<a href="https://www.deskmodder.de/blog/2021/08/07/sophia-script-for-windows-jetzt-fuer-windows-11-und-10/)">Deskmodder.de</a>
+
+<a href="https://forum.ru-board.com/topic.cgi?forum=62&topic=30617#15">Ru-Board</a>
+
+<a href="https://rutracker.org/forum/viewtopic.php?t=5996011">rutracker</a>
+
+<a href="https://forums.mydigitallife.net/threads/powershell-windows-10-sophia-script.81675/">My Digital Life</a>
+</details>
 
 ***
 

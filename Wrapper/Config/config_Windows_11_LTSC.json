@@ -630,7 +630,8 @@
             }
         },
         "Preset": "Zero",
-        "WindowsDefault": "One"
+        "WindowsDefault": "One",
+        "LTSC2024": "true"
     },
     {
         "Region": "UI & Personalization",
@@ -997,25 +998,6 @@
         "LTSC2024": "true"
     },
     {
-        "Region": "OneDrive",
-        "Control": "cmbchkalter",
-        "Required": "false",
-        "Function": "OneDrive",
-        "Function2": "OneDrive -AllUsers",
-        "Function2Selects": "1",
-        "Arg": {
-            "Zero": {
-                "Tag": "Uninstall"
-            },
-            "One": {
-                "Tag": "Install"
-            }
-        },
-        "Preset": "Zero",
-        "WindowsDefault": "",
-        "LTSC2024": "true"
-    },
-    {
         "Region": "System",
         "Control": "cmb",
         "Required": "false",
@@ -1331,23 +1313,6 @@
         "Region": "System",
         "Control": "cmb",
         "Required": "false",
-        "Function": "LatestInstalled.NET",
-        "Arg": {
-            "Zero": {
-                "Tag": "Enable"
-            },
-            "One": {
-                "Tag": "Disable"
-            }
-        },
-        "Preset": "Zero",
-        "WindowsDefault": "One",
-        "LTSC2024": "true"
-    },
-    {
-        "Region": "System",
-        "Control": "cmb",
-        "Required": "false",
         "Function": "WinPrtScrFolder",
         "Arg": {
             "Zero": {
@@ -1528,7 +1493,8 @@
             }
         },
         "Preset": "Zero",
-        "WindowsDefault": "One"
+        "WindowsDefault": "One",
+        "LTSC2024": "true"
     },
     {
         "Region": "System",
@@ -1611,13 +1577,10 @@
         "Region": "System",
         "Control": "chk",
         "Required": "false",
-        "Function": "Install-VCRedist -Redistributables",
+        "Function": "Install-VCRedist",
         "Arg": {
             "Zero": {
-                "Tag": "2015_2026_x86"
-            },
-            "One": {
-                "Tag": "2015_2026_x64"
+                "Tag": ""
             }
         },
         "Preset": "",
@@ -1648,7 +1611,7 @@
         "Region": "System",
         "Control": "cmb",
         "Required": "false",
-        "Function": "RKNBypass",
+        "Function": "AntizapretProxy",
         "Arg": {
             "Zero": {
                 "Tag": "Enable"
@@ -1726,22 +1689,6 @@
             }
         },
         "Preset": "",
-        "WindowsDefault": "",
-        "LTSC2024": "true"
-    },
-    {
-        "Region": "UWP apps",
-        "Control": "chkchkalter",
-        "Required": "false",
-        "Separate": "true",
-        "Function": "Uninstall-UWPApps",
-        "Function2": "Uninstall-UWPApps -ForAllUsers",
-        "Arg": {
-            "Zero": {
-                "Tag": ""
-            }
-        },
-        "Preset": "Zero",
         "WindowsDefault": "",
         "LTSC2024": "true"
     },
@@ -1968,67 +1915,37 @@
     },
     {
         "Region": "Microsoft Defender & Security",
-        "Control": "cmbcmbcmb",
+        "Control": "cmb",
         "Required": "false",
         "Function": "DNSoverHTTPS",
-        "Key": "SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters\\DohWellKnownServers",
-        "PrefixArg2": "PrimaryDNS",
-        "PrefixArg3": "SecondaryDNS",
-        "Arg2_3_Width": "145",
         "Arg": {
             "Zero": {
-                "Tag": "Enable"
+                "Tag": "Cloudflare",
+                "Opposite": "Four"
             },
             "One": {
-                "Tag": "Disable"
-            }
-        },
-        "Arg2": {
-            "Zero": {
-                "Tag": "1.0.0.1"
-            },
-            "One": {
-                "Tag": "1.1.1.1"
+                "Tag": "Google",
+                "Opposite": "Four"
             },
             "Two": {
-                "Tag": "149.112.112.112"
+                "Tag": "Quad9",
+                "Opposite": "Four"
             },
             "Three": {
-                "Tag": "8.8.4.4"
+                "Tag": "ComssOne",
+                "Opposite": "Four"
             },
             "Four": {
-                "Tag": "8.8.8.8"
+                "Tag": "AdGuard",
+                "Opposite": "Four"
             },
             "Five": {
-                "Tag": "9.9.9.9"
-            }
-        },
-        "Arg3": {
-            "Zero": {
-                "Tag": "1.0.0.1"
-            },
-            "One": {
-                "Tag": "1.1.1.1"
-            },
-            "Two": {
-                "Tag": "149.112.112.112"
-            },
-            "Three": {
-                "Tag": "8.8.4.4"
-            },
-            "Four": {
-                "Tag": "8.8.8.8"
-            },
-            "Five": {
-                "Tag": "9.9.9.9"
+                "Tag": "Disable",
+                "Opposite": "Four"
             }
         },
         "Preset": "Zero",
         "WindowsDefault": "One",
-        "Preset2": "Zero",
-        "WindowsDefault2": "",
-        "Preset3": "One",
-        "WindowsDefault3": "",
         "LTSC2024": "true"
     },
     {

@@ -551,25 +551,6 @@
   },
   {
     "Region": "UI & Personalization",
-    "Function": "UnpinTaskbarShortcuts -Shortcuts",
-    "ToolTip": "Die Verknüpfungen Microsoft Edge, Microsoft Store oder Outlook von der Taskleiste lösen.",
-    "Arg": {
-      "Zero": {
-        "Tag": "Edge",
-        "ToolTip": "Die Verknüpfung Microsoft Edge von der Taskleiste lösen."
-      },
-      "One": {
-        "Tag": "Store",
-        "ToolTip": "Die Verknüpfung Microsoft Store von der Taskleiste lösen."
-      },
-      "Two": {
-        "Tag": "Outlook",
-        "ToolTip": "Die Verknüpfung Outlook von der Taskleiste lösen."
-      }
-    }
-  },
-  {
-    "Region": "UI & Personalization",
     "Function": "TaskbarEndTask",
     "Arg": {
       "Zero": {
@@ -1128,20 +1109,6 @@
   },
   {
     "Region": "System",
-    "Function": "LatestInstalled.NET",
-    "Arg": {
-      "Zero": {
-        "Tag": "Enable",
-        "ToolTip": "Verwenden Sie die neueste installierte .NET-Laufzeitumgebung für alle Anwendungen."
-      },
-      "One": {
-        "Tag": "Disable",
-        "ToolTip": "Die zuletzt installierte .NET-Laufzeitumgebung nicht für alle Anwendungen verwenden (Standardwert)."
-      }
-    }
-  },
-  {
-    "Region": "System",
     "Function": "WinPrtScrFolder",
     "Arg": {
       "Zero": {
@@ -1364,7 +1331,7 @@
   {
     "Region": "System",
     "Function": "Install-VCRedist",
-    "ToolTip": "Installieren Sie die neueste Microsoft Visual C++ Redistributable Packages 2015–2026 (ARM64)",
+    "ToolTip": "Installieren Sie die neueste Microsoft Visual C++ Redistributable Packages 2017–2026 (ARM64)",
     "Arg": {
       "Zero": {
         "Tag": "",
@@ -1393,7 +1360,7 @@
   },
   {
     "Region": "System",
-    "Function": "RKNBypass",
+    "Function": "AntizapretProxy",
     "Arg": {
       "Zero": {
         "Tag": "Enable",
@@ -1430,6 +1397,20 @@
       "One": {
         "Tag": "Disable",
         "ToolTip": "Sichern Sie die Systemregistrierung nicht im Ordner %SystemRoot%\\System32\\config\\RegBack (Standardwert)."
+      }
+    }
+  },
+  {
+    "Region": "System",
+    "Function": "WindowsAI",
+    "Arg": {
+      "Zero": {
+        "Tag": "Disable",
+        "ToolTip": "Windows-KI-Funktionen deaktivieren."
+      },
+      "One": {
+        "Tag": "Enable",
+        "ToolTip": "Windows-KI-Funktionen aktivieren (Standardwert)."
       }
     }
   },
@@ -1678,16 +1659,28 @@
     "Function": "DNSoverHTTPS",
     "Arg": {
       "Zero": {
-        "Tag": "Enable",
-        "ToolTip": "Aktiviert DNS-over-HTTPS für IPv4. Gültige IPv4-Adressen: 1.0.0.1, 1.1.1.1, 149.112.112.112, 8.8.4.4, 8.8.8.8, 9.9.9.91."
+        "Tag": "Cloudflare",
+        "ToolTip": "Aktivieren Sie DNS-over-HTTPS mit Cloudflare DNS."
       },
       "One": {
-        "Tag": "Disable",
-        "ToolTip": "Deaktiviert DNS-over-HTTPS für IPv4 (Standardwert)."
+        "Tag": "Google",
+        "ToolTip": "Aktivieren Sie DNS-over-HTTPS mit Google DNS."
       },
       "Two": {
-        "Tag": "ComssOneDNS",
-        "ToolTip": "DNS-over-HTTPS über den Comss.one-DNS-Server aktivieren."
+        "Tag": "Quad9",
+        "ToolTip": "Aktivieren Sie DNS-over-HTTPS mit Quad9 DNS."
+      },
+      "Three": {
+        "Tag": "ComssOne",
+        "ToolTip": "Aktivieren Sie DNS-over-HTTPS mit ComssOne DNS."
+      },
+      "Four": {
+        "Tag": "AdGuard",
+        "ToolTip": "Aktivieren Sie DNS-over-HTTPS mit AdGuard DNS."
+      },
+      "Five": {
+        "Tag": "Disable",
+        "ToolTip": "Standard-DNS-Einträge des Internetdienstanbieters festlegen (Standardwert)."
       }
     }
   },

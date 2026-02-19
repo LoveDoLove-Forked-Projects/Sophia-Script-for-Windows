@@ -15,14 +15,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@main
 
-      - name: Run PSScriptAnalyzer
+      - name: Run Lint
         run: |
-          $Results = @(Get-ChildItem -Path src -File -Recurse -Include *.ps1, *.psm1, *.psd1 | Invoke-ScriptAnalyzer)
-          if ($Results | Where-Object -FilterScript {($_.Severity -eq "Error") -or ($_.Severity -eq "ParseError")})
-          {
-            Write-Verbose -Message "Found script issues" -Verbose
-            exit 1  # Exit with a non-zero status to fail the job
-          }
+          . "Scripts\Lint.ps1"
 
       - name: Download Dependencies
         run: |

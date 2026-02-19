@@ -3,10 +3,10 @@
 	Enable tab completion to invoke for functions if you do not know function name
 
 	.VERSION
-	6.0.4
+	6.1.1
 
 	.DATE
-	05.01.2026
+	13.02.2026
 
 	.COPYRIGHT
 	(c) 2014—2026 Team Sophia
@@ -190,30 +190,6 @@ $Parameters = @{
 				}
 			}
 
-			# If a module command is Install-VCRedist
-			if ($Command -eq "Install-VCRedist")
-			{
-				# Get all command arguments, excluding defaults
-				foreach ($ParameterSet in $ParameterSets.Name)
-				{
-					# If an argument is Redistributables
-					if ($ParameterSet -eq "Redistributables")
-					{
-						$ValidValues = ((Get-Command -Name Install-VCRedist).Parametersets.Parameters | Where-Object -FilterScript {$null -eq $_.Attributes.AliasNames}).Attributes.ValidValues
-						foreach ($ValidValue in $ValidValues)
-						{
-							# The "Install-VCRedist -Redistributables <function>" construction
-							"Install-VCRedist" + " " + "-" + $ParameterSet + " " + $ValidValue | Where-Object -FilterScript {$_ -like "*$wordToComplete*"} | ForEach-Object -Process {"`"$_`""}
-						}
-
-						# The "Install-VCRedist -Redistributables <functions>" construction
-						"Install-VCRedist" + " " + "-" + $ParameterSet + " " + ($ValidValues -join ", ") | Where-Object -FilterScript {$_ -like "*$wordToComplete*"} | ForEach-Object -Process {"`"$_`""}
-					}
-
-					continue
-				}
-			}
-
 			# If a module command is Install-DotNetRuntimes
 			if ($Command -eq "Install-DotNetRuntimes")
 			{
@@ -283,5 +259,5 @@ Write-Verbose -Message "Sophia -Functions <tab>" -Verbose
 Write-Verbose -Message "Sophia -Functions temp<tab>" -Verbose
 Write-Verbose -Message "Sophia -Functions 'DiagTrackService -Disable', 'DiagnosticDataLevel -Minimal', Uninstall-UWPApps" -Verbose
 Write-Information -MessageData "" -InformationAction Continue
-Write-Verbose -Message "Sophia -Functions 'Uninstall-UWPApps, 'PinToStart -UnpinAll' -Verbose"
+Write-Verbose -Message "Sophia -Functions 'Uninstall-UWPApps, 'PinToStart -UnpinAll'" -Verbose
 Write-Verbose -Message "Sophia -Functions `"Set-Association -ProgramPath '%ProgramFiles%\Notepad++\notepad++.exe' -Extension .txt -Icon '%ProgramFiles%\Notepad++\notepad++.exe,0'`"" -Verbose
