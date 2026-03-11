@@ -3,10 +3,10 @@
 	Write registry keys for Set-Association function
 
 	.VERSION
-	7.1.1
+	7.1.4
 
 	.DATE
-	13.02.2026
+	24.02.2026
 
 	.COPYRIGHT
 	(c) 2014—2026 Team Sophia
@@ -14,7 +14,7 @@
 	.LINK
 	https://github.com/farag2/Sophia-Script-for-Windows
 #>
-function Write-AdditionalKeys
+function Global:Write-AdditionalKeys
 {
 	Param
 	(

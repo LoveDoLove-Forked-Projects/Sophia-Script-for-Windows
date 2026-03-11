@@ -3,10 +3,10 @@
 	Default preset file for "Sophia Script for Windows 11 LTSC 2024"
 
 	.VERSION
-	7.1.1
+	7.1.4
 
 	.DATE
-	13.02.2026
+	24.02.2026
 
 	.COPYRIGHT
 	(c) 2014—2026 Team Sophia
@@ -622,7 +622,7 @@ WindowsManageDefaultPrinter -Disable
 # WindowsManageDefaultPrinter -Enable
 
 <#
-	Disable the Windows features using the pop-up dialog box
+	Disable the Windows features using pop-up dialog box
 	If you want to leave "Multimedia settings" element in the advanced settings of Power Options do not disable the "Media Features" feature
 
 	Отключить компоненты Windows, используя всплывающее диалоговое окно
@@ -630,15 +630,15 @@ WindowsManageDefaultPrinter -Disable
 #>
 WindowsFeatures -Disable
 
-# Enable the Windows features using the pop-up dialog box
+# Enable the Windows features using pop-up dialog box
 # Включить компоненты Windows, используя всплывающее диалоговое окно
 # WindowsFeatures -Enable
 
-# Uninstall optional features using the pop-up dialog box
+# Uninstall optional features using pop-up dialog box
 # Удалить дополнительные компоненты, используя всплывающее диалоговое окно
 WindowsCapabilities -Uninstall
 
-# Install optional features using the pop-up dialog box
+# Install optional features using pop-up dialog box
 # Установить дополнительные компоненты, используя всплывающее диалоговое окно
 # WindowsCapabilities -Install
 
@@ -1026,15 +1026,15 @@ DNSoverHTTPS -Cloudflare
 # DNSoverHTTPS -Google
 
 # Enable DNS-over-HTTPS using Quad9 DNS
-# Установить Google DNS, используя DNS-over-HTTPS
+# Установить DNS от Google, используя DNS-over-HTTPS
 # DNSoverHTTPS -Quad9
 
 # Enable DNS-over-HTTPS using Comss.one DNS
-# Установить Google DNS, используя DNS-over-HTTPS
+# Установить DNS от Google, используя DNS-over-HTTPS
 # DNSoverHTTPS -ComssOne
 
 # Enable DNS-over-HTTPS using AdGuard DNS
-# Установить AdGuard DNS, используя DNS-over-HTTPS
+# Установить DNS от AdGuard, используя DNS-over-HTTPS
 # DNSoverHTTPS -AdGuard
 
 # Set default ISP's DNS records (default value)

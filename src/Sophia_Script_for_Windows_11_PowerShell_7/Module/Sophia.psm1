@@ -3,10 +3,10 @@
 	Sophia Script is a PowerShell module for fine-tuning Windows and automating routine tasks
 
 	.VERSION
-	7.1.1
+	7.1.4
 
 	.DATE
-	13.02.2026
+	24.02.2026
 
 	.COPYRIGHT
 	(c) 2014—2026 Team Sophia
@@ -368,9 +368,6 @@ function FeedbackFrequency
 
 	.EXAMPLE
 	ScheduledTasks -Enable
-
-	.NOTES
-	A pop-up dialog box lets a user select tasks
 
 	.NOTES
 	Current user
@@ -4519,9 +4516,6 @@ function WindowsManageDefaultPrinter
 	WindowsFeatures -Enable
 
 	.NOTES
-	A pop-up dialog box lets a user select features
-
-	.NOTES
 	Current user
 #>
 function WindowsFeatures
@@ -4681,7 +4675,7 @@ function WindowsFeatures
 		[void]$Window.Close()
 
 		$SelectedFeatures | ForEach-Object -Process {Write-Verbose -Message $_.DisplayName -Verbose}
-		$SelectedFeatures | Disable-WindowsOptionalFeature -Online -NoRestart
+		$SelectedFeatures | Disable-WindowsOptionalFeature -Online -NoRestart -Verbose
 	}
 
 	function EnableButton
@@ -4693,7 +4687,7 @@ function WindowsFeatures
 		[void]$Window.Close()
 
 		$SelectedFeatures | ForEach-Object -Process {Write-Verbose -Message $_.DisplayName -Verbose}
-		$SelectedFeatures | Enable-WindowsOptionalFeature -Online -All -NoRestart
+		$SelectedFeatures | Enable-WindowsOptionalFeature -Online -All -NoRestart -Verbose
 	}
 
 	function Add-FeatureControl
@@ -4825,9 +4819,6 @@ function WindowsFeatures
 
 	.EXAMPLE
 	WindowsCapabilities -Install
-
-	.NOTES
-	A pop-up dialog box lets a user select features
 
 	.NOTES
 	Current user
@@ -8119,19 +8110,23 @@ function WindowsAI
 		Write-Error -Message $Localization.CopilotPCSupport -ErrorAction SilentlyContinue
 	}
 
+	Write-Information -MessageData "" -InformationAction Continue
+	# Extract the localized "Please wait..." string from %SystemRoot%\System32\shell32.dll
+	Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
+
 	switch ($PSCmdlet.ParameterSetName)
 	{
 		"Disable"
 		{
 			# Disable Recall
-			Disable-WindowsOptionalFeature -Online -FeatureName Recall
+			Disable-WindowsOptionalFeature -Online -FeatureName Recall -NoRestart -Verbose
 			# Remove Copilot application
 			Get-AppxPackage -Name Microsoft.Copilot | Remove-AppxPackage
 		}
 		"Enable"
 		{
 			# Enable Recall
-			Enable-WindowsOptionalFeature -Online -FeatureName Recall
+			Enable-WindowsOptionalFeature -Online -FeatureName Recall -All -NoRestart -Verbose
 			# Open Copilot page in Microsoft Store
 			Start-Process -FilePath "ms-windows-store://pdp/?ProductId=9NHT9RB2F4HD"
 		}
@@ -8144,10 +8139,7 @@ function WindowsAI
 	.SYNOPSIS
 	Windows Subsystem for Linux (WSL)
 
-	.PARAMETER
-	Enable Windows Subsystem for Linux (WSL), install the latest WSL Linux kernel version, and a Linux distribution using a pop-up form
-
-	.EXAMPLE
+	.EXAMPLE Enable Windows Subsystem for Linux (WSL) and install the latest WSL Linux kernel version
 	Install-WSL
 
 	.NOTES
@@ -10752,7 +10744,7 @@ function WindowsSandbox
 			# Checking whether x86 virtualization is enabled in the firmware
 			if ((Get-CimInstance -ClassName CIM_Processor).VirtualizationFirmwareEnabled)
 			{
-				Disable-WindowsOptionalFeature -FeatureName Containers-DisposableClientVM -Online -NoRestart
+				Disable-WindowsOptionalFeature -FeatureName Containers-DisposableClientVM -Online -NoRestart -Verbose
 			}
 			else
 			{
@@ -10761,7 +10753,7 @@ function WindowsSandbox
 					# Determining whether Hyper-V is enabled
 					if ((Get-CimInstance -ClassName CIM_ComputerSystem).HypervisorPresent)
 					{
-						Disable-WindowsOptionalFeature -FeatureName Containers-DisposableClientVM -Online -NoRestart
+						Disable-WindowsOptionalFeature -FeatureName Containers-DisposableClientVM -Online -NoRestart -Verbose
 					}
 				}
 				catch [System.Exception]
@@ -10777,7 +10769,7 @@ function WindowsSandbox
 			# Checking whether x86 virtualization is enabled in the firmware
 			if ((Get-CimInstance -ClassName CIM_Processor).VirtualizationFirmwareEnabled)
 			{
-				Enable-WindowsOptionalFeature -FeatureName Containers-DisposableClientVM -All -Online -NoRestart
+				Enable-WindowsOptionalFeature -FeatureName Containers-DisposableClientVM -All -Online -NoRestart -Verbose
 			}
 			else
 			{
@@ -10786,7 +10778,7 @@ function WindowsSandbox
 					# Determining whether Hyper-V is enabled
 					if ((Get-CimInstance -ClassName CIM_ComputerSystem).HypervisorPresent)
 					{
-						Enable-WindowsOptionalFeature -FeatureName Containers-DisposableClientVM -All -Online -NoRestart
+						Enable-WindowsOptionalFeature -FeatureName Containers-DisposableClientVM -All -Online -NoRestart -Verbose
 					}
 				}
 				catch [System.Exception]
@@ -10888,6 +10880,13 @@ function DNSoverHTTPS
 
 		[Parameter(
 			Mandatory = $true,
+			ParameterSetName = "AdGuard"
+		)]
+		[switch]
+		$OpenDNS,
+
+		[Parameter(
+			Mandatory = $true,
 			ParameterSetName = "Disable"
 		)]
 		[switch]
@@ -10960,6 +10959,13 @@ function DNSoverHTTPS
 			$PrimaryDNS   = "94.140.14.14"
 			$SecondaryDNS = "94.140.14.15"
 			$Query        = "https://dns.adguard-dns.com/dns-query"
+		}
+		# https://www.cisco.com/c/en/us/support/docs/security/umbrella/224705-configure-dns-over-https-doh-with.html
+		"OpenDNS"
+		{
+			$PrimaryDNS   = "208.67.222.222"
+			$SecondaryDNS = "208.67.220.220"
+			$Query        = "https://doh.umbrella.com/dns-query"
 		}
 	}
 

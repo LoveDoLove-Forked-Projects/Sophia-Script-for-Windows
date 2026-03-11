@@ -166,18 +166,18 @@ iwr sl.sophia.team -useb | iex
 Download and expand to Downloads folder latest `Sophia Script for Windows` version depending to your Windows version you use.
 
 ```powershell
-choco install sophia --force -y
+choco install sophia --version=7.1.4 --force --yes
 ```
 
 Download and expand to Downloads folder latest `Sophia Script for Windows` version for PowerShell 7 depending to your Windows version you use.
 
 ```powershell
-choco install sophia --params "/PS7" --force -y
+choco install sophia --version=7.1.4 --params "/PS7" --force --yes
 ```
 
 ```powershell
 # Uninstall and then remove downloaded folder manually
-choco uninstall sophia --force -y
+choco uninstall sophia --force --yes
 ```
 
 ### WinGet
@@ -293,13 +293,15 @@ Read more [here](./Wrapper/README.md)
 
 ## How to translate
 
-* Get your OS UI culture by invoking `$PSUICulture` in PowerShell
-* Create a folder with the UI culture name
+* Run `$PSUICulture` in PowerShell to determine your UI language
+* Create a folder with the UI language name (e.g. `en-US`)
 * Place your localized SophiaScript.psd1 file into this folder
 
 ## Media
 
 <details>
+<a href="https://www.windowscentral.com/microsoft/windows-11/how-to-fine-tune-your-pc-with-the-sophia-script-for-windows-11">Windows Central</a>
+
 <a href="https://www.xda-developers.com/sophia-script-returns-control-windows-11">XDA</a>
 
 <a href="https://4sysops.com/archives/windows-10-sophia-script-powershell-functions-for-windows-10-fine-tuning-and-automating-routine-configuration-tasks/">4sysops</a>

@@ -3,10 +3,10 @@
 	Default preset file for "Sophia Script for Windows 11 (PowerShell 7)"
 
 	.VERSION
-	7.1.1
+	7.1.4
 
 	.DATE
-	13.02.2026
+	24.02.2026
 
 	.COPYRIGHT
 	(c) 2014—2026 Team Sophia
@@ -648,7 +648,7 @@ WindowsManageDefaultPrinter -Disable
 # WindowsManageDefaultPrinter -Enable
 
 <#
-	Disable the Windows features using the pop-up dialog box
+	Disable the Windows features using pop-up dialog box
 	If you want to leave "Multimedia settings" element in the advanced settings of Power Options do not disable the "Media Features" feature
 
 	Отключить компоненты Windows, используя всплывающее диалоговое окно
@@ -656,15 +656,15 @@ WindowsManageDefaultPrinter -Disable
 #>
 WindowsFeatures -Disable
 
-# Enable the Windows features using the pop-up dialog box
+# Enable the Windows features using pop-up dialog box
 # Включить компоненты Windows, используя всплывающее диалоговое окно
 # WindowsFeatures -Enable
 
-# Uninstall optional features using the pop-up dialog box
+# Uninstall optional features using pop-up dialog box
 # Удалить дополнительные компоненты, используя всплывающее диалоговое окно
 WindowsCapabilities -Uninstall
 
-# Install optional features using the pop-up dialog box
+# Install optional features using pop-up dialog box
 # Установить дополнительные компоненты, используя всплывающее диалоговое окно
 # WindowsCapabilities -Install
 
@@ -931,12 +931,12 @@ WindowsAI -Disable
 #endregion WSL
 
 #region UWP apps
-# Uninstall UWP apps using the pop-up dialog box
+# Uninstall UWP apps using pop-up dialog box
 # Удалить UWP-приложения, используя всплывающее диалоговое окно
 Uninstall-UWPApps
 
 <#
-	Uninstall UWP apps for all users using the pop-up dialog box
+	Uninstall UWP apps for all users using pop-up dialog box
 	If the "For All Users" is checked apps packages will not be installed for new users
 
 	Удалить UWP-приложения для всех пользователей, используя всплывающее диалоговое окно
@@ -1095,25 +1095,29 @@ SaveZoneInformation -Disable
 # Выключить Windows Sandbox (значение по умолчанию). Применимо только к редакциям Professional, Enterprise и Education
 # WindowsSandbox -Disable
 
-# Enable DNS-over-HTTPS using Cloudflare DNS
-# Установить Cloudflare DNS, используя DNS-over-HTTPS
+# Set up DNS from Cloudflare DNS using DNS-over-HTTPS
+# Установить DNS от Cloudflare, используя DNS-over-HTTPS
 DNSoverHTTPS -Cloudflare
 
-# Enable DNS-over-HTTPS using Google Public DNS
-# Установить Google Public DNS, используя DNS-over-HTTPS
+# Set up DNS from Google Public DNS using DNS-over-HTTPS
+# Установить DNS от Google Public DNS, используя DNS-over-HTTPS
 # DNSoverHTTPS -Google
 
-# Enable DNS-over-HTTPS using Quad9 DNS
-# Установить Google DNS, используя DNS-over-HTTPS
+# Set up DNS from Quad9 DNS using DNS-over-HTTPS
+# Установить DNS от Quad9, используя DNS-over-HTTPS
 # DNSoverHTTPS -Quad9
 
-# Enable DNS-over-HTTPS using Comss.one DNS
-# Установить Google DNS, используя DNS-over-HTTPS
+# Set up DNS from Comss.one DNS using DNS-over-HTTPS
+# Установить DNS от Comss.one, используя DNS-over-HTTPS
 # DNSoverHTTPS -ComssOne
 
-# Enable DNS-over-HTTPS using AdGuard DNS
-# Установить AdGuard DNS, используя DNS-over-HTTPS
+# Set up DNS from AdGuard DNS using DNS-over-HTTPS
+# Установить DNS от AdGuard, используя DNS-over-HTTPS
 # DNSoverHTTPS -AdGuard
+
+# Set up DNS from OpenDNS DNS using DNS-over-HTTPS
+# Установить DNS от OpenDNS, используя DNS-over-HTTPS
+# DNSoverHTTPS -OpenDNS
 
 # Set default ISP's DNS records (default value)
 # Установить DNS-записи вашего провайдера (значение по умолчанию)

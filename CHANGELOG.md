@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 6.1.4 | 7.1.4 — 24.02.2026
+
+Fixed Set-Association function. Thanks to @gtumanyan
+Updated localizations 🕊️🕊️🕊️
+
+## 6.1.3 | 7.1.3 — 21.02.2026
+
+This is a service update to fix Chocolatey building script.
+
+## 6.1.2 | 7.1.2 — 20.02.2026
+
+* Improved `Install-DotNetRuntimes` and `Install-VCRedist` functions
+* Updated `WindowsCapabilities` function
+* Fixed typos
+* Minor changes
+
 ## 6.1.1 | 7.1.1 — 13.02.2026
 
 * Code refactoring
@@ -275,10 +291,10 @@ Thanks to @gtumanyan
 
 ```powershell
 # Download a PowerShell 5.1 version of Sophia Script by default
-choco install sophia --force -y
+choco install sophia --force --yes
 
 # Download a PowerShell 7 version of Sophia Script
-choco install sophia --params "/PS7" --force -y
+choco install sophia --params "/PS7" --force --yes
 ```
 
 * Added `MeetNow` function for `Windows 10 x64 Enterprise LTSC 2021`
