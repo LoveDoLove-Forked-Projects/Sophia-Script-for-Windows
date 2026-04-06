@@ -935,28 +935,6 @@
         "WindowsDefault": "Zero"
     },
     {
-        "Region": "UI & Personalization",
-        "Control": "cmb",
-        "Required": "false",
-        "Function": "StartLayout",
-        "Arg": {
-            "Zero": {
-                "Tag": "Default",
-                "Opposite": "Two"
-            },
-            "One": {
-                "Tag": "ShowMorePins",
-                "Opposite": "Zero"
-            },
-            "Two": {
-                "Tag": "ShowMoreRecommendations",
-                "Opposite": "Zero"
-            }
-        },
-        "Preset": "One",
-        "WindowsDefault": "Zero"
-    },
-    {
         "Region": "OneDrive",
         "Control": "cmbchkalter",
         "Required": "false",
@@ -1564,22 +1542,6 @@
         },
         "Preset": "",
         "WindowsDefault": ""
-    },
-    {
-        "Region": "System",
-        "Control": "cmb",
-        "Required": "false",
-        "Function": "AntizapretProxy",
-        "Arg": {
-            "Zero": {
-                "Tag": "Enable"
-            },
-            "One": {
-                "Tag": "Disable"
-            }
-        },
-        "Preset": "Zero",
-        "WindowsDefault": "One"
     },
     {
         "Region": "System",

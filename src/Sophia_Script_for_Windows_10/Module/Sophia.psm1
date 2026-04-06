@@ -186,15 +186,18 @@ function DiagnosticDataLevel
 		$Default
 	)
 
-	if (-not (Test-Path -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection))
+	if (-not (Test-Path -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection))
 	{
-		New-Item -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection -Force
+		New-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection -Force
 	}
-
 	if (-not (Test-Path -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack))
 	{
 		New-Item -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack -Force
 	}
+
+	# Remove all policies in order to make changes visible in UI
+	Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -Force -ErrorAction Ignore
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -Type CLEAR
 
 	switch ($PSCmdlet.ParameterSetName)
 	{
@@ -203,15 +206,13 @@ function DiagnosticDataLevel
 			$EditionID = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion").EditionID
 			if (($EditionID -match "Enterprise") -or ($EditionID -match "Education"))
 			{
-				# Security level
-				New-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -PropertyType DWord -Value 0 -Force
-				Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -Type DWORD -Value 0
+				# Diagnostic data off
+				New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection -Name AllowTelemetry -PropertyType DWord -Value 0 -Force
 			}
 			else
 			{
-				# Required diagnostic data
-				New-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -PropertyType DWord -Value 1 -Force
-				Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -Type DWORD -Value 1
+				# Send required diagnostic data
+				New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection -Name AllowTelemetry -PropertyType DWord -Value 1 -Force
 			}
 
 			New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection -Name MaxTelemetryAllowed -PropertyType DWord -Value 1 -Force
@@ -222,9 +223,7 @@ function DiagnosticDataLevel
 			# Optional diagnostic data
 			New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection -Name MaxTelemetryAllowed -PropertyType DWord -Value 3 -Force
 			New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack -Name ShowedToastAtLevel -PropertyType DWord -Value 3 -Force
-			Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -Force -ErrorAction Ignore
-
-			Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -Type CLEAR
+			New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection -Name AllowTelemetry -PropertyType DWord -Value 3 -Force
 		}
 	}
 }
@@ -602,7 +601,9 @@ function ScheduledTasks
 	Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
 
 	# Getting list of all scheduled tasks according to the conditions
-	$Tasks = Get-ScheduledTask | Where-Object -FilterScript {($_.State -eq $State) -and ($_.TaskName -in $CheckedScheduledTasks)}
+	$Tasks = Get-ScheduledTask | Where-Object -FilterScript {
+		($_.State -eq $State) -and ($_.TaskName -in $CheckedScheduledTasks)
+	}
 
 	if (-not $Tasks)
 	{
@@ -3617,10 +3618,10 @@ function Install-Cursors
 		{
 			# Download cursors
 			# The archive was saved in the "Cursors" folder using DeviantArt API via GitHub CI/CD
-			# https://github.com/farag2/Sophia-Script-for-Windows/tree/master/Cursors
-			# https://github.com/farag2/Sophia-Script-for-Windows/blob/master/.github/workflows/Cursors.yml
+			# https://github.com/farag2/Sophia-Script-for-Windows/tree/main/Cursors
+			# https://github.com/farag2/Sophia-Script-for-Windows/blob/main/.github/workflows/Cursors.yml
 			$Parameters = @{
-				Uri             = "https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/master/Cursors/Windows11Cursors.zip"
+				Uri             = "https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/main/Cursors/Windows11Cursors.zip"
 				OutFile         = "$DownloadsFolder\Windows11Cursors.zip"
 				UseBasicParsing = $true
 				Verbose         = $true
@@ -7888,11 +7889,11 @@ function Uninstall-PCHealthCheck
 function Install-VCRedist
 {
 	# Get latest Visual C++ Redistributable Packages build version
-	# https://github.com/ScoopInstaller/Extras/blob/master/bucket/vcredist2022.json
+	# https://github.com/ScoopInstaller/Extras/blob/main/bucket/vcredist2022.json
 	try
 	{
 		$Parameters = @{
-			Uri             = "https://raw.githubusercontent.com/ScoopInstaller/Extras/refs/heads/master/bucket/vcredist2022.json"
+			Uri             = "https://raw.githubusercontent.com/ScoopInstaller/Extras/refs/heads/main/bucket/vcredist2022.json"
 			UseBasicParsing = $true
 			Verbose         = $true
 		}
@@ -8104,92 +8105,6 @@ function Install-DotNetRuntimes
 
 <#
 	.SYNOPSIS
-	Bypass RKN restrictins using antizapret.prostovpn.org proxy
-
-	.PARAMETER Enable
-	Enable proxying only blocked sites from the unified registry of Roskomnadzor using antizapret.prostovpn.org proxy
-
-	.PARAMETER Disable
-	Disable proxying only blocked sites from the unified registry of Roskomnadzor using antizapret.prostovpn.org proxy
-
-	.EXAMPLE
-	AntizapretProxy -Enable
-
-	.EXAMPLE
-	AntizapretProxy -Disable
-
-	.LINK
-	https://antizapret.prostovpn.org
-
-	.NOTES
-	Current user
-#>
-function AntizapretProxy
-{
-	param
-	(
-		[Parameter(
-			Mandatory = $true,
-			ParameterSetName = "Enable"
-		)]
-		[switch]
-		$Enable,
-
-		[Parameter(
-			Mandatory = $true,
-			ParameterSetName = "Disable"
-		)]
-		[switch]
-		$Disable
-	)
-
-	switch ($PSCmdlet.ParameterSetName)
-	{
-		"Enable"
-		{
-			# If current region is Russia
-			if ((Get-WinHomeLocation).GeoId -eq "203")
-			{
-				New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -Name AutoConfigURL -PropertyType String -Value "https://p.thenewone.lol:8443/proxy.pac" -Force
-			}
-			else
-			{
-				Write-Information -MessageData "" -InformationAction Continue
-				Write-Verbose -Message (($Localization.GeoIdNotSupported -f $MyInvocation.Line.Trim()), ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -Verbose
-				Write-Error -Message (($Localization.GeoIdNotSupported -f $MyInvocation.Line.Trim()), ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
-			}
-		}
-		"Disable"
-		{
-			Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -Name AutoConfigURL -Force -ErrorAction Ignore
-		}
-	}
-
-	$Signature = @{
-		Namespace          = "WinAPI"
-		Name               = "wininet"
-		Language           = "CSharp"
-		CompilerParameters = $CompilerParameters
-		MemberDefinition   = @"
-[DllImport("wininet.dll", SetLastError = true, CharSet=CharSet.Auto)]
-public static extern bool InternetSetOption(IntPtr hInternet, int dwOption, IntPtr lpBuffer, int dwBufferLength);
-"@
-	}
-	if (-not ("WinAPI.wininet" -as [type]))
-	{
-		Add-Type @Signature
-	}
-
-	# Apply changed proxy settings
-	# https://learn.microsoft.com/en-us/windows/win32/wininet/option-flags
-	$INTERNET_OPTION_SETTINGS_CHANGED = 39
-	$INTERNET_OPTION_REFRESH          = 37
-	[WinAPI.wininet]::InternetSetOption(0, $INTERNET_OPTION_SETTINGS_CHANGED, 0, 0)
-	[WinAPI.wininet]::InternetSetOption(0, $INTERNET_OPTION_REFRESH, 0, 0)
-}
-
-<#
-	.SYNOPSIS
 	Desktop shortcut creation upon Microsoft Edge update
 
 	.PARAMETER Channels
@@ -8390,10 +8305,10 @@ function Install-WSL
 {
 	try
 	{
-		# https://github.com/microsoft/WSL/blob/master/distributions/DistributionInfo.json
+		# https://github.com/microsoft/WSL/blob/main/distributions/DistributionInfo.json
 		# wsl --list --online relies on Internet connection too, so it's much convenient to parse DistributionInfo.json, rather than parse a cmd output
 		$Parameters = @{
-			Uri             = "https://raw.githubusercontent.com/microsoft/WSL/master/distributions/DistributionInfo.json"
+			Uri             = "https://raw.githubusercontent.com/microsoft/WSL/main/distributions/DistributionInfo.json"
 			UseBasicParsing = $true
 			Verbose         = $true
 		}
@@ -9085,11 +9000,11 @@ function Install-HEVC
 	Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
 
 	# Get actual HEVC package version
-	# https://github.com/farag2/Sophia-Script-for-Windows/blob/master/HEVC/HEVC_version.txt
+	# https://github.com/farag2/Sophia-Script-for-Windows/blob/main/HEVC/HEVC_version.txt
 	try
 	{
 		$Parameters = @{
-			Uri             = "https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/master/HEVC/HEVC_version.txt"
+			Uri             = "https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/main/HEVC/HEVC_version.txt"
 			UseBasicParsing = $true
 			Verbose         = $true
 		}
@@ -9109,7 +9024,7 @@ function Install-HEVC
 		# Download HEVC
 		$DownloadsFolder = Get-ItemPropertyValue -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "{374DE290-123F-4565-9164-39C4925E467B}"
 		$Parameters = @{
-			Uri             = "https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/master/HEVC/Microsoft.HEVCVideoExtension_8wekyb3d8bbwe.appx"
+			Uri             = "https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/main/HEVC/Microsoft.HEVCVideoExtension_8wekyb3d8bbwe.appx"
 			OutFile         = "$DownloadsFolder\Microsoft.HEVCVideoExtension_8wekyb3d8bbwe.appx"
 			UseBasicParsing = $true
 			Verbose         = $true
@@ -9678,14 +9593,14 @@ CreateObject("Wscript.Shell").Run "powershell.exe -ExecutionPolicy Bypass -NoPro
 
 			# We have to call PowerShell script via another VBS script silently because VBS has appropriate feature to suppress console appearing (none of other workarounds work)
 			# powershell.exe process wakes up system anyway even from turned on Focus Assist mode (not a notification toast)
-			# https://github.com/DCourtel/Windows_10_Focus_Assist/blob/master/FocusAssistLibrary/FocusAssistLib.cs
+			# https://github.com/DCourtel/Windows_10_Focus_Assist/blob/main/FocusAssistLibrary/FocusAssistLib.cs
 			# https://redplait.blogspot.com/2018/07/wnf-ids-from-perfntcdll-adk-version.html
 			$ToastNotificationPS = @"
 # https://github.com/farag2/Sophia-Script-for-Windows
 # https://t.me/sophia_chat
 
 # Get Focus Assist status
-# https://github.com/DCourtel/Windows_10_Focus_Assist/blob/master/FocusAssistLibrary/FocusAssistLib.cs
+# https://github.com/DCourtel/Windows_10_Focus_Assist/blob/main/FocusAssistLibrary/FocusAssistLib.cs
 # https://redplait.blogspot.com/2018/07/wnf-ids-from-perfntcdll-adk-version.html
 
 `$CompilerParameters                  = [System.CodeDom.Compiler.CompilerParameters]::new("System.dll")
@@ -10009,14 +9924,14 @@ function SoftwareDistributionTask
 
 			# We have to call PowerShell script via another VBS script silently because VBS has appropriate feature to suppress console appearing (none of other workarounds work)
 			# powershell.exe process wakes up system anyway even from turned on Focus Assist mode (not a notification toast)
-			# https://github.com/DCourtel/Windows_10_Focus_Assist/blob/master/FocusAssistLibrary/FocusAssistLib.cs
+			# https://github.com/DCourtel/Windows_10_Focus_Assist/blob/main/FocusAssistLibrary/FocusAssistLib.cs
 			# https://redplait.blogspot.com/2018/07/wnf-ids-from-perfntcdll-adk-version.html
 			$SoftwareDistributionTaskPS = @"
 # https://github.com/farag2/Sophia-Script-for-Windows
 # https://t.me/sophia_chat
 
 # Get Focus Assist status
-# https://github.com/DCourtel/Windows_10_Focus_Assist/blob/master/FocusAssistLibrary/FocusAssistLib.cs
+# https://github.com/DCourtel/Windows_10_Focus_Assist/blob/main/FocusAssistLibrary/FocusAssistLib.cs
 # https://redplait.blogspot.com/2018/07/wnf-ids-from-perfntcdll-adk-version.html
 
 `$CompilerParameters                  = [System.CodeDom.Compiler.CompilerParameters]::new("System.dll")
@@ -10335,7 +10250,7 @@ function TempTask
 # https://t.me/sophia_chat
 
 # Get Focus Assist status
-# https://github.com/DCourtel/Windows_10_Focus_Assist/blob/master/FocusAssistLibrary/FocusAssistLib.cs
+# https://github.com/DCourtel/Windows_10_Focus_Assist/blob/main/FocusAssistLibrary/FocusAssistLib.cs
 # https://redplait.blogspot.com/2018/07/wnf-ids-from-perfntcdll-adk-version.html
 
 `$CompilerParameters                  = [System.CodeDom.Compiler.CompilerParameters]::new("System.dll")
@@ -10814,7 +10729,7 @@ function EventViewerCustomView
 		}
 		"Disable"
 		{
-			# Unlike in Windows 11 default value for Windows 10 is "disable" by default
+			# Compared to Windows 11 default value for Windows 10 is "disable" by default
 			auditpol /set /subcategory:"{0CCE922B-69AE-11D9-BED3-505054503030}" /success:disable /failure:disable
 			Remove-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit -Name ProcessCreationIncludeCmdLine_Enabled -Force -ErrorAction Ignore
 			Set-Policy -Scope Computer -Path SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit -Name ProcessCreationIncludeCmdLine_Enabled -Type CLEAR

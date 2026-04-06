@@ -121,13 +121,13 @@ function InitialActions
 	# Checking whether the current module version is the latest one
 	try
 	{
-		# https://github.com/farag2/Sophia-Script-for-Windows/blob/master/sophia_script_versions.json
+		# https://github.com/farag2/Sophia-Script-for-Windows/blob/main/sophia_script_versions.json
 		$Parameters = @{
-			Uri             = "https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/master/sophia_script_versions.json"
+			Uri             = "https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/main/sophia_script_versions.json"
 			Verbose         = $true
 			UseBasicParsing = $true
 		}
-		$LatestRelease = (Invoke-RestMethod @Parameters).Sophia_Script_Windows_11_LTSC2024
+		$LatestRelease = (Invoke-RestMethod @Parameters).Sophia_Script_Windows_11_LTSC2024_PowerShell_5_1
 		$CurrentRelease = (Get-Module -Name SophiaScript).Version.ToString()
 
 		if ([System.Version]$LatestRelease -gt [System.Version]$CurrentRelease)
@@ -558,6 +558,13 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 		Write-Warning -Message ($Localization.WindowsComponentBroken -f "Microsoft Defender")
 		Write-Information -MessageData "" -InformationAction Continue
 
+		# Try to display available AVs
+		try
+		{
+			Get-CimInstance -ClassName AntiVirusProduct -Namespace root/SecurityCenter2
+		}
+		catch {}
+
 		Write-Verbose -Message "https://massgrave.dev/genuine-installation-media" -Verbose
 		Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
 		Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
@@ -588,13 +595,17 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 	}
 
 	# Check whether Microsoft Defender is a default AV
-	$Global:DefenderDefaultAV = $false
-	$productState = (Get-CimInstance -ClassName AntiVirusProduct -Namespace root/SecurityCenter2 -ErrorAction Stop | Where-Object -FilterScript {$_.instanceGuid -eq "{D68DDC3A-831F-4fae-9E44-DA132C1ACF46}"}).productState
-	$DefenderState = ('0x{0:x}' -f $productState).Substring(3, 2)
-	if ($DefenderState -notmatch "00|01")
+	$InstalledAVs = Get-CimInstance -ClassName AntiVirusProduct -Namespace root/SecurityCenter2
+	if ($InstalledAVs.displayName.Count -gt 1)
 	{
-		# Defender is a default AV
-		$Global:DefenderDefaultAV = $true
+		$Global:DefenderDefaultAV = $false
+		$productState = ($InstalledAVs | Where-Object -FilterScript {$_.instanceGuid -eq "{D68DDC3A-831F-4fae-9E44-DA132C1ACF46}"}).productState
+		$DefenderState = ('0x{0:x}' -f $productState).Substring(3, 2)
+		if ($DefenderState -notmatch "00|01")
+		{
+			# Defender is a default AV
+			$Global:DefenderDefaultAV = $true
+		}
 	}
 
 	# Check whether Controlled Folder Access is enabled
@@ -748,7 +759,7 @@ public extern static string BrandingFormatString(string sFormat);
 
 		# Windows 11 Pro
 		$Windows_Long = [WinAPI.Winbrand]::BrandingFormatString("%WINDOWS_LONG%")
-		# e.g. 24H2
+		# e.g. 25H2
 		$DisplayVersion = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows nt\CurrentVersion" -Name DisplayVersion
 
 		Write-Warning -Message ($Localization.UnsupportedOSBuild -f $Windows_Long, $DisplayVersion)
@@ -764,9 +775,6 @@ public extern static string BrandingFormatString(string sFormat);
 		# Check for updates
 		& "$env:SystemRoot\System32\UsoClient.exe" StartInteractiveScan
 
-		Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
-		Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
-
 		$Global:Failed = $true
 
 		exit
@@ -775,46 +783,14 @@ public extern static string BrandingFormatString(string sFormat);
 	# Detect Windows build version
 	switch ((Get-CimInstance -ClassName CIM_OperatingSystem).BuildNumber)
 	{
-		{$_ -ne 26100}
-		{
-			Write-Information -MessageData "" -InformationAction Continue
-
-			# Windows 11 Pro
-			$Windows_Long = [WinAPI.Winbrand]::BrandingFormatString("%WINDOWS_LONG%")
-			# e.g. 24H2
-			$DisplayVersion = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows nt\CurrentVersion" -Name DisplayVersion
-
-			Write-Warning -Message ($Localization.UnsupportedOSBuild -f $Windows_Long, $DisplayVersion)
-			Write-Information -MessageData "" -InformationAction Continue
-
-			Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
-			Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
-			Write-Verbose -Message "https://github.com/farag2/Sophia-Script-for-Windows#system-requirements" -Verbose
-
-			# Receive updates for other Microsoft products when you update Windows
-			New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings -Name AllowMUUpdateService -PropertyType DWord -Value 1 -Force
-
-			# Check for updates
-			& "$env:SystemRoot\System32\UsoClient.exe" StartInteractiveScan
-
-			# Open the "Windows Update" page
-			Start-Process -FilePath "ms-settings:windowsupdate"
-
-			Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
-			Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
-
-			$Global:Failed = $true
-
-			exit
-		}
 		"26100"
 		{
 			# Checking whether the current module version is the latest one
 			try
 			{
-				# https://github.com/farag2/Sophia-Script-for-Windows/blob/master/supported_windows_builds.json
+				# https://github.com/farag2/Sophia-Script-for-Windows/blob/main/supported_windows_builds.json
 				$Parameters = @{
-					Uri             = "https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/master/supported_windows_builds.json"
+					Uri             = "https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/main/supported_windows_builds.json"
 					Verbose         = $true
 					UseBasicParsing = $true
 				}
@@ -832,7 +808,7 @@ public extern static string BrandingFormatString(string sFormat);
 			if ((Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows nt\CurrentVersion" -Name UBR) -lt $LatestSupportedBuild)
 			{
 				# Check Windows minor build version
-				# https://support.microsoft.com/en-us/topic/windows-11-version-24h2-update-history-0929c747-1815-4543-8461-0160d16f15e5
+				# https://support.microsoft.com/en-us/topic/windows-11-version-25H2-update-history-0929c747-1815-4543-8461-0160d16f15e5
 				$CurrentBuild = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows nt\CurrentVersion" -Name CurrentBuild
 				$UBR = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows nt\CurrentVersion" -Name UBR
 
@@ -860,6 +836,26 @@ public extern static string BrandingFormatString(string sFormat);
 
 				exit
 			}
+		}
+		"26200"
+		{
+			Write-Information -MessageData "" -InformationAction Continue
+
+			# Windows 11 Enterprise LTSC
+			$Windows_Long = [WinAPI.Winbrand]::BrandingFormatString("%WINDOWS_LONG%")
+			# e.g. 25H2
+			$DisplayVersion = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows nt\CurrentVersion" -Name DisplayVersion
+
+			Write-Warning -Message ($Localization.UnsupportedOSBuild -f $Windows_Long, $DisplayVersion)
+			Write-Information -MessageData "" -InformationAction Continue
+
+			Write-Verbose -Message "https://t.me/sophia_chat" -Verbose
+			Write-Verbose -Message "https://discord.gg/sSryhaEv79" -Verbose
+			Write-Verbose -Message "https://github.com/farag2/Sophia-Script-for-Windows#system-requirements" -Verbose
+
+			$Global:Failed = $true
+
+			exit
 		}
 	}
 

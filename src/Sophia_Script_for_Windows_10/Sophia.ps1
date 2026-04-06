@@ -426,8 +426,8 @@ TaskbarCombine -Always
 # Объединить кнопки панели задач и никогда не скрывать метки
 # TaskbarCombine -Never
 
-# Unpin the "Microsoft Edge", "Microsoft Store", or "Mail" shortcuts from the taskbar
-# Открепить ярлыки "Microsoft Edge", "Microsoft Store" или "Почта" от панели задач
+# Unpin Microsoft Edge, Microsoft Store, and Mail shortcuts from the taskbar
+# Открепить ярлыки Microsoft Edge, Microsoft Store и Почта от панели задач
 UnpinTaskbarShortcuts -Shortcuts Edge, Store, Mail
 
 # View the Control Panel icons by large icons
@@ -917,16 +917,6 @@ Install-VCRedist
 # Install the latest .NET Desktop Runtime 8, 9, 10 x64. Internet connection required
 # Установить последнюю версию .NET Desktop Runtime 8, 9, 10 x64. Требуется соединение с интернетом
 Install-DotNetRuntimes -Runtimes NET8, NET9, NET10
-
-# Enable proxying only blocked sites from the unified registry of Roskomnadzor. Applicable for Russia only
-# Включить проксирование только заблокированных сайтов из единого реестра Роскомнадзора. Функция применима только для России
-# https://antizapret.prostovpn.org
-AntizapretProxy -Enable
-
-# Disable proxying only blocked sites from the unified registry of Roskomnadzor (default value)
-# Выключить проксирование только заблокированных сайтов из единого реестра Роскомнадзора (значение по умолчанию)
-# https://antizapret.prostovpn.org
-# AntizapretProxy -Disable
 
 # List Microsoft Edge channels to prevent desktop shortcut creation upon its update
 # Перечислите каналы Microsoft Edge для предотвращения создания ярлыков на рабочем столе после его обновления

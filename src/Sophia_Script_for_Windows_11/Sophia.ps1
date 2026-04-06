@@ -26,7 +26,7 @@
 	iwr sl.sophia.team -useb | iex
 
 	.NOTES
-	Supports Windows 11 24H2+ Home/Pro/Enterprise
+	Supports Windows 11 25H2+ Home/Pro/Enterprise
 
 	.NOTES
 	To use Enable tab completion to invoke for functions if you do not know function name dot source the Import-TabCompletion.ps1 script first:
@@ -562,18 +562,6 @@ StartAccountNotifications -Hide
 # Show Microsoft account-related notifications on Start (default value)
 # Отображать на начальном экране уведомления, касающиеся учетной записи Microsoft (значение по умолчанию)
 # StartAccountNotifications -Show
-
-# Show default Start layout (default value)
-# Отображать стандартный макет начального экрана (значение по умолчанию)
-# StartLayout -Default
-
-# Show more pins on Start
-# Отображать больше закреплений на начальном экране
-StartLayout -ShowMorePins
-
-# Show more recommendations on Start
-# Отображать больше рекомендаций на начальном экране
-# StartLayout -ShowMoreRecommendations
 #endregion UI & Personalization
 
 #region OneDrive
@@ -888,16 +876,6 @@ Install-VCRedist
 # Install the latest .NET Desktop Runtime 8, 9, 10 x64. Internet connection required
 # Установить последнюю версию .NET Desktop Runtime 8, 9, 10 x64. Требуется соединение с интернетом
 Install-DotNetRuntimes -Runtimes NET8, NET9, NET10
-
-# Enable proxying only blocked sites from the unified registry of Roskomnadzor. Applicable for Russia only
-# Включить проксирование только заблокированных сайтов из единого реестра Роскомнадзора. Функция применима только для России
-# https://antizapret.prostovpn.org
-AntizapretProxy -Enable
-
-# Disable proxying only blocked sites from the unified registry of Roskomnadzor (default value)
-# Выключить проксирование только заблокированных сайтов из единого реестра Роскомнадзора (значение по умолчанию)
-# https://antizapret.prostovpn.org
-# AntizapretProxy -Disable
 
 # List Microsoft Edge channels to prevent desktop shortcut creation upon its update
 # Перечислите каналы Microsoft Edge для предотвращения создания ярлыков на рабочем столе после его обновления

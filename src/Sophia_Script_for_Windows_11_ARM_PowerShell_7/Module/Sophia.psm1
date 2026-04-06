@@ -12,7 +12,7 @@
 	(c) 2014—2026 Team Sophia
 
 	.NOTES
-	Supports Windows 11 24H2+ for ARM64
+	Supports Windows 11 25H2+ for ARM64
 
 	.NOTES
 	Arm CPU architecture supported
@@ -189,15 +189,18 @@ function DiagnosticDataLevel
 		$Default
 	)
 
-	if (-not (Test-Path -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection))
+	if (-not (Test-Path -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection))
 	{
-		New-Item -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection -Force
+		New-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection -Force
 	}
-
 	if (-not (Test-Path -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack))
 	{
 		New-Item -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack -Force
 	}
+
+	# Remove all policies in order to make changes visible in UI
+	Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -Force -ErrorAction Ignore
+	Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -Type CLEAR
 
 	switch ($PSCmdlet.ParameterSetName)
 	{
@@ -207,14 +210,12 @@ function DiagnosticDataLevel
 			if (($EditionID -match "Enterprise") -or ($EditionID -match "Education"))
 			{
 				# Diagnostic data off
-				New-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -PropertyType DWord -Value 0 -Force
-				Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -Type DWORD -Value 0
+				New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection -Name AllowTelemetry -PropertyType DWord -Value 0 -Force
 			}
 			else
 			{
 				# Send required diagnostic data
-				New-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -PropertyType DWord -Value 1 -Force
-				Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -Type DWORD -Value 1
+				New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection -Name AllowTelemetry -PropertyType DWord -Value 1 -Force
 			}
 
 			New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection -Name MaxTelemetryAllowed -PropertyType DWord -Value 1 -Force
@@ -225,9 +226,7 @@ function DiagnosticDataLevel
 			# Optional diagnostic data
 			New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection -Name MaxTelemetryAllowed -PropertyType DWord -Value 3 -Force
 			New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack -Name ShowedToastAtLevel -PropertyType DWord -Value 3 -Force
-			Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -Force -ErrorAction Ignore
-
-			Set-Policy -Scope Computer -Path SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -Type CLEAR
+			New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection -Name AllowTelemetry -PropertyType DWord -Value 3 -Force
 		}
 	}
 }
@@ -617,7 +616,9 @@ function ScheduledTasks
 	Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
 
 	# Getting list of all scheduled tasks according to the conditions
-	$Tasks = Get-ScheduledTask | Where-Object -FilterScript {($_.State -eq $State) -and ($_.TaskName -in $CheckedScheduledTasks)}
+	$Tasks = Get-ScheduledTask | Where-Object -FilterScript {
+		($_.State -eq $State) -and ($_.TaskName -in $CheckedScheduledTasks)
+	}
 
 	if (-not $Tasks)
 	{
@@ -3048,10 +3049,10 @@ function Install-Cursors
 		{
 			# Download cursors
 			# The archive was saved in the "Cursors" folder using DeviantArt API via GitHub CI/CD
-			# https://github.com/farag2/Sophia-Script-for-Windows/tree/master/Cursors
-			# https://github.com/farag2/Sophia-Script-for-Windows/blob/master/.github/workflows/Cursors.yml
+			# https://github.com/farag2/Sophia-Script-for-Windows/tree/main/Cursors
+			# https://github.com/farag2/Sophia-Script-for-Windows/blob/main/.github/workflows/Cursors.yml
 			$Parameters = @{
-				Uri             = "https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/master/Cursors/Windows11Cursors.zip"
+				Uri             = "https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/main/Cursors/Windows11Cursors.zip"
 				OutFile         = "$DownloadsFolder\Windows11Cursors.zip"
 				UseBasicParsing = $true
 				Verbose         = $true
@@ -3698,86 +3699,6 @@ function StartAccountNotifications
 		"Show"
 		{
 			Remove-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name Start_AccountNotifications -Force -ErrorAction Ignore
-		}
-	}
-}
-
-<#
-	.SYNOPSIS
-	Configure Start layout
-
-	.PARAMETER Default
-	Show default Start layout
-
-	.PARAMETER ShowMorePins
-	Show more pins on Start
-
-	.PARAMETER ShowMoreRecommendations
-	Show more recommendations on Start
-
-	.EXAMPLE
-	StartLayout -Default
-
-	.EXAMPLE
-	StartLayout -ShowMorePins
-
-	.EXAMPLE
-	StartLayout -ShowMoreRecommendations
-
-	.NOTES
-	Current user
-#>
-function StartLayout
-{
-	param
-	(
-		[Parameter(
-			Mandatory = $true,
-			ParameterSetName = "Default"
-		)]
-		[switch]
-		$Default,
-
-		[Parameter(
-			Mandatory = $true,
-			ParameterSetName = "ShowMorePins"
-		)]
-		[switch]
-		$ShowMorePins,
-
-		[Parameter(
-			Mandatory = $true,
-			ParameterSetName = "ShowMoreRecommendations"
-		)]
-		[switch]
-		$ShowMoreRecommendations
-	)
-
-	if (Get-Process -Name Start11Srv, StartAllBackCfg, StartMenu -ErrorAction Ignore)
-	{
-		Write-Information -MessageData "" -InformationAction Continue
-		Write-Verbose -Message ($Localization.CustomStartMenu, ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -Verbose
-		Write-Error -Message ($Localization.CustomStartMenu, ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
-
-		return
-	}
-
-	switch ($PSCmdlet.ParameterSetName)
-	{
-		"Default"
-		{
-			# Default
-			New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name Start_Layout -PropertyType DWord -Value 0 -Force
-		}
-		"ShowMorePins"
-		{
-			# Show More Pins
-			New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name Start_Layout -PropertyType DWord -Value 1 -Force
-		}
-		"ShowMoreRecommendations"
-		{
-			# Show More Recommendations
-			New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name Start_Layout -PropertyType DWord -Value 2 -Force
 		}
 	}
 }
@@ -7220,22 +7141,19 @@ function DefaultTerminalApp
 		$ConsoleHost
 	)
 
-	if ($WindowsTerminal)
-	{
-		if (-not (Get-AppxPackage -Name Microsoft.WindowsTerminal))
-		{
-			Write-Information -MessageData "" -InformationAction Continue
-			Write-Verbose -Message (($Localization.PackageNotInstalled -f "Windows Terminal"), ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -Verbose
-			Write-Error -Message (($Localization.PackageNotInstalled -f "Windows Terminal"), ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
-
-			return
-		}
-	}
-
 	switch ($PSCmdlet.ParameterSetName)
 	{
 		"WindowsTerminal"
 		{
+			if (-not (Get-AppxPackage -Name Microsoft.WindowsTerminal))
+			{
+				Write-Information -MessageData "" -InformationAction Continue
+				Write-Verbose -Message (($Localization.PackageNotInstalled -f "Windows Terminal"), ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -Verbose
+				Write-Error -Message (($Localization.PackageNotInstalled -f "Windows Terminal"), ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
+
+				return
+			}
+
 			# Find the current GUID of Windows Terminal
 			$PackageFullName = (Get-AppxPackage -Name Microsoft.WindowsTerminal).PackageFullName
 
@@ -7279,12 +7197,12 @@ function DefaultTerminalApp
 #>
 function Install-VCRedist
 {
-	# Get latest build version
-	# https://github.com/ScoopInstaller/Extras/blob/master/bucket/vcredist2022.json
+	# Get latest Visual C++ Redistributable Packages build version
+	# https://github.com/ScoopInstaller/Extras/blob/main/bucket/vcredist2022.json
 	try
 	{
 		$Parameters = @{
-			Uri             = "https://raw.githubusercontent.com/ScoopInstaller/Extras/refs/heads/master/bucket/vcredist2022.json"
+			Uri             = "https://raw.githubusercontent.com/ScoopInstaller/Extras/refs/heads/main/bucket/vcredist2022.json"
 			UseBasicParsing = $true
 			Verbose         = $true
 		}
@@ -7489,92 +7407,6 @@ function Install-DotNetRuntimes
 		)
 		Get-ChildItem -Path $Paths -Force -ErrorAction Ignore | Remove-Item -Force -ErrorAction Ignore
 	}
-}
-
-<#
-	.SYNOPSIS
-	Bypass RKN restrictins using antizapret.prostovpn.org proxy
-
-	.PARAMETER Enable
-	Enable proxying only blocked sites from the unified registry of Roskomnadzor using antizapret.prostovpn.org proxy
-
-	.PARAMETER Disable
-	Disable proxying only blocked sites from the unified registry of Roskomnadzor using antizapret.prostovpn.org proxy
-
-	.EXAMPLE
-	AntizapretProxy -Enable
-
-	.EXAMPLE
-	AntizapretProxy -Disable
-
-	.LINK
-	https://antizapret.prostovpn.org
-
-	.NOTES
-	Current user
-#>
-function AntizapretProxy
-{
-	param
-	(
-		[Parameter(
-			Mandatory = $true,
-			ParameterSetName = "Enable"
-		)]
-		[switch]
-		$Enable,
-
-		[Parameter(
-			Mandatory = $true,
-			ParameterSetName = "Disable"
-		)]
-		[switch]
-		$Disable
-	)
-
-	switch ($PSCmdlet.ParameterSetName)
-	{
-		"Enable"
-		{
-			# If current region is Russia
-			if ((Get-WinHomeLocation).GeoId -eq "203")
-			{
-				New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -Name AutoConfigURL -PropertyType String -Value "https://p.thenewone.lol:8443/proxy.pac" -Force
-			}
-			else
-			{
-				Write-Information -MessageData "" -InformationAction Continue
-				Write-Verbose -Message (($Localization.GeoIdNotSupported -f $MyInvocation.Line.Trim()), ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -Verbose
-				Write-Error -Message (($Localization.GeoIdNotSupported -f $MyInvocation.Line.Trim()), ($Localization.Skipped -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
-			}
-		}
-		"Disable"
-		{
-			Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -Name AutoConfigURL -Force -ErrorAction Ignore
-		}
-	}
-
-	$Signature = @{
-		Namespace        = "WinAPI"
-		Name             = "wininet"
-		Language         = "CSharp"
-		CompilerOptions  = $CompilerOptions
-		MemberDefinition = @"
-[DllImport("wininet.dll", SetLastError = true, CharSet=CharSet.Auto)]
-public static extern bool InternetSetOption(IntPtr hInternet, int dwOption, IntPtr lpBuffer, int dwBufferLength);
-"@
-	}
-	if (-not ("WinAPI.wininet" -as [type]))
-	{
-		Add-Type @Signature
-	}
-
-	# Apply changed proxy settings
-	# https://learn.microsoft.com/en-us/windows/win32/wininet/option-flags
-	$INTERNET_OPTION_SETTINGS_CHANGED = 39
-	$INTERNET_OPTION_REFRESH          = 37
-	[WinAPI.wininet]::InternetSetOption(0, $INTERNET_OPTION_SETTINGS_CHANGED, 0, 0)
-	[WinAPI.wininet]::InternetSetOption(0, $INTERNET_OPTION_REFRESH, 0, 0)
 }
 
 <#
@@ -7844,10 +7676,7 @@ function WindowsAI
 	.SYNOPSIS
 	Windows Subsystem for Linux (WSL)
 
-	.PARAMETER
-	Enable Windows Subsystem for Linux (WSL), install the latest WSL Linux kernel version, and a Linux distribution using a pop-up form
-
-	.EXAMPLE
+	.EXAMPLE Enable Windows Subsystem for Linux (WSL) and install the latest WSL Linux kernel version
 	Install-WSL
 
 	.NOTES
@@ -7860,10 +7689,10 @@ function Install-WSL
 {
 	try
 	{
-		# https://github.com/microsoft/WSL/blob/master/distributions/DistributionInfo.json
+		# https://github.com/microsoft/WSL/blob/main/distributions/DistributionInfo.json
 		# wsl --list --online relies on Internet connection too, so it's much convenient to parse DistributionInfo.json, rather than parse a cmd output
 		$Parameters = @{
-			Uri             = "https://raw.githubusercontent.com/microsoft/WSL/master/distributions/DistributionInfo.json"
+			Uri             = "https://raw.githubusercontent.com/microsoft/WSL/main/distributions/DistributionInfo.json"
 			UseBasicParsing = $true
 			Verbose         = $true
 		}
@@ -8966,14 +8795,14 @@ CreateObject("Wscript.Shell").Run "powershell.exe -ExecutionPolicy Bypass -NoPro
 
 			# We have to call PowerShell script via another VBS script silently because VBS has appropriate feature to suppress console appearing (none of other workarounds work)
 			# powershell.exe process wakes up system anyway even from turned on Focus Assist mode (not a notification toast)
-			# https://github.com/DCourtel/Windows_10_Focus_Assist/blob/master/FocusAssistLibrary/FocusAssistLib.cs
+			# https://github.com/DCourtel/Windows_10_Focus_Assist/blob/main/FocusAssistLibrary/FocusAssistLib.cs
 			# https://redplait.blogspot.com/2018/07/wnf-ids-from-perfntcdll-adk-version.html
 			$ToastNotificationPS = @"
 # https://github.com/farag2/Sophia-Script-for-Windows
 # https://t.me/sophia_chat
 
 # Get Focus Assist status
-# https://github.com/DCourtel/Windows_10_Focus_Assist/blob/master/FocusAssistLibrary/FocusAssistLib.cs
+# https://github.com/DCourtel/Windows_10_Focus_Assist/blob/main/FocusAssistLibrary/FocusAssistLib.cs
 # https://redplait.blogspot.com/2018/07/wnf-ids-from-perfntcdll-adk-version.html
 
 `$CompilerParameters                  = [System.CodeDom.Compiler.CompilerParameters]::new("System.dll")
@@ -9320,14 +9149,14 @@ function SoftwareDistributionTask
 
 			# We have to call PowerShell script via another VBS script silently because VBS has appropriate feature to suppress console appearing (none of other workarounds work)
 			# powershell.exe process wakes up system anyway even from turned on Focus Assist mode (not a notification toast)
-			# https://github.com/DCourtel/Windows_10_Focus_Assist/blob/master/FocusAssistLibrary/FocusAssistLib.cs
+			# https://github.com/DCourtel/Windows_10_Focus_Assist/blob/main/FocusAssistLibrary/FocusAssistLib.cs
 			# https://redplait.blogspot.com/2018/07/wnf-ids-from-perfntcdll-adk-version.html
 			$SoftwareDistributionTaskPS = @"
 # https://github.com/farag2/Sophia-Script-for-Windows
 # https://t.me/sophia_chat
 
 # Get Focus Assist status
-# https://github.com/DCourtel/Windows_10_Focus_Assist/blob/master/FocusAssistLibrary/FocusAssistLib.cs
+# https://github.com/DCourtel/Windows_10_Focus_Assist/blob/main/FocusAssistLibrary/FocusAssistLib.cs
 # https://redplait.blogspot.com/2018/07/wnf-ids-from-perfntcdll-adk-version.html
 
 `$CompilerParameters                  = [System.CodeDom.Compiler.CompilerParameters]::new("System.dll")
@@ -9669,7 +9498,7 @@ function TempTask
 # https://t.me/sophia_chat
 
 # Get Focus Assist status
-# https://github.com/DCourtel/Windows_10_Focus_Assist/blob/master/FocusAssistLibrary/FocusAssistLib.cs
+# https://github.com/DCourtel/Windows_10_Focus_Assist/blob/main/FocusAssistLibrary/FocusAssistLib.cs
 # https://redplait.blogspot.com/2018/07/wnf-ids-from-perfntcdll-adk-version.html
 
 `$CompilerParameters                  = [System.CodeDom.Compiler.CompilerParameters]::new("System.dll")

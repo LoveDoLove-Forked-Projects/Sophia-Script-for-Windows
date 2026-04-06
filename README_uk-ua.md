@@ -2,13 +2,13 @@
 
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/master/img/Sophia.png" alt="Sophia Script for Windows" width='150'>
+<img src="https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/main/img/Sophia.png" alt="Sophia Script for Windows" width='150'>
 
 # Sophia Script for Windows
 
 Найпотужніший PowerShell-модуль на GitHub для тонкого налаштування Windows
 
-Зроблено з <img src="https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/master/img/heart.svg" height="17px"/> до Windows
+Зроблено з <img src="https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/main/img/heart.svg" height="17px"/> до Windows
 
 <kbd>
 	<a href="https://github.com/farag2/Sophia-Script-for-Windows/actions"><img src="https://img.shields.io/github/actions/workflow/status/farag2/Sophia-Script-for-Windows/Sophia.yml?labelColor=151B23&color=151B23&style=for-the-badge&label=build&logo=GitHub"></a>
@@ -23,10 +23,10 @@
 <br>
 
 <kbd>
-	<a href="https://github.com/farag2/Sophia-Script-for-Windows/blob/master/.github/workflows/Badge_downloads.yml"><img src="https://img.shields.io/endpoint?labelColor=151B23&color=151B23&style=for-the-badge&url=https://gist.githubusercontent.com/farag2/25ddc72387f298503b752ad5b8d16eed/raw/SophiaScriptDownloadsCount.json"></a>
+	<a href="https://github.com/farag2/Sophia-Script-for-Windows/blob/main/.github/workflows/Badge_downloads.yml"><img src="https://img.shields.io/endpoint?labelColor=151B23&color=151B23&style=for-the-badge&url=https://gist.githubusercontent.com/farag2/25ddc72387f298503b752ad5b8d16eed/raw/SophiaScriptDownloadsCount.json"></a>
 </kbd>
 <kbd>
-	<a href="https://github.com/farag2/Sophia-Script-for-Windows/blob/master/.github/workflows/Badge_lines.yml"><img src="https://img.shields.io/endpoint?labelColor=151B23&color=151B23&style=for-the-badge&url=https://gist.githubusercontent.com/farag2/9852d6b9569a91bf69ceba8a94cc97f4/raw/SophiaScript.json"></a>
+	<a href="https://github.com/farag2/Sophia-Script-for-Windows/blob/main/.github/workflows/Badge_lines.yml"><img src="https://img.shields.io/endpoint?labelColor=151B23&color=151B23&style=for-the-badge&url=https://gist.githubusercontent.com/farag2/9852d6b9569a91bf69ceba8a94cc97f4/raw/SophiaScript.json"></a>
 </kbd>
 
 <br>
@@ -88,7 +88,7 @@
   * Зображення
   * Відео
 * Встановлення безкоштовних (світлий та темний) курсорів "Windows 11 Cursors Concept v2" від [Jepri Creations](https://www.deviantart.com/jepricreations/art/Windows-11-Cursors-Concept-v2-886489356) на льоту
-  * Архів був завантажений у папку [Cursors](https://github.com/farag2/Sophia-Script-for-Windows/tree/master/Cursors), за допомогою [DeviantArt API](https://github.com/farag2/Sophia-Script-for-Windows/blob/master/.github/workflows/Cursors.yml)
+  * Архів був завантажений у папку [Cursors](https://github.com/farag2/Sophia-Script-for-Windows/tree/main/Cursors), за допомогою [DeviantArt API](https://github.com/farag2/Sophia-Script-for-Windows/blob/main/.github/workflows/Cursors.yml)
 * Реєстрація програми, розрахунок хешу та встановлення за замовчуванням для певного розширення без спливаючого вікна `Як ви хочете відкрити це`
 * Експортувати та імпортувати всі асоціації в Windows. Необхідно встановити всі програми відповідно до експортованого файлу JSON, щоб відновити асоціації.
 * Створити завдання в Планувальнику завдань з [нативним тостовим повідомленням](#скріншоти)
@@ -118,35 +118,37 @@
 ### Зі сторінки релізу
 
 <table>
-  <tbody>
-    <tr>
-      <td align="center">Windows 10</td>
-      <td align="center">Windows 11</td>
-    </tr>
-    <tr>
-      <td align="left"><a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Windows%2010%20x64-PowerShell%205.1-green?labelColor=151B23&color=151B23&style=for-the-badge"></a></td>
-      <td align="left"><a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Windows%2011-PowerShell%205.1-green?labelColor=151B23&color=151B23&style=for-the-badge"></a></td>
-    </tr>
-    <tr>
-      <td align="left"><a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Windows%2010%20x64-PowerShell%207-green?labelColor=151B23&color=151B23&style=for-the-badge"></a></td>
-      <td align="left"><a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Windows%2011-PowerShell%207-green?labelColor=151B23&color=151B23&style=for-the-badge"></a></td>
-    </tr>
-    <tr>
-      <td align="left"><a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Windows%2010%20x64-LTSC%202019-green?labelColor=151B23&color=151B23&style=for-the-badge"></a></td>
-      <td align="left"><a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Windows%2011%20LTSC%202024-PowerShell%205.1-green?labelColor=151B23&color=151B23&style=for-the-badge"></a></td>
-    </tr>
-    <tr>
-      <td align="left"><a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Windows%2010%20x64-LTSC%202021-green?labelColor=151B23&color=151B23&style=for-the-badge"></a></td>
-      <td align="left"><a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Windows%2011%20Arm-PowerShell%205.1-green?labelColor=151B23&color=151B23&style=for-the-badge"></a></td>
-    </tr>
-    <tr>
-      <td align="left"></td>
-      <td align="left"><a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Windows%2011%20Arm-PowerShell%207-green?labelColor=151B23&color=151B23&style=for-the-badge"></a></td>
-    </tr>
-    <tr>
-      <td align="center" colspan="2"><a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Sophia%20Script%20Wrapper-green?labelColor=151B23&color=151B23&style=for-the-badge"></a></td>
-    </tr>
-  </tbody>
+  <tr>
+    <td align="center">Windows 10</td>
+    <td align="center">Windows 11</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Windows%2010%20x64-PowerShell%205.1-green?labelColor=151B23&color=151B23&style=for-the-badge"></a></td>
+    <td align="left"><a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Windows%2011-PowerShell%205.1-green?labelColor=151B23&color=151B23&style=for-the-badge"></a></td>
+  </tr>
+  <tr>
+    <td align="left"><a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Windows%2010%20x64-PowerShell%207-green?labelColor=151B23&color=151B23&style=for-the-badge"></a></td>
+    <td align="left"><a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Windows%2011-PowerShell%207-green?labelColor=151B23&color=151B23&style=for-the-badge"></a></td>
+  </tr>
+  <tr>
+    <td align="left"><a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Windows%2010-LTSC%202019-green?labelColor=151B23&color=151B23&style=for-the-badge"></a></td>
+    <td align="left"><a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Windows%2011%20LTSC%202024-PowerShell%205.1-green?labelColor=151B23&color=151B23&style=for-the-badge"></a></td>
+  </tr>
+  <tr>
+    <td align="left"><a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Windows%2010-LTSC%202021-green?labelColor=151B23&color=151B23&style=for-the-badge"></a></td>
+    <td align="left"><a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Windows%2011%20LTSC%202024-PowerShell%207-green?labelColor=151B23&color=151B23&style=for-the-badge"></a></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td align="left"><a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"><img src="https://img.shields.io/badge/Windows%2011%20Arm-PowerShell%205.1-green?labelColor=151B23&color=151B23&style=for-the-badge"></a></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td align="left"><a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/download/NewVersion/Sophia.Script.for.Windows.11.Arm.PowerShell.7.vSophia_Script_Windows_11_Arm_PowerShell_7.zip"><img src="https://img.shields.io/badge/Windows%2011%20Arm-PowerShell%207-green?labelColor=151B23&color=151B23&style=for-the-badge"></a></td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2"><a href="https://github.com/farag2/Sophia-Script-for-Windows/releases/download/NewVersion/Sophia.Script.Wrapper.vSophia_Script_Wrapper.zip"><img src="https://img.shields.io/badge/Sophia%20Script%20Wrapper-green?labelColor=151B23&color=151B23&style=for-the-badge"></a></td>
+  </tr>
 </table>
 
 ### Завантажити через PowerShell
@@ -157,7 +159,7 @@
 iwr script.sophia.team -useb | iex
 ```
 
-Завантажте та розпакуйте в папку Завантаження останню версію `Sophia Script for Windows` з актуального [коміту](https://github.com/farag2/Sophia-Script-for-Windows/commits/master/) залежно від версій ваших Windows і PowerShell.
+Завантажте та розпакуйте в папку Завантаження останню версію `Sophia Script for Windows` з актуального [коміту](https://github.com/farag2/Sophia-Script-for-Windows/commits/main/) залежно від версій ваших Windows і PowerShell.
 
 ```powershell
 iwr sl.sophia.team -useb | iex
@@ -274,11 +276,11 @@ Wrapper — це сторонній лончер із закритим вихі�
 [Windows-10-LTSC-2019]: https://support.microsoft.com/topic/windows-10-and-windows-server-2019-update-history-725fc2e1-4443-6831-a5ca-51ff5cbcb059
 [Windows-10-LTSC-2021]: https://support.microsoft.com/topic/windows-10-update-history-857b8ccb-71e4-49e5-b3f6-7073197d98fb
 [Windows-11-LTSC-2024]: https://support.microsoft.com/topic/windows-11-version-24h2-update-history-0929c747-1815-4543-8461-0160d16f15e5
-[Windows-11-24h2]: https://support.microsoft.com/topic/windows-11-version-25h2-update-history-99c7f493-df2a-4832-bd2d-6706baa0dec0
+[Windows-11-25h2]: https://support.microsoft.com/topic/windows-11-version-25h2-update-history-99c7f493-df2a-4832-bd2d-6706baa0dec0
 
 |                Версія                    |                 Збіркa                   |       Видання       |
 |:-----------------------------------------|:----------------------------------------:|:-------------------:|
-| Windows 11 24H2/25H2+                    | [Остання стабільн][Windows-11-24h2]      | Home/Pro/Enterprise |
+| Windows 11 25H2+                         | [Остання стабільн][Windows-11-25h2]      | Home/Pro/Enterprise |
 | Windows 10 x64 22H2                      | [Остання стабільн][Windows-10]           | Home/Pro/Enterprise |
 | Windows 11 Enterprise LTSC 2024          | [Остання стабільн][Windows-11-LTSC-2024] | Enterprise          |
 | Windows 10 x64 21H2 Enterprise LTSC 2021 | [Остання стабільн][Windows-10-LTSC-2021] | Enterprise          |
@@ -302,17 +304,22 @@ Wrapper — це сторонній лончер із закритим вихі�
 ## Медіа
 
 <details>
+
+<a href="https://www.comss.ru/page.php?id=19917">Comss.ru</a>
+
 <a href="https://www.windowscentral.com/microsoft/windows-11/how-to-fine-tune-your-pc-with-the-sophia-script-for-windows-11">Windows Central</a>
 
 <a href="https://www.xda-developers.com/sophia-script-returns-control-windows-11">XDA</a>
+
+<a href="https://www.neowin.net/news/this-script-is-the-ultimate-tool-to-control-and-customize-windows-11">Neowin</a>
+
+<a href="https://www.neowin.net/news/this-windows-10-setup-script-lets-you-fine-tune-around-150-functions-for-new-installs">Neowin 2</a>
 
 <a href="https://4sysops.com/archives/windows-10-sophia-script-powershell-functions-for-windows-10-fine-tuning-and-automating-routine-configuration-tasks/">4sysops</a>
 
 <a href="https://www.ghacks.net/2020/09/27/windows-10-setup-script-has-a-new-name-and-is-now-easier-to-use/">gHacks</a>
 
-<a href="https://www.neowin.net/news/this-windows-10-setup-script-lets-you-fine-tune-around-150-functions-for-new-installs">Neowin</a>
-
-<a href="https://www.comss.ru/page.php?id=8019">Comss.ru</a>
+<a href="https://www.comss.ru/page.php?id=8019">Comss.ru 2</a>
 
 <a href="https://habr.com/company/skillfactory/blog/553800">Habr</a>
 
@@ -331,5 +338,5 @@ Wrapper — це сторонній лончер із закритим вихі�
 
 [SophiApp](https://github.com/Sophia-Community/SophiApp) перебуває в активній розробці. 🚀
 
-![Image](https://github.com/farag2/Sophia-Script-for-Windows/raw/master/img/0.gif)
-![Image](https://github.com/farag2/Sophia-Script-for-Windows/raw/master/img/1.png)
+![Image](https://github.com/farag2/Sophia-Script-for-Windows/raw/main/img/0.gif)
+![Image](https://github.com/farag2/Sophia-Script-for-Windows/raw/main/img/1.png)
