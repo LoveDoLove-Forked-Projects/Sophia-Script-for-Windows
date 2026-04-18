@@ -6,8 +6,35 @@ if (-not (Test-Path -Path HEVC))
 	New-Item -Path HEVC -ItemType Directory -Force
 }
 
+# Bypass Cloudflare protection
 try
 {
+	$Headers = @{
+		"User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+	}
+	$Parameters = @{
+		Uri             = "https://store.rg-adguard.net"
+		UseBasicParsing = $true
+	}
+	Invoke-WebRequest @Parameters | Out-Null
+}
+catch [System.Net.WebException]
+{
+	Write-Verbose -Message "Connection could not be established with https://store.rg-adguard.net" -Verbose
+
+	exit 1 # Exit with a non-zero status to fail the job
+}
+
+try
+{
+	$Headers = @{
+		"User-Agent"       = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+		"Accept"           = "application/json, text/javascript, */*; q=0.01"
+		"Content-Type"     = "application/x-www-form-urlencoded; charset=UTF-8"
+		"X-Requested-With" = "XMLHttpRequest"
+		"Origin"           = "https://store.rg-adguard.net"
+		"Referer"          = "https://store.rg-adguard.net"
+	}
 	$Body = @{
 		type = "url"
 		url  = "https://apps.microsoft.com/detail/9N4WGH0Z6VHQ"
@@ -15,10 +42,11 @@ try
 		lang = "en-US"
 	}
 	$Parameters = @{
-		Uri             = "https://ru.store.rg-adguard.net/api/GetFiles"
+		Uri             = "https://store.rg-adguard.net/api/GetFiles"
 		Method          = "Post"
 		ContentType     = "application/x-www-form-urlencoded"
 		Body            = $Body
+		Headers         = $Headers
 		UseBasicParsing = $true
 		Verbose         = $true
 	}
@@ -26,7 +54,7 @@ try
 }
 catch [System.Net.WebException]
 {
-	Write-Verbose -Message "Connection could not be established with https://store.rg-adguard.net" -Verbose
+	Write-Verbose -Message "Connection could not be established with https://store.rg-adguard.net/api/GetFiles" -Verbose
 
 	exit 1 # Exit with a non-zero status to fail the job
 }
@@ -36,7 +64,7 @@ catch [System.Net.WebException]
 [xml]$TempURL = ($Raw.Links.outerHTML | Where-Object -FilterScript {$_ -match "appxbundle"}).Replace("&", "&amp;")
 if (-not $TempURL)
 {
-	Write-Verbose -Message "https://store.rg-adguard.net does not output correct URL" -Verbose
+	Write-Verbose -Message "https://store.rg-adguard.net/api/GetFiles does not output correct URL" -Verbose
 
 	exit 1 # Exit with a non-zero status to fail the job
 }

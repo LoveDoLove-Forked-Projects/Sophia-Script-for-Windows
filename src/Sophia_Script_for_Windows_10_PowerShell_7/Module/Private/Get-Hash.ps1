@@ -3,10 +3,10 @@
 	Calculate hash for Set-Association function
 
 	.VERSION
-	7.1.4
+	7.1.5
 
 	.DATE
-	24.02.2026
+	15.04.2026
 
 	.COPYRIGHT
 	(c) 2014—2026 Team Sophia
@@ -43,11 +43,11 @@ function Get-Hash
 	)
 
 	$Signature = @{
-		Namespace          = "WinAPI"
-		Name               = "PatentHash"
-		Language           = "CSharp"
-		CompilerParameters = $CompilerParameters
-		MemberDefinition   = @"
+		Namespace        = "WinAPI"
+		Name             = "PatentHash"
+		Language         = "CSharp"
+		CompilerOptions  = $CompilerOptions
+		MemberDefinition = @"
 public static uint[] WordSwap(byte[] a, int sz, byte[] md5)
 {
 	if (sz < 2 || (sz & 1) == 1)

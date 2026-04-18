@@ -3,10 +3,10 @@
 	Post actions
 
 	.VERSION
-	7.1.4
+	7.1.5
 
 	.DATE
-	24.02.2026
+	15.04.2026
 
 	.COPYRIGHT
 	(c) 2014—2026 Team Sophia
@@ -199,6 +199,5 @@ public static void PostMessage()
 		} | Sort-Object -Property $Localization.ErrorsLine | Format-Table -AutoSize -Wrap | Out-String).Trim()
 	}
 
-	Write-Information -MessageData "" -InformationAction Continue
 	Write-Warning -Message $Localization.RestartWarning
 }

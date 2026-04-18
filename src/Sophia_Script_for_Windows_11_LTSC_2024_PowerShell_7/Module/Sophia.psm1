@@ -3,10 +3,10 @@
 	Sophia Script is a PowerShell module for fine-tuning Windows and automating routine tasks
 
 	.VERSION
-	7.1.4
+	7.1.5
 
 	.DATE
-	24.02.2026
+	15.04.2026
 
 	.COPYRIGHT
 	(c) 2014—2026 Team Sophia
@@ -3132,11 +3132,11 @@ function Install-Cursors
 
 	# Reload cursor on-the-fly
 	$Signature = @{
-		Namespace          = "WinAPI"
-		Name               = "Cursor"
-		Language           = "CSharp"
-		CompilerParameters = $CompilerParameters
-		MemberDefinition   = @"
+		Namespace        = "WinAPI"
+		Name             = "Cursor"
+		Language         = "CSharp"
+		CompilerOptions  = $CompilerOptions
+		MemberDefinition = @"
 [DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
 public static extern bool SystemParametersInfo(uint uiAction, uint uiParam, uint pvParam, uint fWinIni);
 "@
@@ -6858,11 +6858,11 @@ function Import-Associations
 function Install-VCRedist
 {
 	# Get latest Visual C++ Redistributable Packages build version
-	# https://github.com/ScoopInstaller/Extras/blob/main/bucket/vcredist2022.json
+	# https://github.com/ScoopInstaller/Extras/blob/master/bucket/vcredist2022.json
 	try
 	{
 		$Parameters = @{
-			Uri             = "https://raw.githubusercontent.com/ScoopInstaller/Extras/refs/heads/main/bucket/vcredist2022.json"
+			Uri             = "https://raw.githubusercontent.com/ScoopInstaller/Extras/refs/heads/master/bucket/vcredist2022.json"
 			UseBasicParsing = $true
 			Verbose         = $true
 		}
@@ -9295,6 +9295,9 @@ function WindowsSandbox
 	.PARAMETER AdGuard
 	Enable DNS-over-HTTPS using AdGuard DNS
 
+	.PARAMETER OpenDNS
+	Enable DNS-over-HTTPS using OpenDNS DNS
+
 	.PARAMETER Disable
 	Set default ISP's DNS records
 
@@ -9312,6 +9315,9 @@ function WindowsSandbox
 
 	.EXAMPLE
 	DNSoverHTTPS -AdGuard
+
+	.EXAMPLE
+	DNSoverHTTPS -OpenDNS
 
 	.EXAMPLE
 	DNSoverHTTPS -Disable
@@ -9364,7 +9370,7 @@ function DNSoverHTTPS
 
 		[Parameter(
 			Mandatory = $true,
-			ParameterSetName = "AdGuard"
+			ParameterSetName = "OpenDNS"
 		)]
 		[switch]
 		$OpenDNS,

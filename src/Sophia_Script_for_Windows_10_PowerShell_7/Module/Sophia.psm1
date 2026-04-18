@@ -3,10 +3,10 @@
 	Sophia Script is a PowerShell module for fine-tuning Windows and automating routine tasks
 
 	.VERSION
-	6.1.4
+	6.1.5
 
 	.DATE
-	24.02.2026
+	15.04.2026
 
 	.COPYRIGHT
 	(c) 2014—2026 Team Sophia
@@ -3784,11 +3784,11 @@ function Install-Cursors
 
 	# Reload cursor on-the-fly
 	$Signature = @{
-		Namespace          = "WinAPI"
-		Name               = "Cursor"
-		Language           = "CSharp"
-		CompilerParameters = $CompilerParameters
-		MemberDefinition   = @"
+		Namespace        = "WinAPI"
+		Name             = "Cursor"
+		Language         = "CSharp"
+		CompilerOptions  = $CompilerOptions
+		MemberDefinition = @"
 [DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
 public static extern bool SystemParametersInfo(uint uiAction, uint uiParam, uint pvParam, uint fWinIni);
 "@
@@ -7891,11 +7891,11 @@ function Uninstall-PCHealthCheck
 function Install-VCRedist
 {
 	# Get latest Visual C++ Redistributable Packages build version
-	# https://github.com/ScoopInstaller/Extras/blob/main/bucket/vcredist2022.json
+	# https://github.com/ScoopInstaller/Extras/blob/master/bucket/vcredist2022.json
 	try
 	{
 		$Parameters = @{
-			Uri             = "https://raw.githubusercontent.com/ScoopInstaller/Extras/refs/heads/main/bucket/vcredist2022.json"
+			Uri             = "https://raw.githubusercontent.com/ScoopInstaller/Extras/refs/heads/master/bucket/vcredist2022.json"
 			UseBasicParsing = $true
 			Verbose         = $true
 		}
