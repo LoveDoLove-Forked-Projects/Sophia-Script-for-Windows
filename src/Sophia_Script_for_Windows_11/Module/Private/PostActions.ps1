@@ -3,10 +3,10 @@
 	Post actions
 
 	.VERSION
-	7.1.5
+	7.1.6
 
 	.DATE
-	15.04.2026
+	16.06.2026
 
 	.COPYRIGHT
 	(c) 2014—2026 Team Sophia
@@ -160,7 +160,6 @@ public static void PostMessage()
 	<audio src="ms-winsoundevent:notification.default" />
 	<actions>
 		<action content="Ko-fi" arguments="https://ko-fi.com/farag" activationType="protocol"/>
-		<action content="Boosty" arguments="https://boosty.to/teamsophia" activationType="protocol"/>
 	</actions>
 </toast>
 "@
@@ -181,8 +180,9 @@ public static void PostMessage()
 
 	Write-Information -MessageData "" -InformationAction Continue
 	Write-Verbose -Message "https://ko-fi.com/farag" -Verbose
-	Write-Verbose -Message "https://boosty.to/teamsophia" -Verbose
+
 	Write-Information -MessageData "" -InformationAction Continue
+	Write-Warning -Message $Localization.RestartWarning
 
 	if ($Global:Error)
 	{
@@ -201,6 +201,4 @@ public static void PostMessage()
 			}
 		} | Sort-Object -Property $Localization.ErrorsLine | Format-Table -AutoSize -Wrap | Out-String).Trim()
 	}
-
-	Write-Warning -Message $Localization.RestartWarning
 }

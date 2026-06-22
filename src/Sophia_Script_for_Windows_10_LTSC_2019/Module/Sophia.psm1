@@ -3,10 +3,10 @@
 	Sophia Script is a PowerShell module for fine-tuning Windows and automating routine tasks
 
 	.VERSION
-	6.1.5
+	6.1.6
 
 	.DATE
-	15.04.2026
+	16.06.2026
 
 	.COPYRIGHT
 	(c) 2014—2026 Team Sophia
@@ -26,7 +26,6 @@
 
 	.DONATE
 	https://ko-fi.com/farag
-	https://boosty.to/teamsophia
 
 	.NOTES
 	https://forum.ru-board.com/topic.cgi?forum=62&topic=30617#15
@@ -206,10 +205,10 @@ function DiagnosticDataLevel
 		}
 		"Default"
 		{
-			# Full level
-			New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection -Name AllowTelemetry -PropertyType DWord -Value 3 -Force
+			# Optional diagnostic data
+			New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection -Name MaxTelemetryAllowed -PropertyType DWord -Value 3 -Force
 			New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack -Name ShowedToastAtLevel -PropertyType DWord -Value 3 -Force
-			Remove-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -Force -ErrorAction Ignore
+			New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection -Name AllowTelemetry -PropertyType DWord -Value 3 -Force
 		}
 	}
 }
@@ -255,7 +254,6 @@ function ErrorReporting
 	# Remove all policies in order to make changes visible in UI
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "HKCU:\Software\Policies\Microsoft\Windows\Windows Error Reporting" -Name Disabled -Force -ErrorAction Ignore
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting" -Name DoReport -Force -ErrorAction Ignore
-	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" -Name Disabled -Force -ErrorAction Ignore
 	Set-Policy -Scope Computer -Path "SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" -Name Disabled -Type CLEAR
 	Set-Policy -Scope User -Path "Software\Policies\Microsoft\Windows\Windows Error Reporting" -Name Disabled -Type CLEAR
 	Set-Policy -Scope Computer -Path "SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting" -Name DoReport -Type CLEAR
@@ -589,7 +587,9 @@ function ScheduledTasks
 	Write-Verbose -Message ([WinAPI.GetStrings]::GetString(12612)) -Verbose
 
 	# Getting list of all scheduled tasks according to the conditions
-	$Tasks = Get-ScheduledTask | Where-Object -FilterScript {($_.State -eq $State) -and ($_.TaskName -in $CheckedScheduledTasks)}
+	$Tasks = Get-ScheduledTask | Where-Object -FilterScript {
+		($_.State -eq $State) -and ($_.TaskName -in $CheckedScheduledTasks)
+	}
 
 	if (-not $Tasks)
 	{
@@ -2680,16 +2680,21 @@ function Install-Cursors
 
 	if (-not $Default)
 	{
+		if (-not (Test-Path -Path "$env:SystemRoot\Cursors"))
+		{
+			New-Item -Path "$env:SystemRoot\Cursors" -ItemType Directory -Force
+		}
+
 		try
 		{
 			# Download cursors
-			# tar.exe cannot expand archive if username contains unicode characters, so we download archive to the system drive root
-			# The archive was saved in the "Cursors" folder using DeviantArt API via GitHub CI/CD
+			# tar.exe cannot extract an archive if it is located in a folder whose path includes $env:USERPROFILE path, so we download the archive to the $env:SystemDrive\Sophia_Script_Temp folder
+			# The archive was saved to the "Cursors" folder using DeviantArt API via GitHub CI/CD
 			# https://github.com/farag2/Sophia-Script-for-Windows/tree/main/Cursors
 			# https://github.com/farag2/Sophia-Script-for-Windows/blob/main/.github/workflows/Cursors.yml
 			$Parameters = @{
 				Uri             = "https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/main/Cursors/Windows11Cursors.zip"
-				OutFile         = "$env:SystemDrive\Windows11Cursors.zip"
+				OutFile         = "$env:SystemRoot\Cursors\Windows11Cursors.zip"
 				UseBasicParsing = $true
 				Verbose         = $true
 			}
@@ -2697,6 +2702,8 @@ function Install-Cursors
 		}
 		catch [System.Net.WebException]
 		{
+			Remove-Item -Path "$env:SystemRoot\Cursors" -Recurse -Force -ErrorAction Ignore
+
 			Write-Information -MessageData "" -InformationAction Continue
 			Write-Verbose -Message (($Localization.NoResponse -f "https://raw.githubusercontent.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -Verbose
 			Write-Error -Message (($Localization.NoResponse -f "https://raw.githubusercontent.com"), ($Localization.RestartFunction -f $MyInvocation.Line.Trim()) -join " ") -ErrorAction SilentlyContinue
@@ -2715,7 +2722,7 @@ function Install-Cursors
 			}
 
 			# Extract archive from "dark" folder only
-			& "$env:SystemRoot\System32\tar.exe" -xvf "$env:SystemDrive\Windows11Cursors.zip" -C "$env:SystemRoot\Cursors\W11 Cursor Dark Free" --strip-components=1 dark/
+			& "$env:SystemRoot\System32\tar.exe" -xvf "$env:SystemRoot\Cursors\Windows11Cursors.zip" -C "$env:SystemRoot\Cursors\W11 Cursor Dark Free" --strip-components=1 dark/
 
 			New-ItemProperty -Path "HKCU:\Control Panel\Cursors" -Name "(default)" -PropertyType String -Value "W11 Cursor Dark Free by Jepri Creations" -Force
 			New-ItemProperty -Path "HKCU:\Control Panel\Cursors" -Name AppStarting -PropertyType ExpandString -Value "%SystemRoot%\Cursors\W11 Cursor Dark Free\appstarting.ani" -Force
@@ -2764,7 +2771,7 @@ function Install-Cursors
 
 			Start-Sleep -Seconds 1
 
-			Remove-Item -Path "$env:SystemDrive\Windows11Cursors.zip", "$env:SystemRoot\Cursors\W11 Cursor Dark Free\Install.inf" -Force -ErrorAction Ignore
+			Remove-Item -Path "$env:SystemRoot\Cursors\Windows11Cursors.zip", "$env:SystemRoot\Cursors\W11 Cursor Dark Free\Install.inf" -Force -ErrorAction Ignore
 		}
 		"Light"
 		{
@@ -2774,7 +2781,7 @@ function Install-Cursors
 			}
 
 			# Extract archive from "light" folder only
-			& "$env:SystemRoot\System32\tar.exe" -xvf "$env:SystemDrive\Windows11Cursors.zip" -C "$env:SystemRoot\Cursors\W11 Cursor Light Free" --strip-components=1 light/
+			& "$env:SystemRoot\System32\tar.exe" -xvf "$env:SystemRoot\Cursors\Windows11Cursors.zip" -C "$env:SystemRoot\Cursors\W11 Cursor Light Free" --strip-components=1 light/
 
 			New-ItemProperty -Path "HKCU:\Control Panel\Cursors" -Name "(default)" -PropertyType String -Value "W11 Cursor Light Free by Jepri Creations" -Force
 			New-ItemProperty -Path "HKCU:\Control Panel\Cursors" -Name AppStarting -PropertyType ExpandString -Value "%SystemRoot%\Cursors\W11 Cursor Light Free\appstarting.ani" -Force
